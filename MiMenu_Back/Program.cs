@@ -1,12 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using MiMenu_Back.Data;
+using MiMenu_Back.Mappers;
+using MiMenu_Back.Mappers.Interfaces;
+using MiMenu_Back.Repositories;
+using MiMenu_Back.Repositories.Interfaces;
+using MiMenu_Back.Services;
+using MiMenu_Back.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 DotNetEnv.Env.Load();
 var connectionString = System.Environment.GetEnvironmentVariable("MySQLConnection");
 builder.Services.AddDbContext<AppDB>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
-
+builder.Services.AddSingleton<Util>();
+builder.Services.AddScoped<IAuthMapper, AuthMapper>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

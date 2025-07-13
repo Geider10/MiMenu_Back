@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MiMenu_Back.Migrations
 {
     [DbContext(typeof(AppDB))]
-    [Migration("20250712231245_AddUserTable")]
-    partial class AddUserTable
+    [Migration("20250713185548_UpdateTableUser")]
+    partial class UpdateTableUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,8 +32,12 @@ namespace MiMenu_Back.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -54,9 +58,6 @@ namespace MiMenu_Back.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
-
-                    b.Property<DateOnly>("birthDate")
-                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
