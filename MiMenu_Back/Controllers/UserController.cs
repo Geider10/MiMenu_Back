@@ -29,7 +29,7 @@ namespace MiMenu_Back.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost][Route("{id}")]
+        [HttpPut][Route("{id}")]
         public async Task<ActionResult> Update([FromRoute]string id, [FromBody] UpdateDto updateDto)
         {
             try
@@ -43,6 +43,19 @@ namespace MiMenu_Back.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete][Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute]string id)
+        {
+            try
+            {
+                await _userService.Delete(id);
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

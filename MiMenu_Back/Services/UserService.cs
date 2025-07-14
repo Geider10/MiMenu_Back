@@ -1,4 +1,5 @@
 ﻿using MiMenu_Back.Data.DTOs.User;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -35,6 +36,13 @@ namespace MiMenu_Back.Services
             await _userRepo.Update(userUpdated);
 
             return "User updated";
+        }
+        public async Task Delete(string id)
+        {
+            var userModel = await _userRepo.GetById(id);
+            if (userModel == null) throw new Exception("User no found");
+
+            await _userRepo.Delete(userModel);
         }
     }
 }

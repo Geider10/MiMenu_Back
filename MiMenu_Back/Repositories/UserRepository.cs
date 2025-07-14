@@ -36,5 +36,10 @@ namespace MiMenu_Back.Repositories
             _appDB.Users.Update(user);
             await _appDB.SaveChangesAsync();
         }
+        public async Task Delete(UserModel user)
+        {
+            _appDB.Users.Remove(user);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }
