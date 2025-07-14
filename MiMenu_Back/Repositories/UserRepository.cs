@@ -26,6 +26,10 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Users.FirstAsync(u => u.Email == email);
         }
-        
+
+        public async Task<UserModel> GetById(string id)
+        {
+            return await _appDB.Users.FirstAsync(u => u.Id == Guid.Parse(id));
+        }
     }
 }

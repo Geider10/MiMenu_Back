@@ -14,8 +14,10 @@ var connectionString = System.Environment.GetEnvironmentVariable("MySQLConnectio
 builder.Services.AddDbContext<AppDB>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddSingleton<Util>();
 builder.Services.AddScoped<IAuthMapper, AuthMapper>();
+builder.Services.AddScoped<IUserMapper, UserMapper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
