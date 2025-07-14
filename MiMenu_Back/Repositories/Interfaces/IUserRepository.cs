@@ -6,5 +6,6 @@ namespace MiMenu_Back.Repositories.Interfaces
     {
         Task<bool> ExistsByEmail(string email);
         Task Add(UserModel user);
+        Task<UserModel> GetByEmail(string email);
     }
 }

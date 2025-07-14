@@ -29,5 +29,17 @@ namespace MiMenu_Back.Services
 
             return "User registered";
         }
+        public async Task<string> Login(LoginDto loginDto)
+        {
+            bool userExists = await _user.ExistsByEmail(loginDto.Email);
+            if (!userExists) throw new Exception("Email no registered");
+
+            var user = await _user.GetByEmail(loginDto.Email);
+            bool passwordMatch = _util.VerifyHashText(loginDto.Password, user.Password);
+            if (!passwordMatch) throw new Exception("Password incorrect");
+
+            string token = _util.GenerateJWT(user.Id.ToString(), user.Role);
+            return token;
+        }
     }
 }

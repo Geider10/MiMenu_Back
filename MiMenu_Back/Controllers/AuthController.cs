@@ -22,11 +22,27 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                ValidationResult validate = new SignupValidator().Validate(signupDto);
-                if (!validate.IsValid) return BadRequest(validate.Errors);
+                ValidationResult bodyReq = new SignupValidator().Validate(signupDto);
+                if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
                 string res = await _auth.Signup(signupDto);
                 return Created(res, null);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost][Route("login")]
+        public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            try
+            {
+                ValidationResult bodyReq = new LoginValidator().Validate(loginDto);
+                if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
+
+                string res = await _auth.Login(loginDto);
+                return Ok(res);
             }
             catch (Exception ex)
             {
