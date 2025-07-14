@@ -16,5 +16,13 @@ namespace MiMenu_Back.Mappers
                 BirthDate = birthDate
             };
         }
+        public UserModel MapUpdateDto(UserModel userModel, UpdateDto updateDto, DateOnly? birthDate)
+        {
+            userModel.Name = updateDto.Name;
+            userModel.Address = updateDto.Address;
+            userModel.BirthDate = birthDate;
+
+            return userModel;
+        }
     }
 }

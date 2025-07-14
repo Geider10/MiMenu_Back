@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MiMenu_Back.Data.DTOs.User;
 using MiMenu_Back.Services;
+using FluentValidation.Results;
+using MiMenu_Back.Validators.User;
 
 namespace MiMenu_Back.Controllers
 {
@@ -26,6 +29,21 @@ namespace MiMenu_Back.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost][Route("{id}")]
+        public async Task<ActionResult> Update([FromRoute]string id, [FromBody] UpdateDto updateDto)
+        {
+            try
+            {
+                ValidationResult bodyReq = new UpdateValidator().Validate(updateDto);
+                if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
+                var res = await _userService.Update(id, updateDto);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -31,5 +31,10 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Users.FirstAsync(u => u.Id == Guid.Parse(id));
         }
+        public async Task Update(UserModel user)
+        {
+            _appDB.Users.Update(user);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }

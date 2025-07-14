@@ -8,5 +8,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task Add(UserModel user);
         Task<UserModel> GetByEmail(string email);
         Task<UserModel> GetById(string id);
+        Task Update(UserModel user);
     }
 }

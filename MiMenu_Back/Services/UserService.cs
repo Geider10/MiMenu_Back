@@ -22,7 +22,19 @@ namespace MiMenu_Back.Services
             if (userModel == null) throw new Exception("User no found");
 
             string birthDate = _util.FormatToString(userModel.BirthDate);
-            return _userMap.MapUserModel(userModel, birthDate);
+            var userDto = _userMap.MapUserModel(userModel, birthDate);
+            return userDto;
+        }
+        public async Task<string> Update(string id,UpdateDto updateDto)
+        {
+            var userModel = await _userRepo.GetById(id);
+            if(userModel == null) throw new Exception("User no found");
+
+            DateOnly? birthDate = _util.FormatToDateOnly(updateDto.BirthDate);
+            var userUpdated = _userMap.MapUpdateDto(userModel, updateDto, birthDate);
+            await _userRepo.Update(userUpdated);
+
+            return "User updated";
         }
     }
 }
