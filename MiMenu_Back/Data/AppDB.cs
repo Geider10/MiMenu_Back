@@ -8,6 +8,7 @@ namespace MiMenu_Back.Data
         public AppDB(DbContextOptions<AppDB> options) : base(options) { }
 
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<CategoryModel> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,6 +24,13 @@ namespace MiMenu_Back.Data
                 user.Property(u => u.Address).IsRequired().HasMaxLength(200);
                 user.Property(u => u.Role).IsRequired().HasMaxLength(50);
                 user.Property(u => u.BirthDate);
+            });
+            modelBuilder.Entity<CategoryModel>(tb =>
+            {
+                tb.ToTable("category");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.Name).IsRequired().HasMaxLength(100);
             });
         }
     }
