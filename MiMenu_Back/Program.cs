@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MiMenu_Back.Data;
 using MiMenu_Back.Mappers;
 using MiMenu_Back.Mappers.Interfaces;
@@ -6,11 +9,13 @@ using MiMenu_Back.Repositories;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 DotNetEnv.Env.Load();
 var connectionString = System.Environment.GetEnvironmentVariable("MySQLConnection");
+var secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
 builder.Services.AddDbContext<AppDB>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddSingleton<Util>();
 builder.Services.AddScoped<IAuthMapper, AuthMapper>();
@@ -23,6 +28,34 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddAuthentication(config =>
+{
+    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(config =>
+{
+    config.RequireHttpsMetadata = false;
+    config.SaveToken = true;
+    config.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NewPolicy", app =>
+    {
+        app.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -31,6 +64,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("NewPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

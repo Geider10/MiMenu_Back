@@ -5,11 +5,13 @@ using MiMenu_Back.Services;
 using FluentValidation.Results;
 using MiMenu_Back.Validators.User;
 using MiMenu_Back.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiMenu_Back.Controllers
 {
     [Route("api/user")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
