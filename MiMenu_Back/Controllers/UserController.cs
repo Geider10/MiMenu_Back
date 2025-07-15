@@ -18,16 +18,20 @@ namespace MiMenu_Back.Controllers
             _userService = userService;
         }
         [HttpGet][Route("{id}")]
-        public async Task<ActionResult> GetById([FromRoute] string id)
+        public async Task<ActionResult<GetDto>> GetById([FromRoute] string id)
         {
             try
             {
                 var userDto = await _userService.GetById(id);
-                return Ok(userDto);
+                return StatusCode(200, userDto);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
         [HttpPut][Route("{id}")]
@@ -47,20 +51,24 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
         [HttpDelete][Route("{id}")]
-        public async Task<ActionResult> Delete([FromRoute]string id)
+        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string id)
         {
             try
             {
-                var res =  await _userService.Delete(id);
-                return Ok(res);
+                await _userService.Delete(id);
+                return StatusCode(200, new MainResponse(true, "User deleted with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
     }

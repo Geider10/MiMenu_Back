@@ -5,6 +5,7 @@ using MiMenu_Back.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using MiMenu_Back.Validators.Auth;
+using MiMenu_Back.Utils;
 
 namespace MiMenu_Back.Controllers
 {
@@ -12,41 +13,49 @@ namespace MiMenu_Back.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _auth;
+        private readonly AuthService _authService;
         public AuthController(AuthService auth)
         {
-            _auth = auth;
+            _authService = auth;
         }
         [HttpPost][Route("signup")]
-        public async Task<ActionResult> Singup([FromBody] SignupDto signupDto)
+        public async Task<ActionResult<MainResponse>> Singup([FromBody] SignupDto signupDto)
         {
             try
             {
                 ValidationResult bodyReq = new SignupValidator().Validate(signupDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
-                string res = await _auth.Signup(signupDto);
-                return Created(res, null);
+                await _authService.Signup(signupDto);
+                return StatusCode(201, new MainResponse(true, "User registered with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
         [HttpPost][Route("login")]
-        public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<ActionResult<string>> Login([FromBody] LoginDto loginDto)
         {
             try
             {
                 ValidationResult bodyReq = new LoginValidator().Validate(loginDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
-                string res = await _auth.Login(loginDto);
-                return Ok(res);
+                string token = await _authService.Login(loginDto);
+                return StatusCode(200, token);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
     }

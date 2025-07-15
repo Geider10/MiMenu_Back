@@ -20,7 +20,7 @@ namespace MiMenu_Back.Services
         public async Task<GetDto> GetById(string id)
         {
             var userModel = await _userRepo.GetById(id);
-            if (userModel == null) throw new Exception("User no found");
+            if (userModel == null) throw new MainException("User no found", 404);
 
             string birthDate = _util.FormatToString(userModel.BirthDate);
             var userDto = _userMap.MapUserModel(userModel, birthDate);
@@ -35,13 +35,12 @@ namespace MiMenu_Back.Services
             var userUpdated = _userMap.MapUpdateDto(userModel, updateDto, birthDate);
             await _userRepo.Update(userUpdated);
         }
-        public async Task<MainResponse> Delete(string id)
+        public async Task Delete(string id)
         {
             var userModel = await _userRepo.GetById(id);
             if (userModel == null) throw new MainException("User no found", 404);
 
             await _userRepo.Delete(userModel);
-            return new MainResponse(true, "User deleted with success");
         }
     }
 }

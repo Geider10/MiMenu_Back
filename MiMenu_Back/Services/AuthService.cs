@@ -7,38 +7,36 @@ namespace MiMenu_Back.Services
 {
     public class AuthService
     {
-        private readonly IAuthMapper _auth;
-        private readonly IUserRepository _user;
+        private readonly IAuthMapper _authMap;
+        private readonly IUserRepository _userRepo;
         private readonly Util _util;
         public AuthService(IAuthMapper auth, IUserRepository user, Util util)
         {
-            _auth = auth;
-            _user = user;
+            _authMap = auth;
+            _userRepo = user;
             _util = util;
         }
-        public async Task<string> Signup(SignupDto signupDto)
+        public async Task Signup(SignupDto signupDto)
         {
-            bool userExists = await _user.ExistsByEmail(signupDto.Email);
-            if (userExists) throw new Exception("Email already registered");
+            bool userExists = await _userRepo.ExistsByEmail(signupDto.Email);
+            if (userExists) throw new MainException("Email already registered", 400);
 
             string passwordHash = _util.HashText(signupDto.Password);
             DateOnly? birthDate = _util.FormatToDateOnly(signupDto.BirthDate);
 
-            var user = _auth.MapSignupDTO(signupDto, passwordHash, birthDate);
-            await _user.Add(user);
-
-            return "User registered";
+            var userModel = _authMap.MapSignupDTO(signupDto, passwordHash, birthDate);
+            await _userRepo.Add(userModel);
         }
         public async Task<string> Login(LoginDto loginDto)
         {
-            bool userExists = await _user.ExistsByEmail(loginDto.Email);
-            if (!userExists) throw new Exception("Email no registered");
+            bool userExists = await _userRepo.ExistsByEmail(loginDto.Email);
+            if (!userExists) throw new MainException("Email no registered", 400);
 
-            var user = await _user.GetByEmail(loginDto.Email);
-            bool passwordMatch = _util.VerifyHashText(loginDto.Password, user.Password);
-            if (!passwordMatch) throw new Exception("Password incorrect");
+            var userModel = await _userRepo.GetByEmail(loginDto.Email);
+            bool passwordMatch = _util.VerifyHashText(loginDto.Password, userModel.Password);
+            if (!passwordMatch) throw new MainException("Password incorrect", 400);
 
-            string token = _util.GenerateJWT(user.Id.ToString(), user.Role);
+            string token = _util.GenerateJWT(userModel.Id.ToString(), userModel.Role);
             return token;
         }
     }
