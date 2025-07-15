@@ -4,6 +4,7 @@ using MiMenu_Back.Data.DTOs.User;
 using MiMenu_Back.Services;
 using FluentValidation.Results;
 using MiMenu_Back.Validators.User;
+using MiMenu_Back.Utils;
 
 namespace MiMenu_Back.Controllers
 {
@@ -30,32 +31,36 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpPut][Route("{id}")]
-        public async Task<ActionResult> Update([FromRoute]string id, [FromBody] UpdateDto updateDto)
+        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody] UpdateDto updateDto)
         {
             try
             {
                 ValidationResult bodyReq = new UpdateValidator().Validate(updateDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
-                var res = await _userService.Update(id, updateDto);
+                await _userService.Update(id, updateDto);
+                return StatusCode(200, new MainResponse(true, "User updated with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));  
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal Server Error " + ex.Message));
+            }
+        }
+        [HttpDelete][Route("{id}")]
+        public async Task<ActionResult> Delete([FromRoute]string id)
+        {
+            try
+            {
+                var res =  await _userService.Delete(id);
                 return Ok(res);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete][Route("{id}")]
-        public async Task<IActionResult> Delete([FromRoute]string id)
-        {
-            try
-            {
-                await _userService.Delete(id);
-                return StatusCode(StatusCodes.Status204NoContent);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

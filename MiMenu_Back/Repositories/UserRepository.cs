@@ -22,14 +22,14 @@ namespace MiMenu_Back.Repositories
             await _appDB.SaveChangesAsync();
         }
 
-        public async Task<UserModel> GetByEmail(string email)
+        public async Task<UserModel?> GetByEmail(string email)
         {
-            return await _appDB.Users.FirstAsync(u => u.Email == email);
+            return await _appDB.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<UserModel> GetById(string id)
+        public async Task<UserModel?> GetById(string id)
         {
-            return await _appDB.Users.FirstAsync(u => u.Id == Guid.Parse(id));
+            return await _appDB.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
         }
         public async Task Update(UserModel user)
         {
