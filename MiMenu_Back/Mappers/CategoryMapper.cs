@@ -14,5 +14,20 @@ namespace MiMenu_Back.Mappers
                 Type = attributeDto.Type
             };
         }
+
+        public List<AttributeDto> MapCategoryModelList(List<CategoryModel> categoryList)
+        {
+            var dtosList = new List<AttributeDto>();
+            foreach(var category in categoryList)
+            {
+                dtosList.Add(new AttributeDto
+                {
+                    Name = category.Name,
+                    Type = category.Type
+                });
+            }
+
+            return dtosList;
+        }
     }
 }

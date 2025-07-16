@@ -38,5 +38,22 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Iternal Server Error: "+ ex.Message));
             }
         }
+        [HttpGet]
+        public async Task<ActionResult<List<AttributeDto>>> GetAll([FromQuery] string? type)
+        {
+            try
+            {
+                var dtosList = await _categoryService.GetAll(type);
+                return StatusCode(200, dtosList);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Iternal Server Error: " + ex.Message));
+            }
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace MiMenu_Back.Repositories.Interfaces
     {
         Task<bool> ExistsByName(string name);
         Task Add(CategoryModel category);
+        Task<List<CategoryModel>>? GetAll(string type);
     }
 }

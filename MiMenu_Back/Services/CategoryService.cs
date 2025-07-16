@@ -23,5 +23,15 @@ namespace MiMenu_Back.Services
             var categoryModel = _categoryMap.MapAttributeDto(attributeDto);
             await _categoryRepo.Add(categoryModel);
         }
+        public async Task<List<AttributeDto>> GetAll(string? type)
+        {
+            var categoriesList = await _categoryRepo.GetAll(type);
+            if (categoriesList == null) throw new MainException("Type of category is incorrect", 400);
+
+            var dtosList = _categoryMap.MapCategoryModelList(categoriesList);
+            if (dtosList.Count == 0) throw new MainException("Categories no found of this type", 404);
+
+            return dtosList;
+        }
     }
 }
