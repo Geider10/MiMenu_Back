@@ -3,9 +3,9 @@ using MiMenu_Back.Data.DTOs.Category;
 
 namespace MiMenu_Back.Validators.Category
 {
-    public class AttributeValidator : AbstractValidator<AttributeDto>
+    public class CategoryAddValidator : AbstractValidator<CategoryAddDto>
     {
-        public AttributeValidator()
+        public CategoryAddValidator()
         {
             RuleFor(c => c.Name)
                 .NotEmpty().WithMessage("Name is required")

@@ -15,7 +15,7 @@ namespace MiMenu_Back.Services
             _categoryMap = categoryMap;
         }
 
-        public async Task Add(AttributeDto attributeDto)
+        public async Task Add(CategoryAddDto attributeDto)
         {
             bool categoryExists = await _categoryRepo.ExistsByName(attributeDto.Name);
             if (categoryExists) throw new MainException("Category already exists", 400);
@@ -23,15 +23,13 @@ namespace MiMenu_Back.Services
             var categoryModel = _categoryMap.MapAttributeDto(attributeDto);
             await _categoryRepo.Add(categoryModel);
         }
-        public async Task<List<AttributeDto>> GetAll(string? type)
+        public async Task<List<CategoryGetDto>> GetAll(CategoryQueryDto queryParams)
         {
-            var categoriesList = await _categoryRepo.GetAll(type);
-            if (categoriesList == null) throw new MainException("Type of category is incorrect", 400);
+            var categoriesList = await _categoryRepo.GetAll(queryParams.Type, queryParams.Sort);
+            if (categoriesList.Count == 0) throw new MainException("There are not categories of this type", 404);
 
-            var dtosList = _categoryMap.MapCategoryModelList(categoriesList);
-            if (dtosList.Count == 0) throw new MainException("Categories no found of this type", 404);
-
-            return dtosList;
+            var categoriesGetList = _categoryMap.MapCategoryModelList(categoriesList);
+            return categoriesGetList;
         }
     }
 }

@@ -19,11 +19,11 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpPost][Route("")]
-        public async Task<ActionResult<MainResponse>> Add([FromBody] AttributeDto attributeDto)
+        public async Task<ActionResult<MainResponse>> Add([FromBody] CategoryAddDto attributeDto)
         {
             try
             {
-                ValidationResult bodyReq = new AttributeValidator().Validate(attributeDto);
+                ValidationResult bodyReq = new CategoryAddValidator().Validate(attributeDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
                 await _categoryService.Add(attributeDto);
@@ -35,16 +35,19 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Iternal Server Error: "+ ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: "+ ex.Message));
             }
         }
         [HttpGet]
-        public async Task<ActionResult<List<AttributeDto>>> GetAll([FromQuery] string? type)
+        public async Task<ActionResult<List<CategoryGetDto>>> GetAll([FromQuery] CategoryQueryDto queryParams)
         {
             try
             {
-                var dtosList = await _categoryService.GetAll(type);
-                return StatusCode(200, dtosList);
+                ValidationResult queryReq = new CategoryQueryValidator().Validate(queryParams);
+                if (!queryReq.IsValid) return BadRequest(queryReq.Errors);
+
+                var categoryGetList = await _categoryService.GetAll(queryParams);
+                return StatusCode(200, categoryGetList);
             }
             catch (MainException ex)
             {
@@ -52,7 +55,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Iternal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
     }

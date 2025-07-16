@@ -22,14 +22,19 @@ namespace MiMenu_Back.Repositories
             await _appDB.SaveChangesAsync();
         }
 
-        public async Task<List<CategoryModel>>? GetAll(string type)
+        public async Task<List<CategoryModel>> GetAll(string type, string? sort)
         {
-            string typeFormat = type.ToLower().Trim();
-            if (typeFormat != "comida" && typeFormat != "cupón") return null;
-
             var categories = await _appDB.Categories
-                .Where(c => c.Type.ToLower() == typeFormat)
+                .Where(c => c.Type.ToLower() == type.ToLower())
                 .ToListAsync();
+
+            if(sort == "asc")
+            {
+                categories = categories.OrderBy(c => c.Name).ToList();
+            }else if(sort == "desc")
+            {
+                categories = categories.OrderByDescending(c => c.Name).ToList();
+            }
 
             return categories;
         }

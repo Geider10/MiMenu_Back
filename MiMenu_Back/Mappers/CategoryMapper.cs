@@ -6,7 +6,7 @@ namespace MiMenu_Back.Mappers
 {
     public class CategoryMapper : ICategoryMapper
     {
-        public CategoryModel MapAttributeDto(AttributeDto attributeDto)
+        public CategoryModel MapAttributeDto(CategoryAddDto attributeDto)
         {
             return new CategoryModel
             {
@@ -15,15 +15,15 @@ namespace MiMenu_Back.Mappers
             };
         }
 
-        public List<AttributeDto> MapCategoryModelList(List<CategoryModel> categoryList)
+        public List<CategoryGetDto> MapCategoryModelList(List<CategoryModel> categoryList)
         {
-            var dtosList = new List<AttributeDto>();
+            var dtosList = new List<CategoryGetDto>();
             foreach(var category in categoryList)
             {
-                dtosList.Add(new AttributeDto
+                dtosList.Add(new CategoryGetDto
                 {
+                    Id = category.Id.ToString(),
                     Name = category.Name,
-                    Type = category.Type
                 });
             }
 
