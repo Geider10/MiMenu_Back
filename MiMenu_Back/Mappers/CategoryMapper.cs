@@ -10,7 +10,8 @@ namespace MiMenu_Back.Mappers
         {
             return new CategoryModel
             {
-                Name = attributeDto.Name
+                Name = attributeDto.Name,
+                Type = attributeDto.Type
             };
         }
     }

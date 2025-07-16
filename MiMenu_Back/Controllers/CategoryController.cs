@@ -35,7 +35,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Iternal Server Error"+ ex.Message));
+                return StatusCode(500, new MainResponse(false, "Iternal Server Error: "+ ex.Message));
             }
         }
     }

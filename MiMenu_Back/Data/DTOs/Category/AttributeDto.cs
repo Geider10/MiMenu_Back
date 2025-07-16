@@ -3,5 +3,6 @@
     public class AttributeDto
     {
         public string Name { get; set; }
+        public string Type { get; set; }
     }
 }
