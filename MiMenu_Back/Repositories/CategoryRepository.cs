@@ -5,10 +5,10 @@ using MiMenu_Back.Repositories.Interfaces;
 
 namespace MiMenu_Back.Repositories
 {
-    public class CategoryRespository : ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDB _appDB;
-        public CategoryRespository(AppDB appDB)
+        public CategoryRepository(AppDB appDB)
         {
             _appDB = appDB;
         }
@@ -35,8 +35,18 @@ namespace MiMenu_Back.Repositories
             {
                 categories = categories.OrderByDescending(c => c.Name).ToList();
             }
-
             return categories;
+        }
+
+        public async Task<CategoryModel?> GetById(string id)
+        {
+            return await _appDB.Categories.FirstOrDefaultAsync(c => c.Id == Guid.Parse(id));
+        }
+
+        public async Task Update(CategoryModel category)
+        {
+            _appDB.Categories.Update(category);
+            await _appDB.SaveChangesAsync();
         }
     }
 }

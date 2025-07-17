@@ -6,7 +6,7 @@ namespace MiMenu_Back.Mappers
 {
     public class CategoryMapper : ICategoryMapper
     {
-        public CategoryModel MapAttributeDto(CategoryAddDto attributeDto)
+        public CategoryModel GetDto(CategoryAddDto attributeDto)
         {
             return new CategoryModel
             {
@@ -15,7 +15,7 @@ namespace MiMenu_Back.Mappers
             };
         }
 
-        public List<CategoryGetDto> MapCategoryModelList(List<CategoryModel> categoryList)
+        public List<CategoryGetDto> CategoryModelList(List<CategoryModel> categoryList)
         {
             var dtosList = new List<CategoryGetDto>();
             foreach(var category in categoryList)
