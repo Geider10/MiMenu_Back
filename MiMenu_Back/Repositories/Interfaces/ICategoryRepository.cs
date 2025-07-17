@@ -9,5 +9,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<List<CategoryModel>> GetAll(string type, string? sort);
         Task<CategoryModel?> GetById(string id);
         Task Update(CategoryModel category);
+        Task Delete(CategoryModel category);
     }
 }

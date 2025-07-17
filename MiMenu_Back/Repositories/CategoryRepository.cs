@@ -48,5 +48,10 @@ namespace MiMenu_Back.Repositories
             _appDB.Categories.Update(category);
             await _appDB.SaveChangesAsync();
         }
+        public async Task Delete (CategoryModel category)
+        {
+            _appDB.Categories.Remove(category);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }

@@ -42,5 +42,12 @@ namespace MiMenu_Back.Services
             categoryModel.Name = category.Name;
             await _categoryRepo.Update(categoryModel);
         }
+        public async Task Delete(string id)
+        {
+            var categoryModel = await _categoryRepo.GetById(id);
+            if (categoryModel == null) throw new MainException("Category no found", 404);
+
+            await _categoryRepo.Delete(categoryModel);
+        }
     }
 }
