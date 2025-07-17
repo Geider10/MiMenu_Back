@@ -5,7 +5,7 @@ namespace MiMenu_Back.Mappers.Interfaces
 {
     public interface ICategoryMapper
     {
-        CategoryModel GetDto(CategoryAddDto attributeDto);
-        List<CategoryGetDto> CategoryModelList(List<CategoryModel> categoryList);
+        CategoryModel GetToCategoryModel(CategoryAddDto attributeDto);
+        List<CategoryGetDto> CategoryListToGetList(List<CategoryModel> categoryList);
     }
 }

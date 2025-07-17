@@ -4,7 +4,7 @@ namespace MiMenu_Back.Mappers.Interfaces
 {
     public interface IUserMapper
     {
-        GetDto MapUserModel(UserModel userModel, string birthDate);
-        UserModel MapUpdateDto(UserModel userModel, UpdateDto updateDto, DateOnly? birthDate);
+        GetDto UserModelToGet(UserModel userModel, string birthDate);
+        UserModel UpdateToUserModel(UserModel userModel, UpdateDto updateDto, DateOnly? birthDate);
     }
 }

@@ -5,6 +5,6 @@ namespace MiMenu_Back.Mappers.Interfaces
 {
     public interface IAuthMapper
     {
-        UserModel MapSignupDTO(SignupDto signupDto, string passwordHash, DateOnly? birthDate);
+        UserModel SignupToUserModel(SignupDto signupDto, string passwordHash, DateOnly? birthDate);
     }
 }

@@ -23,7 +23,7 @@ namespace MiMenu_Back.Services
             if (userModel == null) throw new MainException("User no found", 404);
 
             string birthDate = _util.FormatToString(userModel.BirthDate);
-            var userDto = _userMap.MapUserModel(userModel, birthDate);
+            var userDto = _userMap.UserModelToGet(userModel, birthDate);
             return userDto;
         }
         public async Task Update(string id,UpdateDto updateDto)
@@ -32,7 +32,7 @@ namespace MiMenu_Back.Services
             if(userModel == null) throw new MainException("User no found", 404);
 
             DateOnly? birthDate = _util.FormatToDateOnly(updateDto.BirthDate);
-            var userUpdated = _userMap.MapUpdateDto(userModel, updateDto, birthDate);
+            var userUpdated = _userMap.UpdateToUserModel(userModel, updateDto, birthDate);
             await _userRepo.Update(userUpdated);
         }
         public async Task Delete(string id)

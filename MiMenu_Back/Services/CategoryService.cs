@@ -20,7 +20,7 @@ namespace MiMenu_Back.Services
             bool categoryExists = await _categoryRepo.ExistsByName(getDto.Name);
             if (categoryExists) throw new MainException("Category already exists", 400);
 
-            var categoryModel = _categoryMap.GetDto(getDto);
+            var categoryModel = _categoryMap.GetToCategoryModel(getDto);
             await _categoryRepo.Add(categoryModel);
         }
         public async Task<List<CategoryGetDto>> GetAll(CategoryQueryDto queryParams)
@@ -28,7 +28,7 @@ namespace MiMenu_Back.Services
             var categoriesList = await _categoryRepo.GetAll(queryParams.Type, queryParams.Sort);
             if (categoriesList.Count == 0) throw new MainException("There are not categories of this type", 404);
 
-            var categoriesGetList = _categoryMap.CategoryModelList(categoriesList);
+            var categoriesGetList = _categoryMap.CategoryListToGetList(categoriesList);
             return categoriesGetList;
         }
         public async Task Update (string id, CategoryUpdateDto category)

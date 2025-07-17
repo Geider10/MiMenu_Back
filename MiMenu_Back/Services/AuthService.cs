@@ -24,7 +24,7 @@ namespace MiMenu_Back.Services
             string passwordHash = _util.HashText(signupDto.Password);
             DateOnly? birthDate = _util.FormatToDateOnly(signupDto.BirthDate);
 
-            var userModel = _authMap.MapSignupDTO(signupDto, passwordHash, birthDate);
+            var userModel = _authMap.SignupToUserModel(signupDto, passwordHash, birthDate);
             await _userRepo.Add(userModel);
         }
         public async Task<string> Login(LoginDto loginDto)

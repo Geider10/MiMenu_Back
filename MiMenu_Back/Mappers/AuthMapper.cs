@@ -5,7 +5,7 @@ namespace MiMenu_Back.Mappers
 {
     public class AuthMapper : IAuthMapper
     {
-        public UserModel MapSignupDTO(SignupDto signupDto, string passwordHash, DateOnly? birthDate)
+        public UserModel SignupToUserModel(SignupDto signupDto, string passwordHash, DateOnly? birthDate)
         {
             return new UserModel
             {
