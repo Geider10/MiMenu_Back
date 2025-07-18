@@ -20,10 +20,13 @@ namespace MiMenu_Back.Controllers
             _userService = userService;
         }
         [HttpGet][Route("{id}")]
-        public async Task<ActionResult<GetDto>> GetById([FromRoute] string id)
+        public async Task<ActionResult<UserGetDto>> GetById([FromRoute] string id)
         {
             try
             {
+                var guid = new Guid();
+                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+
                 var userDto = await _userService.GetById(id);
                 return StatusCode(200, userDto);
             }
@@ -37,11 +40,14 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpPut][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody] UpdateDto updateDto)
+        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody] UserUpdateDto updateDto)
         {
             try
             {
-                ValidationResult bodyReq = new UpdateValidator().Validate(updateDto);
+                var guid = new Guid();
+                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+
+                ValidationResult bodyReq = new UserUpdateValidator().Validate(updateDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
                 await _userService.Update(id, updateDto);
@@ -61,6 +67,9 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
+                var guid = new Guid();
+                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+
                 await _userService.Delete(id);
                 return StatusCode(200, new MainResponse(true, "User deleted with success"));
             }

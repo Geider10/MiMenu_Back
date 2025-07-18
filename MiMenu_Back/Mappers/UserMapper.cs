@@ -6,9 +6,9 @@ namespace MiMenu_Back.Mappers
 {
     public class UserMapper : IUserMapper
     {
-        public GetDto UserModelToGet(UserModel userModel, string birthDate)
+        public UserGetDto UserModelToGet(UserModel userModel, string birthDate)
         {
-            return new GetDto
+            return new UserGetDto
             {
                 Name = userModel.Name,
                 Email = userModel.Email,
@@ -16,7 +16,7 @@ namespace MiMenu_Back.Mappers
                 BirthDate = birthDate
             };
         }
-        public UserModel UpdateToUserModel(UserModel userModel, UpdateDto updateDto, DateOnly? birthDate)
+        public UserModel UpdateToUserModel(UserModel userModel, UserUpdateDto updateDto, DateOnly? birthDate)
         {
             userModel.Name = updateDto.Name;
             userModel.Address = updateDto.Address;

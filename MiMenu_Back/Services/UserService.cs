@@ -17,7 +17,7 @@ namespace MiMenu_Back.Services
             _userMap = userMap;
             _util = util;  
         }
-        public async Task<GetDto> GetById(string id)
+        public async Task<UserGetDto> GetById(string id)
         {
             var userModel = await _userRepo.GetById(id);
             if (userModel == null) throw new MainException("User no found", 404);
@@ -26,7 +26,7 @@ namespace MiMenu_Back.Services
             var userDto = _userMap.UserModelToGet(userModel, birthDate);
             return userDto;
         }
-        public async Task Update(string id,UpdateDto updateDto)
+        public async Task Update(string id,UserUpdateDto updateDto)
         {
             var userModel = await _userRepo.GetById(id);
             if(userModel == null) throw new MainException("User no found", 404);

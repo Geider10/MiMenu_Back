@@ -66,8 +66,8 @@ namespace MiMenu_Back.Controllers
             try
             {
                 var guid = new Guid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest(new MainResponse(false, "Id must be type Guid"));
-                if (string.IsNullOrWhiteSpace(category.Name)) return BadRequest(new MainResponse(false, "Name is required"));
+                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (string.IsNullOrWhiteSpace(category.Name)) return BadRequest("Name is required");
 
                 await _categoryService.Update(id, category);
                 return StatusCode(200, new MainResponse(true, "Category updated with success"));
@@ -88,7 +88,7 @@ namespace MiMenu_Back.Controllers
             try
             {
                 var formatId = new Guid();
-                if (!Guid.TryParse(id, out formatId)) return BadRequest(new MainResponse(false, "Id must be type Guid"));
+                if (!Guid.TryParse(id, out formatId)) return BadRequest("Id must has format Guid");
 
                 await _categoryService.Delete(id);
                 return StatusCode(200, new MainResponse(true, "Category deleted with success"));

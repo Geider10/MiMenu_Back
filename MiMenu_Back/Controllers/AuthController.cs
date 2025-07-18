@@ -19,7 +19,7 @@ namespace MiMenu_Back.Controllers
             _authService = auth;
         }
         [HttpPost][Route("signup")]
-        public async Task<ActionResult<MainResponse>> Singup([FromBody] SignupDto signupDto)
+        public async Task<ActionResult<MainResponse>> Signup([FromBody] SignupDto signupDto)
         {
             try
             {
