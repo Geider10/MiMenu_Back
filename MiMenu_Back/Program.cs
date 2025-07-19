@@ -11,6 +11,7 @@ using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 using System.Text;
 
+//register services and setup app
 var builder = WebApplication.CreateBuilder(args);
 
 DotNetEnv.Env.Load();
@@ -58,7 +59,7 @@ builder.Services.AddCors(options =>
         app.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
-
+//setup middleware and routes
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
