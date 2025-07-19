@@ -22,11 +22,14 @@ builder.Services.AddSingleton<Util>();
 builder.Services.AddScoped<IAuthMapper, AuthMapper>();
 builder.Services.AddScoped<IUserMapper, UserMapper>();
 builder.Services.AddScoped<ICategoryMapper, CategoryMapper>();
+builder.Services.AddScoped<IFoodMapper, FoodMapper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IFoodRepository, FoodRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<FoodService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
