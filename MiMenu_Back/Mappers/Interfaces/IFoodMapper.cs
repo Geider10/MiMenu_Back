@@ -6,5 +6,6 @@ namespace MiMenu_Back.Mappers.Interfaces
     public interface IFoodMapper
     {
         FoodModel GetToFoodModel(FoodAddDto food);
+        FoodGetDto FoodModelToGet(FoodModel food);
     }
 }

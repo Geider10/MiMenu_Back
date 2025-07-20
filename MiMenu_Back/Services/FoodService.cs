@@ -1,6 +1,7 @@
 ﻿using MiMenu_Back.Data.DTOs.Food;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
+using MiMenu_Back.Utils;
 
 namespace MiMenu_Back.Services
 {
@@ -17,6 +18,14 @@ namespace MiMenu_Back.Services
         {
             var foodModel = _foodMap.GetToFoodModel(food);
             await _foodRepo.Add(foodModel);
+        }
+        public async Task<FoodGetDto> GetById (string id)
+        {
+            var foodModel = await _foodRepo.GetById(id);
+            if (foodModel == null) throw new MainException("Food no found", 404);
+
+            var foodDto = _foodMap.FoodModelToGet(foodModel);
+            return foodDto;
         }
 
     }

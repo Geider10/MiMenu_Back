@@ -5,5 +5,6 @@ namespace MiMenu_Back.Repositories.Interfaces
     public interface IFoodRepository
     {
         Task Add(FoodModel food);
+        Task<FoodModel?> GetById(string id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MiMenu_Back.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MiMenu_Back.Data;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 
@@ -15,6 +16,13 @@ namespace MiMenu_Back.Repositories
         {
             _appDB.Foods.Add(food);
             await _appDB.SaveChangesAsync();
+        }
+
+        public async Task<FoodModel?> GetById(string id)
+        {
+            return await _appDB.Foods
+                .Include(f => f.Category)
+                .FirstOrDefaultAsync(f => f.Id == Guid.Parse(id));   
         }
     }
 }

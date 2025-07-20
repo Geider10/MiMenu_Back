@@ -18,5 +18,18 @@ namespace MiMenu_Back.Mappers
                 Discount = food.Discount
             };
         }
+        public FoodGetDto FoodModelToGet(FoodModel food)
+        {
+            return new FoodGetDto
+            {
+                Id = food.Id.ToString(),
+                Category = food.Category.Name,
+                Name = food.Name,
+                Description = food.Description,
+                ImgUrl = food.ImgUrl,
+                Price = food.Price,
+                Discount = food.Discount
+            };
+        }
     }
 }
