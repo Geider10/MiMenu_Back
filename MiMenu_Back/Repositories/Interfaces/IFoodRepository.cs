@@ -8,5 +8,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<FoodModel?> GetById(string id);
         Task<List<FoodModel?>> GetAll(string? idCategory, string? sort);
         Task Update(FoodModel food);
+        Task Delete(FoodModel food);
     }
 }

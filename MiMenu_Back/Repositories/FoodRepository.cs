@@ -2,6 +2,7 @@
 using MiMenu_Back.Data;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace MiMenu_Back.Repositories
 {
@@ -45,6 +46,11 @@ namespace MiMenu_Back.Repositories
         public async Task Update(FoodModel food)
         {
             _appDB.Foods.Update(food);
+            await _appDB.SaveChangesAsync();
+        }
+        public async Task Delete(FoodModel food)
+        {
+            _appDB.Foods.Remove(food);
             await _appDB.SaveChangesAsync();
         }
     }

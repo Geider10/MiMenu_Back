@@ -44,5 +44,12 @@ namespace MiMenu_Back.Services
             var foodModelUpdate = _foodMap.UpdateToFoodModel(food, foodModel);
             await _foodRepo.Update(foodModelUpdate);
         }
+        public async Task Delete (string id)
+        {
+            var foodModel = await _foodRepo.GetById(id);
+            if (foodModel == null) throw new MainException("Food no found", 404);
+
+            await _foodRepo.Delete(foodModel);
+        }
     }
 }

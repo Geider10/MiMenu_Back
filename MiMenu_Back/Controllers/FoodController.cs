@@ -100,5 +100,26 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
+        [Authorize(Roles = "admin")]
+        [HttpDelete][Route("{id}")]
+        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string id)
+        {
+            try
+            {
+                var guid = Guid.NewGuid();
+                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+
+                await _foodService.Delete(id);
+                return StatusCode(200, new MainResponse(true, "Food deleted with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
     }
 }
