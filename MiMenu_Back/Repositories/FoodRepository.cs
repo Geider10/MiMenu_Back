@@ -42,5 +42,10 @@ namespace MiMenu_Back.Repositories
             }
             return foods;
         }
+        public async Task Update(FoodModel food)
+        {
+            _appDB.Foods.Update(food);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }

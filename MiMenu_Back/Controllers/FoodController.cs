@@ -62,8 +62,8 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                ValidationResult queryRes = new FoodQueryValidator().Validate(foodQuery);
-                if (!queryRes.IsValid) return BadRequest(queryRes.Errors);
+                ValidationResult queryReq = new FoodQueryValidator().Validate(foodQuery);
+                if (!queryReq.IsValid) return BadRequest(queryReq.Errors);
 
                 var foodsDtoList = await _foodService.GetAll(foodQuery);
                 return StatusCode(200, foodsDtoList);
@@ -75,6 +75,29 @@ namespace MiMenu_Back.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+            }
+        }
+        [Authorize(Roles = "admin")]
+        [HttpPut][Route("{id}")]
+        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody]FoodAddDto food)
+        {
+            try
+            {
+                var guid = Guid.NewGuid();
+                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                ValidationResult bodyReq = new FoodAddValidator().Validate(food);
+                if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
+
+                await _foodService.Update(id, food);
+                return StatusCode(200, new MainResponse(true, "Food updated with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
     }

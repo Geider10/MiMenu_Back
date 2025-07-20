@@ -7,5 +7,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task Add(FoodModel food);
         Task<FoodModel?> GetById(string id);
         Task<List<FoodModel?>> GetAll(string? idCategory, string? sort);
+        Task Update(FoodModel food);
     }
 }

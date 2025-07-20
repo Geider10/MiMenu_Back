@@ -8,5 +8,6 @@ namespace MiMenu_Back.Mappers.Interfaces
         FoodModel GetToFoodModel(FoodAddDto food);
         FoodGetDto FoodModelToGet(FoodModel food);
         List<FoodGetDto> FoodListToGetList(List<FoodModel> foods);
+        FoodModel UpdateToFoodModel(FoodAddDto foodDto, FoodModel foodModel);
     }
 }

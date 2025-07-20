@@ -2,6 +2,7 @@
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
+using System.Runtime.InteropServices;
 
 namespace MiMenu_Back.Services
 {
@@ -34,6 +35,14 @@ namespace MiMenu_Back.Services
 
             var foodsDtoList = _foodMap.FoodListToGetList(foodsList);
             return foodsDtoList;
+        }
+        public async Task Update(string id,FoodAddDto food)
+        {
+            var foodModel = await _foodRepo.GetById(id);
+            if (foodModel == null) throw new MainException("Food no found", 404);
+
+            var foodModelUpdate = _foodMap.UpdateToFoodModel(food, foodModel);
+            await _foodRepo.Update(foodModelUpdate);
         }
     }
 }
