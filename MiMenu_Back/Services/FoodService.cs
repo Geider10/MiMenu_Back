@@ -27,6 +27,13 @@ namespace MiMenu_Back.Services
             var foodDto = _foodMap.FoodModelToGet(foodModel);
             return foodDto;
         }
+        public async Task<List<FoodGetDto>> GetAll(FoodQueryDto foodQuery)
+        {
+            var foodsList = await _foodRepo.GetAll(foodQuery.IdCategory, foodQuery.Sort);
+            if (foodsList.Count == 0 || foodsList == null) throw new MainException("There are no foodsList", 404);
 
+            var foodsDtoList = _foodMap.FoodListToGetList(foodsList);
+            return foodsDtoList;
+        }
     }
 }

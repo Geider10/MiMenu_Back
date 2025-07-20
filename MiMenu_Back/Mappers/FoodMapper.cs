@@ -31,5 +31,26 @@ namespace MiMenu_Back.Mappers
                 Discount = food.Discount
             };
         }
+
+        public List<FoodGetDto> FoodListToGetList(List<FoodModel> foods)
+        {
+            var foodDtoList = new List<FoodGetDto>();
+            foreach (var food in foods)
+            {
+                foodDtoList.Add( new FoodGetDto
+                    {
+                        Id = food.Id.ToString(),
+                        Category = food.Category.Name,
+                        Name = food.Name,
+                        Description = food.Description,
+                        ImgUrl = food.ImgUrl,
+                        Price = food.Price,
+                        Discount = food.Discount
+                    }
+                );
+               
+            }
+            return foodDtoList;
+        }
     }
 }

@@ -57,5 +57,25 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
             }
         }
+        [HttpGet]
+        public async Task<ActionResult<List<FoodGetDto>>> GetAll([FromQuery] FoodQueryDto foodQuery)
+        {
+            try
+            {
+                ValidationResult queryRes = new FoodQueryValidator().Validate(foodQuery);
+                if (!queryRes.IsValid) return BadRequest(queryRes.Errors);
+
+                var foodsDtoList = await _foodService.GetAll(foodQuery);
+                return StatusCode(200, foodsDtoList);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+            }
+        }
     }
 }

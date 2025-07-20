@@ -17,12 +17,30 @@ namespace MiMenu_Back.Repositories
             _appDB.Foods.Add(food);
             await _appDB.SaveChangesAsync();
         }
-
         public async Task<FoodModel?> GetById(string id)
         {
             return await _appDB.Foods
                 .Include(f => f.Category)
                 .FirstOrDefaultAsync(f => f.Id == Guid.Parse(id));   
+        }
+        public async Task<List<FoodModel?>> GetAll(string? idCategory, string? sort)
+        {
+            var foods = await _appDB.Foods
+                .Include(f => f.Category)
+                .ToListAsync();
+
+            if (!string.IsNullOrEmpty(idCategory))
+            {
+                foods = foods.Where(f => f.IdCategory == Guid.Parse(idCategory)).ToList();
+            }
+            if(sort == "asc")
+            {
+                foods = foods.OrderBy(f => f.Name).ToList();
+            }else if(sort == "desc")
+            {
+                foods = foods.OrderByDescending(f => f.Name).ToList();
+            }
+            return foods;
         }
     }
 }
