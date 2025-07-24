@@ -48,7 +48,28 @@ namespace MiMenu_Back.Data
 
                 tb.HasOne(col => col.Category)
                 .WithMany(cat => cat.Foods)
-                .HasForeignKey(col => col.IdCategory);
+                .HasForeignKey(col => col.IdCategory)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<OrderModel>(tb =>
+            {
+                tb.ToTable("order");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.IdFood).IsRequired();
+                tb.Property(col => col.IdUser).IsRequired();
+                tb.Property(col => col.Quantity).IsRequired();
+                tb.Property(col => col.PriceTotal).IsRequired();
+
+                tb.HasOne(col => col.Food)
+                .WithMany(food => food.Orders)
+                .HasForeignKey(col => col.IdFood)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                tb.HasOne(col => col.User)
+                .WithMany(user => user.Orders)
+                .HasForeignKey(col => col.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

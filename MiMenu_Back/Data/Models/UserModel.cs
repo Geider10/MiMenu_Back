@@ -9,6 +9,8 @@
         public string Address { get; set; }
         public string Role { get; protected set; }
         public DateOnly? BirthDate { get; set; }
+
+        public ICollection<OrderModel> Orders { get; set; }
         public UserModel()
         {
             Id = Guid.NewGuid();
