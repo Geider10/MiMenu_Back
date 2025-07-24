@@ -6,5 +6,6 @@ namespace MiMenu_Back.Repositories.Interfaces
     {
         Task<bool> ExistsByUserFood(string idFood, string idUser);
         Task Add(OrderModel order);
+        Task<OrderModel?> GetById(string id);
     }
 }

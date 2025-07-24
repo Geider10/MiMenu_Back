@@ -16,5 +16,19 @@ namespace MiMenu_Back.Mappers
                 PriceTotal = order.PriceTotal
             };
         }
+        public OrderGetDto OrderModelToGet(OrderModel order)
+        {
+            return new OrderGetDto
+            {
+                Id = order.Id.ToString(),
+                Name = order.Food.Name,
+                Description = order.Food.Description,
+                ImgUrl = order.Food.ImgUrl,
+                Price = order.Food.Price,
+                Discount = order.Food.Discount,
+                Quantity = order.Quantity,
+                PriceTotal = order.PriceTotal
+            };
+        }
     }
 }
