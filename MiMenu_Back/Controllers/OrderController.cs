@@ -31,9 +31,13 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(201, new MainResponse(true, "Order created with success"));
                 
             }
+            catch(MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error: " + ex.Message);
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
     }
