@@ -49,5 +49,13 @@ namespace MiMenu_Back.Services
             var orderUpdate = _orderMap.UpdateToOrderModel(orderModel, orderDto);
             await _orderRepo.Update(orderUpdate);
         }
+        public async Task Delete(string idOrder, string idUser)
+        {
+            var orderModel = await _orderRepo.GetById(idOrder);
+            if (orderModel == null) throw new MainException("Order no found", 404);
+
+            if (orderModel.IdUser != Guid.Parse(idUser)) throw new MainException("Order must be from user", 403);
+            await _orderRepo.Delete(orderModel);
+        }
     }
 }

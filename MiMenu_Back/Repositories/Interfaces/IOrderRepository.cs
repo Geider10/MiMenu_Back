@@ -10,5 +10,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<OrderModel?> GetById(string id);
         Task<List<OrderModel>?> GetAllByUserId(string idUser);
         Task Update(OrderModel order);
+        Task Delete(OrderModel order);
     }
 }

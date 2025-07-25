@@ -100,5 +100,25 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
+        [HttpDelete][Route("{idOrder}/user/{idUser}")]
+        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string idOrder, [FromRoute]string idUser)
+        {
+            try
+            {
+                if (!Guid.TryParse(idOrder, out _)) return BadRequest("IdOrder must has format Guid");
+                if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
+
+                await _orderSer.Delete(idOrder, idUser);
+                return StatusCode(200, new MainResponse(true, "Order deleted with success"));
+            }
+            catch(MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
     }
 }

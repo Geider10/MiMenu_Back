@@ -45,5 +45,11 @@ namespace MiMenu_Back.Repositories
             _appDB.Orders.Update(order);
             await _appDB.SaveChangesAsync();
         }
+
+        public async Task Delete(OrderModel order)
+        {
+            _appDB.Orders.Remove(order);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }
