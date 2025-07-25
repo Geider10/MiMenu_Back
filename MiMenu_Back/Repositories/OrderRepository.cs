@@ -40,5 +40,10 @@ namespace MiMenu_Back.Repositories
 
             return orderList;
         }
+        public async Task Update(OrderModel order)
+        {
+            _appDB.Orders.Update(order);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }

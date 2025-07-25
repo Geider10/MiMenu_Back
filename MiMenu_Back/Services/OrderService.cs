@@ -2,6 +2,7 @@
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
+using System.Data;
 using System.Globalization;
 namespace MiMenu_Back.Services
 {
@@ -38,6 +39,15 @@ namespace MiMenu_Back.Services
 
             var dtoList = _orderMap.OrderListToGetList(orderList);
             return dtoList;
+        }
+        public async Task Update(string idOrder, string idUser, OrderUpdateDto orderDto)
+        {
+            var orderModel = await _orderRepo.GetById(idOrder);
+            if (orderModel == null) throw new MainException("Order no found", 404);
+
+            if (orderModel.IdUser != Guid.Parse(idUser)) throw new MainException("Order must be from user", 403);
+            var orderUpdate = _orderMap.UpdateToOrderModel(orderModel, orderDto);
+            await _orderRepo.Update(orderUpdate);
         }
     }
 }

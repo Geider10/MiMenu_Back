@@ -41,5 +41,13 @@ namespace MiMenu_Back.Mappers
             }
             return orderDtoList;
         }
+
+        public OrderModel UpdateToOrderModel(OrderModel orderModel, OrderUpdateDto orderDto)
+        {
+            orderModel.Quantity = orderDto.Quantity;
+            orderModel.PriceTotal = orderDto.PriceTotal;
+
+            return orderModel;
+        }
     }
 }

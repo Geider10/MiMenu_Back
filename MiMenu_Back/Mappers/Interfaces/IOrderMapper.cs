@@ -8,5 +8,6 @@ namespace MiMenu_Back.Mappers.Interfaces
         OrderModel GetToOrderModel(OrderAddDto order);
         OrderGetDto OrderModelToGet(OrderModel order);
         List<OrderGetDto> OrderListToGetList(List<OrderModel> orders);
+        OrderModel UpdateToOrderModel(OrderModel orderModel, OrderUpdateDto orderDto);
     }
 }

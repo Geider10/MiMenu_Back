@@ -78,5 +78,27 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
+        [HttpPut][Route("{idOrder}/user/{idUser}")]
+        public async Task<ActionResult<MainResponse>> Update(string idOrder, string idUser, [FromBody]OrderUpdateDto orderDto)
+        {
+            try
+            {
+                if (!Guid.TryParse(idOrder, out _)) return BadRequest("IdOrder must has format Guid");
+                if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
+                ValidationResult bodyReq = new OrderUpdateValidator().Validate(orderDto);
+                if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
+
+                await _orderSer.Update(idOrder, idUser, orderDto);
+                return StatusCode(200, new MainResponse(true, "Order updated with success"));
+            }
+            catch(MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
     }
 }
