@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiMenu_Back.Data;
+using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 
@@ -28,6 +29,16 @@ namespace MiMenu_Back.Repositories
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
 
+        }
+        public async Task<List<OrderModel>?> GetAllByUserId(string idUser)
+        {
+            var orderList = await _appDB.Orders
+                .Include(o => o.Food)
+                .Include(o => o.User)
+                .Where(o => o.IdUser == Guid.Parse(idUser))
+                .ToListAsync();
+
+            return orderList;
         }
     }
 }

@@ -59,5 +59,24 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
+        [HttpGet][Route("user/{idUser}")]
+        public async Task<ActionResult<List<OrderGetDto>>> GetAllByUserId(string idUser)
+        {
+            try
+            {
+                if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
+
+                var dtoList = await _orderSer.GetAllByUserId(idUser);
+                return StatusCode(200, dtoList);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
     }
 }

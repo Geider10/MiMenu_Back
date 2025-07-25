@@ -30,5 +30,16 @@ namespace MiMenu_Back.Mappers
                 PriceTotal = order.PriceTotal
             };
         }
+        public List<OrderGetDto> OrderListToGetList(List<OrderModel> orders)
+        {
+            List<OrderGetDto> orderDtoList = new List<OrderGetDto>();
+            
+            foreach (var order in orders)
+            {
+                var orderDto = OrderModelToGet(order);
+                orderDtoList.Add(orderDto);
+            }
+            return orderDtoList;
+        }
     }
 }
