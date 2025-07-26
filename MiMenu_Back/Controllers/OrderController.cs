@@ -40,7 +40,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpGet][Route("{idOrder}/user/{idUser}")]
-        public async Task<ActionResult<OrderGetDto>> GetById(string idOrder, string idUser)
+        public async Task<ActionResult<OrderGetDto>> GetById([FromRoute]string idOrder,[FromRoute]string idUser)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpGet][Route("user/{idUser}")]
-        public async Task<ActionResult<List<OrderGetDto>>> GetAllByUserId(string idUser)
+        public async Task<ActionResult<List<OrderGetDto>>> GetAllByUserId([FromRoute]string idUser)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpPut][Route("{idOrder}/user/{idUser}")]
-        public async Task<ActionResult<MainResponse>> Update(string idOrder, string idUser, [FromBody]OrderUpdateDto orderDto)
+        public async Task<ActionResult<MainResponse>> Update([FromRoute]string idOrder,[FromRoute]string idUser, [FromBody]OrderUpdateDto orderDto)
         {
             try
             {
