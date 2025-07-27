@@ -45,6 +45,7 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.ImgUrl);
                 tb.Property(col => col.Price).IsRequired().HasColumnType("decimal(18,2)");
                 tb.Property(col => col.Discount);
+                tb.Property(col => col.Visibility).IsRequired();
 
                 tb.HasOne(col => col.Category)
                 .WithMany(cat => cat.Foods)

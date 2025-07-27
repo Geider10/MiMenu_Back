@@ -32,7 +32,7 @@ namespace MiMenu_Back.Repositories
                 .Include(f => f.Category)
                 .FirstOrDefaultAsync(f => f.Id == Guid.Parse(id));   
         }
-        public async Task<List<FoodModel?>> GetAll(string? idCategory, string? sort)
+        public async Task<List<FoodModel>?> GetAll(string? idCategory, string? sort)
         {
             var foods = await _appDB.Foods
                 .Include(f => f.Category)

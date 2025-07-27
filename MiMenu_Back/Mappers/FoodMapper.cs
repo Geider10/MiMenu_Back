@@ -6,7 +6,7 @@ namespace MiMenu_Back.Mappers
 {
     public class FoodMapper : IFoodMapper
     {
-        public FoodModel GetToFoodModel(FoodAddDto food)
+        public FoodModel AddToFoodModel(FoodAddDto food)
         {
             return new FoodModel
             {
@@ -15,7 +15,8 @@ namespace MiMenu_Back.Mappers
                 Description = food.Description,
                 ImgUrl = food.ImgUrl,
                 Price = food.Price,
-                Discount = food.Discount
+                Discount = food.Discount,
+                Visibility = food.Visibility
             };
         }
         public FoodGetDto FoodModelToGet(FoodModel food)
@@ -28,26 +29,18 @@ namespace MiMenu_Back.Mappers
                 Description = food.Description,
                 ImgUrl = food.ImgUrl,
                 Price = food.Price,
-                Discount = food.Discount
+                Discount = food.Discount,
+                Visibility = food.Visibility
             };
         }
         public List<FoodGetDto> FoodListToGetList(List<FoodModel> foods)
         {
             var foodDtoList = new List<FoodGetDto>();
+
             foreach (var food in foods)
             {
-                foodDtoList.Add( new FoodGetDto
-                    {
-                        Id = food.Id.ToString(),
-                        Category = food.Category.Name,
-                        Name = food.Name,
-                        Description = food.Description,
-                        ImgUrl = food.ImgUrl,
-                        Price = food.Price,
-                        Discount = food.Discount
-                    }
-                );
-               
+                var foodDto = FoodModelToGet(food);
+                foodDtoList.Add(foodDto);
             }
             return foodDtoList;
         }

@@ -21,7 +21,7 @@ namespace MiMenu_Back.Services
             var foodExists = await _foodRepo.ExistsByName(food.Name);
             if (foodExists) throw new MainException("Name of food already exists", 400);
 
-            var foodModel = _foodMap.GetToFoodModel(food);
+            var foodModel = _foodMap.AddToFoodModel(food);
             await _foodRepo.Add(foodModel);
         }
         public async Task<FoodGetDto> GetById (string id)

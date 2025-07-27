@@ -8,5 +8,6 @@
         public string? ImgUrl { get; set; }
         public double Price { get; set; }
         public int? Discount { get; set; }
+        public bool Visibility { get; set; }
     }
 }

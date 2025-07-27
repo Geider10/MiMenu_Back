@@ -20,6 +20,8 @@ namespace MiMenu_Back.Validators.Food
             RuleFor(p => p.Price)
                 .NotEmpty().WithMessage("Price is required")
                 .GreaterThan(0).WithMessage("Price must be greater than 0");
+            RuleFor(p => p.Visibility)
+                .Must(value => value == true || value == false).WithMessage("Visibility must be true or false");
         }
     }
 }
