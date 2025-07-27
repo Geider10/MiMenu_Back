@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Food;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
@@ -39,7 +40,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpGet][Route("{id}")]
-        public async Task<ActionResult<FoodGetDto>> GetById([FromRoute]string id)
+        public async Task<ActionResult<FoodGetDto>> GetById([FromRoute] string id)
         {
             try
             {
@@ -48,7 +49,7 @@ namespace MiMenu_Back.Controllers
                 var foodDto = await _foodService.GetById(id);
                 return StatusCode(200, foodDto);
             }
-            catch(MainException ex){
+            catch (MainException ex) {
                 return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
             }
             catch (Exception ex)
@@ -78,7 +79,7 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpPut][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody]FoodAddDto food)
+        public async Task<ActionResult<MainResponse>> Update([FromRoute] string id, [FromBody] FoodAddDto food)
         {
             try
             {
@@ -100,7 +101,7 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpDelete][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string id)
+        public async Task<ActionResult<MainResponse>> Delete([FromRoute] string id)
         {
             try
             {
@@ -116,6 +117,27 @@ namespace MiMenu_Back.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
+        [Authorize(Roles = "admin")]
+        [HttpPut][Route("{id}/image")]
+        public async Task<ActionResult<MainResponse>> UpdateImg([FromRoute] string id, [FromBody] ImgUpdateDto imgDto)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
+                if (string.IsNullOrWhiteSpace(imgDto.ImgUrl)) return BadRequest("ImgUrl is required");
+
+                await _foodService.UpdateImg(id, imgDto);
+                return StatusCode(200, new MainResponse(true, "Image of food updated with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));    
             }
         }
     }

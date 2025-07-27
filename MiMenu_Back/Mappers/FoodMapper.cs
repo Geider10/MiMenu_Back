@@ -31,7 +31,6 @@ namespace MiMenu_Back.Mappers
                 Discount = food.Discount
             };
         }
-
         public List<FoodGetDto> FoodListToGetList(List<FoodModel> foods)
         {
             var foodDtoList = new List<FoodGetDto>();
@@ -52,13 +51,11 @@ namespace MiMenu_Back.Mappers
             }
             return foodDtoList;
         }
-
         public FoodModel UpdateToFoodModel(FoodAddDto foodDto, FoodModel foodModel)
         {
             foodModel.IdCategory = Guid.Parse(foodDto.IdCategory);
             foodModel.Name = foodDto.Name;
             foodModel.Description = foodDto.Description;
-            foodModel.ImgUrl = foodDto.ImgUrl;
             foodModel.Price = foodDto.Price;
             foodModel.Discount = foodDto.Discount;
 
