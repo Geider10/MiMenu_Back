@@ -66,6 +66,13 @@ namespace MiMenu_Back.Services
             foodModel.ImgUrl = imgDto.ImgUrl;
             await _foodRepo.Update(foodModel);
         }
+        public async Task DeleteImg(string id)
+        {
+            var foodModel = await _foodRepo.GetById(id);
+            if (foodModel == null) throw new MainException("Food no found", 404);
 
+            foodModel.ImgUrl = null;
+            await _foodRepo.Update(foodModel);
+        }
     }
 }
