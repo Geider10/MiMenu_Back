@@ -18,7 +18,7 @@ namespace MiMenu_Back.Controllers
             _foodService = foodService;
         }
         [Authorize(Roles = "admin")]
-        [HttpPost][Route("")]
+        [HttpPost]
         public async Task<ActionResult<MainResponse>> Add([FromBody] FoodAddDto food)
         {
             try
@@ -35,7 +35,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [HttpGet][Route("{id}")]
@@ -43,8 +43,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var guid = Guid.NewGuid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 var foodDto = await _foodService.GetById(id);
                 return StatusCode(200, foodDto);
@@ -54,7 +53,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [HttpGet]
@@ -74,7 +73,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [Authorize(Roles = "admin")]
@@ -83,8 +82,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var guid = Guid.NewGuid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
                 ValidationResult bodyReq = new FoodAddValidator().Validate(food);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
@@ -106,8 +104,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var guid = Guid.NewGuid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _foodService.Delete(id);
                 return StatusCode(200, new MainResponse(true, "Food deleted with success"));

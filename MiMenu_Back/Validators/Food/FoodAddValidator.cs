@@ -7,10 +7,9 @@ namespace MiMenu_Back.Validators.Food
     {
         public FoodAddValidator()
         {
-            var guid = Guid.NewGuid();
             RuleFor(p => p.IdCategory)
                 .NotEmpty().WithMessage("ID category is required")
-                .Must(value => Guid.TryParse(value, out guid)).WithMessage("ID category must has format Guid")
+                .Must(value => Guid.TryParse(value, out _)).WithMessage("ID category must has format Guid")
                 .MaximumLength(50).WithMessage("ID category must has length maximum 50 characters");
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("Name is required")

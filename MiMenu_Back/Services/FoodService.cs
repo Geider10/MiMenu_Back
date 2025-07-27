@@ -17,6 +17,9 @@ namespace MiMenu_Back.Services
         }
         public async Task Add (FoodAddDto food)
         {
+            var foodExists = await _foodRepo.ExistsByName(food.Name);
+            if (foodExists) throw new MainException("Name of food already exists", 400);
+
             var foodModel = _foodMap.GetToFoodModel(food);
             await _foodRepo.Add(foodModel);
         }
@@ -40,6 +43,9 @@ namespace MiMenu_Back.Services
         {
             var foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
+
+            var foodExists = await _foodRepo.ExistsByName(food.Name, id);
+            if (foodExists) throw new MainException("Name of food already exists", 400);
 
             var foodModelUpdate = _foodMap.UpdateToFoodModel(food, foodModel);
             await _foodRepo.Update(foodModelUpdate);

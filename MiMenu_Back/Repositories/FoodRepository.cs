@@ -13,6 +13,14 @@ namespace MiMenu_Back.Repositories
         {
             _appDB = appDB;
         }
+        public async Task<bool> ExistsByName(string name)
+        {
+            return await _appDB.Foods.AnyAsync(f => f.Name == name);
+        }
+        public async Task<bool> ExistsByName(string name, string idIgnore)
+        {
+            return await _appDB.Foods.AnyAsync(f => f.Name == name && f.Id != Guid.Parse(idIgnore));
+        }
         public async Task Add(FoodModel food)
         {
             _appDB.Foods.Add(food);
