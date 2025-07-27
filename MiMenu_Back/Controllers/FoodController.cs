@@ -160,5 +160,26 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
+        [Authorize(Roles ="admin")]
+        [HttpPut][Route("{id}/visible")]
+        public async Task<ActionResult<MainResponse>> UpdateVisibility([FromRoute]string id, [FromBody]VisibilityUpdateDto visibleDto)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
+                if (visibleDto.Visibility != true && visibleDto.Visibility != false) return BadRequest("Visibility must be true or false");
+
+                await _foodService.UpdateVisibility(id, visibleDto);
+                return StatusCode(200, new MainResponse(true, "Visibility of food updated with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
     }
 }

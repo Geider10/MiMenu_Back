@@ -74,5 +74,13 @@ namespace MiMenu_Back.Services
             foodModel.ImgUrl = null;
             await _foodRepo.Update(foodModel);
         }
+        public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
+        {
+            var foodModel = await _foodRepo.GetById(id);
+            if (foodModel == null) throw new MainException("Food no found", 404);
+
+            foodModel.Visibility = visibleDto.Visibility;
+            await _foodRepo.Update(foodModel);
+        }
     }
 }
