@@ -17,9 +17,6 @@ namespace MiMenu_Back.Validators.Food
             RuleFor(p => p.Description)
                 .NotEmpty().WithMessage("Description is required")
                 .MaximumLength(400).WithMessage("Description must has length 400 characters");
-            RuleFor(p => p.ImgUrl)
-                .NotEmpty().WithMessage("ImgUrl is required")
-                .MaximumLength(400).WithMessage("ImgUrl must has length maximum 400 characters");
             RuleFor(p => p.Price)
                 .NotEmpty().WithMessage("Price is required")
                 .GreaterThan(0).WithMessage("Price must be greater than 0");

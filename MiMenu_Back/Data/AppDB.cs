@@ -42,7 +42,7 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.IdCategory).IsRequired();
                 tb.Property(col => col.Name).IsRequired().HasMaxLength(200);
                 tb.Property(col => col.Description).IsRequired().HasMaxLength(400);
-                tb.Property(col => col.ImgUrl).IsRequired().HasMaxLength(400);
+                tb.Property(col => col.ImgUrl);
                 tb.Property(col => col.Price).IsRequired().HasColumnType("decimal(18,2)");
                 tb.Property(col => col.Discount);
 
