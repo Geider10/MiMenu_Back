@@ -33,6 +33,7 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.Id).ValueGeneratedOnAdd();
                 tb.Property(col => col.Name).IsRequired().HasMaxLength(100);
                 tb.Property(col => col.Type).IsRequired().HasMaxLength(50);
+                tb.Property(col => col.Visibility).IsRequired();
             });
             modelBuilder.Entity<FoodModel>(tb =>
             {

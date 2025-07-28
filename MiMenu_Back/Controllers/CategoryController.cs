@@ -19,7 +19,7 @@ namespace MiMenu_Back.Controllers
             _categoryService = categoryService;
         }
         [Authorize(Roles = "admin")]
-        [HttpPost][Route("")]
+        [HttpPost]
         public async Task<ActionResult<MainResponse>> Add([FromBody] CategoryAddDto attributeDto)
         {
             try
@@ -36,7 +36,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: "+ ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: "+ ex.Message));
             }
         }
         [HttpGet]

@@ -6,12 +6,13 @@ namespace MiMenu_Back.Mappers
 {
     public class CategoryMapper : ICategoryMapper
     {
-        public CategoryModel GetToCategoryModel(CategoryAddDto attributeDto)
+        public CategoryModel AddToCategoryModel(CategoryAddDto attributeDto)
         {
             return new CategoryModel
             {
                 Name = attributeDto.Name,
-                Type = attributeDto.Type
+                Type = attributeDto.Type,
+                Visibility = attributeDto.Visibility
             };
         }
 

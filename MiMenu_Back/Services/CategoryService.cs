@@ -15,12 +15,12 @@ namespace MiMenu_Back.Services
             _categoryMap = categoryMap;
         }
 
-        public async Task Add(CategoryAddDto getDto)
+        public async Task Add(CategoryAddDto categoryDto)
         {
-            bool categoryExists = await _categoryRepo.ExistsByName(getDto.Name);
-            if (categoryExists) throw new MainException("Category already exists", 400);
+            bool categoryExists = await _categoryRepo.ExistsByName(categoryDto.Name);
+            if (categoryExists) throw new MainException("Name of category already exists", 400);
 
-            var categoryModel = _categoryMap.GetToCategoryModel(getDto);
+            var categoryModel = _categoryMap.AddToCategoryModel(categoryDto);
             await _categoryRepo.Add(categoryModel);
         }
         public async Task<List<CategoryGetDto>> GetAll(CategoryQueryDto queryParams)
