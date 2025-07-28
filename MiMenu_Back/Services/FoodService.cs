@@ -34,7 +34,7 @@ namespace MiMenu_Back.Services
         }
         public async Task<List<FoodGetDto>> GetAll(FoodQueryDto foodQuery)
         {
-            var foodsList = await _foodRepo.GetAll(foodQuery.IdCategory, foodQuery.Sort);
+            var foodsList = await _foodRepo.GetAll(foodQuery.Category, foodQuery.SortName, foodQuery.Visibility);
             if (foodsList.Count == 0 || foodsList == null) throw new MainException("There are no foodsList", 404);
 
             var foodsDtoList = _foodMap.FoodListToGetList(foodsList);

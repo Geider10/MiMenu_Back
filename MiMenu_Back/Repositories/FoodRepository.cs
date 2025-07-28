@@ -2,6 +2,7 @@
 using MiMenu_Back.Data;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
+using MiMenu_Back.Services;
 using System.Runtime.InteropServices;
 
 namespace MiMenu_Back.Repositories
@@ -32,22 +33,29 @@ namespace MiMenu_Back.Repositories
                 .Include(f => f.Category)
                 .FirstOrDefaultAsync(f => f.Id == Guid.Parse(id));   
         }
-        public async Task<List<FoodModel>?> GetAll(string? idCategory, string? sort)
+        public async Task<List<FoodModel>?> GetAll(string? category, string? sortName, bool? visibility)
         {
             var foods = await _appDB.Foods
                 .Include(f => f.Category)
                 .ToListAsync();
 
-            if (!string.IsNullOrEmpty(idCategory))
+            if (!string.IsNullOrEmpty(category))
             {
-                foods = foods.Where(f => f.IdCategory == Guid.Parse(idCategory)).ToList();
+                foods = foods.Where(f => f.Category.Name.ToLower() == category.ToLower()).ToList();
             }
-            if(sort == "asc")
+            if(sortName == "asc" && !string.IsNullOrEmpty(sortName))
             {
                 foods = foods.OrderBy(f => f.Name).ToList();
-            }else if(sort == "desc")
+            }else if(sortName == "desc" && !string.IsNullOrEmpty(sortName))
             {
                 foods = foods.OrderByDescending(f => f.Name).ToList();
+            }
+            if(visibility == true && visibility.HasValue)
+            {
+                foods = foods.Where(f => f.Visibility == visibility).ToList();
+            }else if (visibility == false && visibility.HasValue)
+            {
+                foods = foods.Where(f => f.Visibility == visibility).ToList();
             }
             return foods;
         }

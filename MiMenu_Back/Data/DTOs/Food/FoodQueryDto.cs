@@ -2,7 +2,8 @@
 {
     public class FoodQueryDto
     {
-        public string? IdCategory { get; set; }
-        public string? Sort { get; set; }
+        public string? Category { get; set; }
+        public string? SortName { get; set; }
+        public bool? Visibility { get; set; }
     }
 }

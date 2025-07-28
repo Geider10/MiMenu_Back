@@ -62,9 +62,6 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                ValidationResult queryReq = new FoodQueryValidator().Validate(foodQuery);
-                if (!queryReq.IsValid) return BadRequest(queryReq.Errors);
-
                 var foodsDtoList = await _foodService.GetAll(foodQuery);
                 return StatusCode(200, foodsDtoList);
             }
