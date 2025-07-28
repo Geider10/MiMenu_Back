@@ -3,16 +3,19 @@ using MiMenu_Back.Utils;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Data.DTOs.Category;
 using MiMenu_Back.Mappers.Interfaces;
+using MiMenu_Back.Data.DTOs;
 namespace MiMenu_Back.Services
 {
     public class CategoryService
     {
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICategoryMapper _categoryMap;
-        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap)
+        private readonly IFoodRepository _foodRepo;
+        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo)
         {
             _categoryRepo = categoryRepo;
             _categoryMap = categoryMap;
+            _foodRepo = foodRepo;
         }
 
         public async Task Add(CategoryAddDto categoryDto)
@@ -48,6 +51,23 @@ namespace MiMenu_Back.Services
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
             await _categoryRepo.Delete(categoryModel);
+        }
+        public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
+        {
+            var categoryModel = await _categoryRepo.GetById(id);
+            if (categoryModel == null) throw new MainException("Category no found", 404);
+
+            if(visibleDto.Visibility == true)
+            {
+                categoryModel.Visibility = true;
+                await _categoryRepo.Update(categoryModel);
+            }
+            else
+            {
+                await _foodRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
+                categoryModel.Visibility = false;
+                await _categoryRepo.Update(categoryModel);
+            }
         }
     }
 }

@@ -69,5 +69,17 @@ namespace MiMenu_Back.Repositories
             _appDB.Foods.Remove(food);
             await _appDB.SaveChangesAsync();
         }
+        public async Task UpdateVisibilityByCategory(string idCategory, bool visible)
+        {
+            var foodsList = await _appDB.Foods
+                .Where(f => f.IdCategory == Guid.Parse(idCategory))
+                .ToListAsync();
+
+            foreach (var food in foodsList)
+            {
+                food.Visibility = visible;
+                await Update(food);
+            }
+        }
     }
 }

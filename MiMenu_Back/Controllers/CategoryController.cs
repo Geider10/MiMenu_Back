@@ -7,6 +7,7 @@ using MiMenu_Back.Utils;
 using MiMenu_Back.Data.DTOs.Category;
 using MiMenu_Back.Validators.Category;
 using Microsoft.IdentityModel.Tokens;
+using MiMenu_Back.Data.DTOs;
 namespace MiMenu_Back.Controllers
 {
     [Route("api/category")]
@@ -100,6 +101,27 @@ namespace MiMenu_Back.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+            }
+        }
+        [Authorize(Roles ="admin")]
+        [HttpPut][Route("{id}/visible")]
+        public async Task<ActionResult<MainResponse>> UpdateVisibility([FromRoute]string id, [FromBody]VisibilityUpdateDto visibleDto)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
+                if (visibleDto.Visibility != true && visibleDto.Visibility != false) return BadRequest("Visibility must be true or false");
+
+                await _categoryService.UpdateVisibility(id, visibleDto);
+                return StatusCode(200, new MainResponse(true, "Visibility of category updated with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
     }

@@ -11,5 +11,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<List<FoodModel>?> GetAll(string? category, string? sortName, bool? visibility);
         Task Update(FoodModel food);
         Task Delete(FoodModel food);
+        Task UpdateVisibilityByCategory(string idCategory, bool visible);
     }
 }
