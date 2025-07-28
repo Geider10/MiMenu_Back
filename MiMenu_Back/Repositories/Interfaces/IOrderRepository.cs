@@ -6,6 +6,7 @@ namespace MiMenu_Back.Repositories.Interfaces
     public interface IOrderRepository
     {
         Task<bool> ExistsByUserFood(string idFood, string idUser);
+        Task<bool> ExistsByFoodId(string idFood);
         Task Add(OrderModel order);
         Task<OrderModel?> GetById(string id);
         Task<List<OrderModel>?> GetAllByUserId(string idUser);

@@ -17,6 +17,10 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Orders.AnyAsync(o => o.IdFood == Guid.Parse(idFood) && o.IdUser == Guid.Parse(idUser));
         }
+        public async Task<bool> ExistsByFoodId(string idFood)
+        {
+            return await _appDB.Orders.AnyAsync(o => o.IdFood == Guid.Parse(idFood));
+        }
         public async Task Add(OrderModel order)
         {
             _appDB.Orders.Add(order);
@@ -51,5 +55,6 @@ namespace MiMenu_Back.Repositories
             _appDB.Orders.Remove(order);
             await _appDB.SaveChangesAsync();
         }
+       
     }
 }
