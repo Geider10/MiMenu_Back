@@ -45,8 +45,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                ValidationResult queryReq = new CategoryQueryValidator().Validate(queryParams);
-                if (!queryReq.IsValid) return BadRequest(queryReq.Errors);
+                if (queryParams.TypeCategory != "comida" && queryParams.TypeCategory != "cupón") return BadRequest("TypeCategory must be comida o cupón");
 
                 var categoryGetList = await _categoryService.GetAll(queryParams);
                 return StatusCode(200, categoryGetList);
@@ -57,7 +56,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [Authorize(Roles = "admin")]

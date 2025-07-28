@@ -22,19 +22,24 @@ namespace MiMenu_Back.Repositories
             await _appDB.SaveChangesAsync();
         }
 
-        public async Task<List<CategoryModel>> GetAll(string type, string? sort)
+        public async Task<List<CategoryModel>> GetAll(string typeCategory, string? sortName, bool? visibility)
         {
             var categories = await _appDB.Categories
-                .Where(c => c.Type.ToLower() == type.ToLower())
+                .Where(c => c.Type.ToLower() == typeCategory.ToLower())
                 .ToListAsync();
 
-            if(sort == "asc")
+            if(sortName == "asc" && !string.IsNullOrEmpty(sortName))
             {
                 categories = categories.OrderBy(c => c.Name).ToList();
-            }else if(sort == "desc")
+            }else if(sortName == "desc" && !string.IsNullOrEmpty(sortName))
             {
                 categories = categories.OrderByDescending(c => c.Name).ToList();
             }
+            if(visibility.HasValue)
+            {
+                categories = categories.Where(c => c.Visibility == visibility).ToList();
+            }
+
             return categories;
         }
 

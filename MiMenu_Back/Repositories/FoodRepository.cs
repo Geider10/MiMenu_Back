@@ -50,13 +50,11 @@ namespace MiMenu_Back.Repositories
             {
                 foods = foods.OrderByDescending(f => f.Name).ToList();
             }
-            if(visibility == true && visibility.HasValue)
-            {
-                foods = foods.Where(f => f.Visibility == visibility).ToList();
-            }else if (visibility == false && visibility.HasValue)
+            if(visibility.HasValue)
             {
                 foods = foods.Where(f => f.Visibility == visibility).ToList();
             }
+
             return foods;
         }
         public async Task Update(FoodModel food)

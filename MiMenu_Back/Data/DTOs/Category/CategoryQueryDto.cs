@@ -2,7 +2,8 @@
 {
     public class CategoryQueryDto
     {
-        public string Type { get; set; }
-        public string? Sort { get; set; }
+        public string TypeCategory { get; set; }
+        public string? SortName { get; set; }
+        public bool? Visibility { get; set; }
     }
 }

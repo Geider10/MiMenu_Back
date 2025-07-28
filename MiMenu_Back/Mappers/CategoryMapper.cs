@@ -15,20 +15,20 @@ namespace MiMenu_Back.Mappers
                 Visibility = attributeDto.Visibility
             };
         }
-
         public List<CategoryGetDto> CategoryListToGetList(List<CategoryModel> categoryList)
         {
-            var dtosList = new List<CategoryGetDto>();
+            var dtoList = new List<CategoryGetDto>();
+
             foreach(var category in categoryList)
             {
-                dtosList.Add(new CategoryGetDto
+                dtoList.Add(new CategoryGetDto
                 {
                     Id = category.Id.ToString(),
                     Name = category.Name,
+                    Visibility = category.Visibility
                 });
             }
-
-            return dtosList;
+            return dtoList;
         }
     }
 }
