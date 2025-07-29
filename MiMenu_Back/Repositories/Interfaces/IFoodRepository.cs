@@ -6,6 +6,7 @@ namespace MiMenu_Back.Repositories.Interfaces
     {
         Task<bool> ExistsByName(string name);
         Task<bool> ExistsByName(string name, string idIgnore);
+        Task<bool> ExistsByCategoryId(string idCategory);
         Task Add(FoodModel food);
         Task<FoodModel?> GetById(string id);
         Task<List<FoodModel>?> GetAll(string? category, string? sortName, bool? visibility);

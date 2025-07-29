@@ -82,12 +82,11 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpDelete][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Delete (string id)
+        public async Task<ActionResult<MainResponse>> Delete ([FromRoute]string id)
         {
             try
             {
-                var formatId = new Guid();
-                if (!Guid.TryParse(id, out formatId)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _categoryService.Delete(id);
                 return StatusCode(200, new MainResponse(true, "Category deleted with success"));
@@ -98,7 +97,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [Authorize(Roles ="admin")]

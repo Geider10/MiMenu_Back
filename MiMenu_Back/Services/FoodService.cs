@@ -59,7 +59,7 @@ namespace MiMenu_Back.Services
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             bool orderExists = await _orderRepo.ExistsByFoodId(id);
-            if(orderExists) throw new MainException("Food cannot be deleted because is associated with an order", 400);
+            if(orderExists) throw new MainException("Cannot be deleted because is associated with a order", 400);
 
             await _foodRepo.Delete(foodModel);
         }

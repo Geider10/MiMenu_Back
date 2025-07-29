@@ -1,9 +1,8 @@
-﻿using MiMenu_Back.Repositories.Interfaces;
-using MiMenu_Back.Utils;
-using MiMenu_Back.Data.Models;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Category;
 using MiMenu_Back.Mappers.Interfaces;
-using MiMenu_Back.Data.DTOs;
+using MiMenu_Back.Repositories.Interfaces;
+using MiMenu_Back.Utils;
 namespace MiMenu_Back.Services
 {
     public class CategoryService
@@ -49,6 +48,9 @@ namespace MiMenu_Back.Services
         {
             var categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
+
+            bool foodExists = await _foodRepo.ExistsByCategoryId(id);
+            if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 400);
 
             await _categoryRepo.Delete(categoryModel);
         }
