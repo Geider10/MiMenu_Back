@@ -39,8 +39,8 @@ namespace MiMenu_Back.Services
             var categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
-            bool categoryExists = await _categoryRepo.ExistsByName(category.Name);
-            if (categoryExists) throw new MainException("Category already exists", 400);
+            bool categoryExists = await _categoryRepo.ExistsByName(category.Name,id);
+            if (categoryExists) throw new MainException("Name of category already exists", 400);
 
             categoryModel.Name = category.Name;
             await _categoryRepo.Update(categoryModel);

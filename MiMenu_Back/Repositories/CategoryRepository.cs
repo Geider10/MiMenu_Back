@@ -16,12 +16,15 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Categories.AnyAsync(c => c.Name == name);
         }
+        public async Task<bool> ExistsByName(string name, string idIgnore)
+        {
+            return await _appDB.Categories.AnyAsync(c => c.Name == name && c.Id != Guid.Parse(idIgnore));
+        }
         public async Task Add(CategoryModel category)
         {
             _appDB.Categories.Add(category);
             await _appDB.SaveChangesAsync();
         }
-
         public async Task<List<CategoryModel>> GetAll(string typeCategory, string? sortName, bool? visibility)
         {
             var categories = await _appDB.Categories

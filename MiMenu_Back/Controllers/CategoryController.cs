@@ -61,12 +61,11 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<MainResponse>> Update (string id, [FromBody] CategoryUpdateDto category)
+        public async Task<ActionResult<MainResponse>> Update ([FromRoute]string id, [FromBody] CategoryUpdateDto category)
         {
             try
             {
-                var guid = new Guid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
                 if (string.IsNullOrWhiteSpace(category.Name)) return BadRequest("Name is required");
 
                 await _categoryService.Update(id, category);
@@ -78,7 +77,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [Authorize(Roles = "admin")]
