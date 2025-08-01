@@ -5,9 +5,9 @@ namespace MiMenu_Back.Mappers.Interfaces
 {
     public interface IOrderMapper
     {
-        OrderModel GetToOrderModel(OrderAddDto order);
-        OrderGetDto OrderModelToGet(OrderModel order);
-        List<OrderGetDto> OrderListToGetList(List<OrderModel> orders);
-        OrderModel UpdateToOrderModel(OrderModel orderModel, OrderUpdateDto orderDto);
+        CartItem GetToOrderModel(OrderAddDto order);
+        OrderGetDto OrderModelToGet(CartItem order);
+        List<OrderGetDto> OrderListToGetList(List<CartItem> orders);
+        CartItem UpdateToOrderModel(CartItem orderModel, OrderUpdateDto orderDto);
     }
 }

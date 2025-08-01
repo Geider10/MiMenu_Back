@@ -6,9 +6,9 @@ namespace MiMenu_Back.Mappers
 {
     public class OrderMapper : IOrderMapper
     {
-        public OrderModel GetToOrderModel(OrderAddDto order)
+        public CartItem GetToOrderModel(OrderAddDto order)
         {
-            return new OrderModel
+            return new CartItem
             {
                 IdFood = Guid.Parse(order.IdFood),
                 IdUser = Guid.Parse(order.IdUser),
@@ -16,7 +16,7 @@ namespace MiMenu_Back.Mappers
                 PriceTotal = order.PriceTotal
             };
         }
-        public OrderGetDto OrderModelToGet(OrderModel order)
+        public OrderGetDto OrderModelToGet(CartItem order)
         {
             return new OrderGetDto
             {
@@ -30,7 +30,7 @@ namespace MiMenu_Back.Mappers
                 PriceTotal = order.PriceTotal
             };
         }
-        public List<OrderGetDto> OrderListToGetList(List<OrderModel> orders)
+        public List<OrderGetDto> OrderListToGetList(List<CartItem> orders)
         {
             List<OrderGetDto> orderDtoList = new List<OrderGetDto>();
             
@@ -42,7 +42,7 @@ namespace MiMenu_Back.Mappers
             return orderDtoList;
         }
 
-        public OrderModel UpdateToOrderModel(OrderModel orderModel, OrderUpdateDto orderDto)
+        public CartItem UpdateToOrderModel(CartItem orderModel, OrderUpdateDto orderDto)
         {
             orderModel.Quantity = orderDto.Quantity;
             orderModel.PriceTotal = orderDto.PriceTotal;

@@ -13,30 +13,34 @@ namespace MiMenu_Back.Repositories
         {
             _appDB = appDB;
         }
-        public async Task<bool> ExistsByUserFood(string idFood, string idUser)
+        public async Task<bool> ExistsByUserFood(string? idFood, string idUser)
         {
-            return await _appDB.Orders.AnyAsync(o => o.IdFood == Guid.Parse(idFood) && o.IdUser == Guid.Parse(idUser));
+            if (!string.IsNullOrEmpty(idFood))
+            {
+                return await _appDB.CartItems.AnyAsync(o => o.IdFood == Guid.Parse(idFood) && o.IdUser == Guid.Parse(idUser));
+            }
+            return false;
         }
         public async Task<bool> ExistsByFoodId(string idFood)
         {
-            return await _appDB.Orders.AnyAsync(o => o.IdFood == Guid.Parse(idFood));
+            return await _appDB.CartItems.AnyAsync(o => o.IdFood == Guid.Parse(idFood));
         }
-        public async Task Add(OrderModel order)
+        public async Task Add(CartItem order)
         {
-            _appDB.Orders.Add(order);
+            _appDB.CartItems.Add(order);
             await _appDB.SaveChangesAsync();
         }
-        public async Task<OrderModel?> GetById(string id)
+        public async Task<CartItem?> GetById(string id)
         {
-            return await _appDB.Orders
+            return await _appDB.CartItems
                 .Include(o => o.Food)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
 
         }
-        public async Task<List<OrderModel>?> GetAllByUserId(string idUser)
+        public async Task<List<CartItem>?> GetAllByUserId(string idUser)
         {
-            var orderList = await _appDB.Orders
+            var orderList = await _appDB.CartItems
                 .Include(o => o.Food)
                 .Include(o => o.User)
                 .Where(o => o.IdUser == Guid.Parse(idUser))
@@ -44,15 +48,15 @@ namespace MiMenu_Back.Repositories
 
             return orderList;
         }
-        public async Task Update(OrderModel order)
+        public async Task Update(CartItem order)
         {
-            _appDB.Orders.Update(order);
+            _appDB.CartItems.Update(order);
             await _appDB.SaveChangesAsync();
         }
 
-        public async Task Delete(OrderModel order)
+        public async Task Delete(CartItem order)
         {
-            _appDB.Orders.Remove(order);
+            _appDB.CartItems.Remove(order);
             await _appDB.SaveChangesAsync();
         }
        

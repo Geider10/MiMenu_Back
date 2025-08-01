@@ -1,16 +1,16 @@
 ﻿namespace MiMenu_Back.Data.Models
 {
-    public class OrderModel
+    public class CartItem
     {
         public Guid Id { get; set; }
-        public Guid IdFood { get; set; }
         public Guid IdUser { get; set; }
+        public Guid? IdFood { get; set; }
         public int Quantity { get; set; }
         public double PriceTotal { get; set; }
 
         public FoodModel Food { get; set; }
         public UserModel User { get; set; }
-        public OrderModel()
+        public CartItem()
         {
             Id = Guid.NewGuid();
         }

@@ -10,7 +10,7 @@ namespace MiMenu_Back.Data
         public DbSet<UserModel> Users { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<FoodModel> Foods { get; set; }
-        public DbSet<OrderModel> Orders { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -71,12 +71,12 @@ namespace MiMenu_Back.Data
                 .HasForeignKey(col => col.IdCategory)
                 .OnDelete(DeleteBehavior.Cascade);
             });
-            modelBuilder.Entity<OrderModel>(tb =>
+            modelBuilder.Entity<CartItem>(tb =>
             {
-                tb.ToTable("order");
+                tb.ToTable("cartItem");
                 tb.HasKey(col => col.Id);
                 tb.Property(col => col.Id).ValueGeneratedOnAdd();
-                tb.Property(col => col.IdFood).IsRequired();
+                tb.Property(col => col.IdFood);
                 tb.Property(col => col.IdUser).IsRequired();
                 tb.Property(col => col.Quantity).IsRequired();
                 tb.Property(col => col.PriceTotal).IsRequired();

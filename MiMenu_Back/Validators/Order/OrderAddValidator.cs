@@ -8,8 +8,7 @@ namespace MiMenu_Back.Validators.Order
         public OrderAddValidator()
         {
             RuleFor(prop => prop.IdFood)
-                .NotEmpty().WithMessage("IdFood is required")
-                .Must(v => Guid.TryParse(v, out _)).WithMessage("IdFood must has format Guid");
+                .Must(v => Guid.TryParse(v, out _) || v == null).WithMessage("IdFood must has format Guid or be null");
             RuleFor(prop => prop.IdUser)
                 .NotEmpty().WithMessage("IdUser is required")
                 .Must(value => Guid.TryParse(value, out _)).WithMessage("IdUser must has format Guid");
