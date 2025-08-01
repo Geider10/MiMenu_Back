@@ -24,9 +24,10 @@ namespace MiMenu_Back.Utils
             if (!dateFormat.IsMatch(date)) return null;
             return DateOnly.Parse(date);
         }
-        public string FormatToString(DateOnly? date)
+        public string? FormatToString(DateOnly? date)
         {
-            return date.HasValue ? date.Value.ToString("yyyy-MM-dd") : string.Empty;
+            if (date == null) return null;
+            return date.Value.ToString("dd-MM-yyyy");
         }
         public string GenerateJWT(string id , string role)
         {

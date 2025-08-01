@@ -27,10 +27,11 @@ namespace MiMenu_Back.Repositories
                 .Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
-
         public async Task<UserModel?> GetById(string id)
         {
-            return await _appDB.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
+            return await _appDB.Users
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
         }
         public async Task Update(UserModel user)
         {

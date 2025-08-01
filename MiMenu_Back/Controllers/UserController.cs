@@ -11,7 +11,7 @@ namespace MiMenu_Back.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles="client")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -24,8 +24,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var guid = new Guid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 var userDto = await _userService.GetById(id);
                 return StatusCode(200, userDto);
@@ -36,7 +35,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [HttpPut][Route("{id}")]
@@ -44,9 +43,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var guid = new Guid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
-
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
                 ValidationResult bodyReq = new UserUpdateValidator().Validate(updateDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
@@ -59,7 +56,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [HttpDelete][Route("{id}")]
@@ -67,8 +64,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var guid = new Guid();
-                if (!Guid.TryParse(id, out guid)) return BadRequest("Id must has format Guid");
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _userService.Delete(id);
                 return StatusCode(200, new MainResponse(true, "User deleted with success"));
@@ -79,7 +75,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
     }

@@ -22,7 +22,7 @@ namespace MiMenu_Back.Services
             var userModel = await _userRepo.GetById(id);
             if (userModel == null) throw new MainException("User no found", 404);
 
-            string birthDate = _util.FormatToString(userModel.BirthDate);
+            string? birthDate = _util.FormatToString(userModel.BirthDate);
             var userDto = _userMap.UserModelToGet(userModel, birthDate);
             return userDto;
         }
