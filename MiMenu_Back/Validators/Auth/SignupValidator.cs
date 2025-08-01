@@ -7,11 +7,20 @@ namespace MiMenu_Back.Validators.Auth
     {
         public SignupValidator()
         {
-            RuleFor(u => u.Name).NotEmpty().MaximumLength(100).WithMessage("Name is required and length maximum is 100 characters");
-            RuleFor(u => u.Email).NotEmpty().MaximumLength(100).Matches(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$").WithMessage("Email is required and must has format validate");
-            RuleFor(u => u.Password).NotEmpty().MaximumLength(100).Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$").WithMessage("Password is required and must comply format expected");
-            RuleFor(u => u.Address).NotEmpty().MaximumLength(200).WithMessage("Address length maximum is 200 characters");
-            //RuleFor(u => u.BirthDate).Matches(@"^(?: 3[01] | [12][0 - 9] | 0?[1 - 9])([\-/.])(0?[1 - 9] | 1[1 - 2])\1\d{ 4}$").WithMessage("Birth date is optional and must comply format expected");
+            RuleFor(u => u.Name)
+                .NotEmpty().WithMessage("Name is required")
+                .MaximumLength(100).WithMessage("Name must has length maximum 100 characters");
+            RuleFor(u => u.Email)
+                .NotEmpty().WithMessage("Email is required")
+                .Matches(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$").WithMessage("Email must comply format validate")
+                .MaximumLength(100).WithMessage("Email must has length maximum 100 characters");
+            RuleFor(u => u.Password)
+                .NotEmpty().WithMessage("Password is required")
+                .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$").WithMessage("Password must comply format validate")
+                .MaximumLength(100).WithMessage("Password must has length maximum 100 characters");
+            RuleFor(u => u.Phone)
+                .NotEmpty().WithMessage("Phone is required")
+                .Length(10).WithMessage("Phone must has length 10 characters");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MiMenu_Back.Mappers
                 Name = signupDto.Name,
                 Email = signupDto.Email,
                 Password = passwordHash,
-                Address = signupDto.Address,
+                Phone = signupDto.Phone,
                 BirthDate = birthDate
             };
         }

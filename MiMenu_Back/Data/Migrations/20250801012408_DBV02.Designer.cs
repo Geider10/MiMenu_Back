@@ -4,6 +4,7 @@ using MiMenu_Back.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MiMenu_Back.Migrations
 {
     [DbContext(typeof(AppDB))]
-    partial class AppDBModelSnapshot : ModelSnapshot
+    [Migration("20250801012408_DBV02")]
+    partial class DBV02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,16 +114,44 @@ namespace MiMenu_Back.Migrations
                     b.ToTable("order", (string)null);
                 });
 
-            modelBuilder.Entity("MiMenu_Back.Data.Models.UserModel", b =>
+            modelBuilder.Entity("MiMenu_Back.Data.Models.RolModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("rol", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Name = "client"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Name = "local"
+                        });
+                });
+
+            modelBuilder.Entity("MiMenu_Back.Data.Models.UserModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<DateOnly?>("BirthDate")
                         .HasColumnType("date");
@@ -129,6 +160,11 @@ namespace MiMenu_Back.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<Guid>("IdRol")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasDefaultValue(new Guid("00000000-0000-0000-0000-000000000001"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -140,12 +176,15 @@ namespace MiMenu_Back.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Role")
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdRol")
+                        .IsUnique();
 
                     b.ToTable("user", (string)null);
                 });
@@ -166,7 +205,7 @@ namespace MiMenu_Back.Migrations
                     b.HasOne("MiMenu_Back.Data.Models.FoodModel", "Food")
                         .WithMany("Orders")
                         .HasForeignKey("IdFood")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MiMenu_Back.Data.Models.UserModel", "User")
@@ -180,6 +219,17 @@ namespace MiMenu_Back.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MiMenu_Back.Data.Models.UserModel", b =>
+                {
+                    b.HasOne("MiMenu_Back.Data.Models.RolModel", "Rol")
+                        .WithOne("User")
+                        .HasForeignKey("MiMenu_Back.Data.Models.UserModel", "IdRol")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Rol");
+                });
+
             modelBuilder.Entity("MiMenu_Back.Data.Models.CategoryModel", b =>
                 {
                     b.Navigation("Foods");
@@ -188,6 +238,12 @@ namespace MiMenu_Back.Migrations
             modelBuilder.Entity("MiMenu_Back.Data.Models.FoodModel", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("MiMenu_Back.Data.Models.RolModel", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MiMenu_Back.Data.Models.UserModel", b =>

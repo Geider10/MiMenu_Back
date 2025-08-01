@@ -12,14 +12,14 @@ namespace MiMenu_Back.Mappers
             {
                 Name = userModel.Name,
                 Email = userModel.Email,
-                Address = userModel.Address,
+                Phone = userModel.Phone,
                 BirthDate = birthDate
             };
         }
         public UserModel UpdateToUserModel(UserModel userModel, UserUpdateDto updateDto, DateOnly? birthDate)
         {
             userModel.Name = updateDto.Name;
-            userModel.Address = updateDto.Address;
+            userModel.Phone = updateDto.Phone;
             userModel.BirthDate = birthDate;
 
             return userModel;

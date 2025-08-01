@@ -35,7 +35,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
         [HttpPost][Route("login")]
@@ -55,7 +55,7 @@ namespace MiMenu_Back.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new MainResponse(false, "Internal Server Error: " + ex.Message));
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
     }

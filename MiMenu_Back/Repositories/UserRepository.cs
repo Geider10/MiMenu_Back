@@ -21,10 +21,11 @@ namespace MiMenu_Back.Repositories
             _appDB.Users.Add(user);
             await _appDB.SaveChangesAsync();
         }
-
         public async Task<UserModel?> GetByEmail(string email)
         {
-            return await _appDB.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _appDB.Users
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<UserModel?> GetById(string id)

@@ -18,7 +18,7 @@ namespace MiMenu_Back.Utils
         {
             return BCrypt.Net.BCrypt.Verify(text, hashText);
         }
-        public DateOnly? FormatToDateOnly(string date)
+        public DateOnly? FormatToDateOnly(string? date)
         {
             var dateFormat = new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$");//dd-mm-yyy||dd/mm/yyyy
             if (!dateFormat.IsMatch(date)) return null;
