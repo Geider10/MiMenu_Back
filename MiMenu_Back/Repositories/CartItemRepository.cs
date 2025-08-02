@@ -6,10 +6,10 @@ using MiMenu_Back.Repositories.Interfaces;
 
 namespace MiMenu_Back.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class CartItemRepository : ICartItemRepository
     {
         private readonly AppDB _appDB;
-        public OrderRepository(AppDB appDB)
+        public CartItemRepository(AppDB appDB)
         {
             _appDB = appDB;
         }
@@ -25,9 +25,9 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.CartItems.AnyAsync(o => o.IdFood == Guid.Parse(idFood));
         }
-        public async Task Add(CartItem order)
+        public async Task Add(CartItem cartItem)
         {
-            _appDB.CartItems.Add(order);
+            _appDB.CartItems.Add(cartItem);
             await _appDB.SaveChangesAsync();
         }
         public async Task<CartItem?> GetById(string id)
@@ -48,15 +48,15 @@ namespace MiMenu_Back.Repositories
 
             return orderList;
         }
-        public async Task Update(CartItem order)
+        public async Task Update(CartItem cartItem)
         {
-            _appDB.CartItems.Update(order);
+            _appDB.CartItems.Update(cartItem);
             await _appDB.SaveChangesAsync();
         }
 
-        public async Task Delete(CartItem order)
+        public async Task Delete(CartItem cartItem)
         {
-            _appDB.CartItems.Remove(order);
+            _appDB.CartItems.Remove(cartItem);
             await _appDB.SaveChangesAsync();
         }
        

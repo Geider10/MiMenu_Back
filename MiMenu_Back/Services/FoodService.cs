@@ -11,8 +11,8 @@ namespace MiMenu_Back.Services
     {
         private readonly IFoodMapper _foodMap;
         private readonly IFoodRepository _foodRepo;
-        private readonly IOrderRepository _orderRepo;
-        public FoodService(IFoodMapper foodMap, IFoodRepository foodRepo, IOrderRepository orderRepo)
+        private readonly ICartItemRepository _orderRepo;
+        public FoodService(IFoodMapper foodMap, IFoodRepository foodRepo, ICartItemRepository orderRepo)
         {
             _foodMap = foodMap;
             _foodRepo = foodRepo;

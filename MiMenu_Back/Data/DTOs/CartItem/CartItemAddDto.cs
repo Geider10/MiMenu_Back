@@ -1,6 +1,6 @@
 ﻿namespace MiMenu_Back.Data.DTOs.Order
 {
-    public class OrderAddDto
+    public class CartItemAddDto
     {
         public string IdUser { get; set; }
         public string? IdFood { get; set; }

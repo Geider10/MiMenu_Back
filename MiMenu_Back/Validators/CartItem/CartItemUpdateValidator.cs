@@ -2,9 +2,9 @@
 using MiMenu_Back.Data.DTOs.Order;
 namespace MiMenu_Back.Validators.Order
 {
-    public class OrderUpdateValidator : AbstractValidator<OrderUpdateDto>
+    public class CartItemUpdateValidator : AbstractValidator<CartItemUpdateDto>
     {
-        public OrderUpdateValidator()
+        public CartItemUpdateValidator()
         {
             RuleFor(prop => prop.Quantity)
                .NotEmpty().WithMessage("Quantity is required")

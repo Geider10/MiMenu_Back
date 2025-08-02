@@ -1,6 +1,5 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Services;
@@ -9,26 +8,26 @@ using MiMenu_Back.Validators.Order;
 
 namespace MiMenu_Back.Controllers
 {
-    [Route("api/order")]
+    [Route("api/cartItem")]
     [ApiController]
     [Authorize(Roles="client")]
-    public class OrderController : ControllerBase
+    public class CartItemController : ControllerBase
     {
-        private readonly OrderService _orderSer;
-        public OrderController(OrderService orderSer)
+        private readonly CartItemService _ciService;
+        public CartItemController(CartItemService ciService)
         {
-            _orderSer = orderSer;
+            _ciService = ciService;
         }
         [HttpPost]
-        public async Task<ActionResult<MainResponse>> Add([FromBody]OrderAddDto order)
+        public async Task<ActionResult<MainResponse>> Add([FromBody]CartItemAddDto cartItem)
         {
             try
             {
-                ValidationResult bodyReq = new OrderAddValidator().Validate(order);
+                ValidationResult bodyReq = new CartItemAddValidator().Validate(cartItem);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
-                await _orderSer.Add(order);
-                return StatusCode(201, new MainResponse(true, "Order created with success"));
+                await _ciService.Add(cartItem);
+                return StatusCode(201, new MainResponse(true, "CartItem created with success"));
             }
             catch(MainException ex)
             {
@@ -39,16 +38,16 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
-        [HttpGet][Route("{idOrder}/user/{idUser}")]
-        public async Task<ActionResult<OrderGetDto>> GetById([FromRoute]string idOrder,[FromRoute]string idUser)
+        [HttpGet][Route("{idCartItem}/user/{idUser}")]
+        public async Task<ActionResult<CartItemGetDto>> GetById([FromRoute]string idCartItem,[FromRoute]string idUser)
         {
             try
             {
-                if (!Guid.TryParse(idOrder, out _)) return BadRequest("IdOrder must has format Guid");
+                if (!Guid.TryParse(idCartItem, out _)) return BadRequest("IdCartItem must has format Guid");
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var orderDto = await _orderSer.GetById(idOrder, idUser);
-                return StatusCode(200, orderDto);
+                var cartItemDto = await _ciService.GetById(idCartItem, idUser);
+                return StatusCode(200, cartItemDto);
             }
             catch(MainException ex)
             {
@@ -60,13 +59,13 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpGet][Route("user/{idUser}")]
-        public async Task<ActionResult<List<OrderGetDto>>> GetAllByUserId([FromRoute]string idUser)
+        public async Task<ActionResult<List<CartItemGetDto>>> GetAllByUserId([FromRoute]string idUser)
         {
             try
             {
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var dtoList = await _orderSer.GetAllByUserId(idUser);
+                var dtoList = await _ciService.GetAllByUserId(idUser);
                 return StatusCode(200, dtoList);
             }
             catch (MainException ex)
@@ -78,18 +77,18 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
-        [HttpPut][Route("{idOrder}/user/{idUser}")]
-        public async Task<ActionResult<MainResponse>> Update([FromRoute]string idOrder,[FromRoute]string idUser, [FromBody]OrderUpdateDto orderDto)
+        [HttpPut][Route("{idCartItem}/user/{idUser}")]
+        public async Task<ActionResult<MainResponse>> Update([FromRoute]string idCartItem,[FromRoute]string idUser, [FromBody]CartItemUpdateDto orderDto)
         {
             try
             {
-                if (!Guid.TryParse(idOrder, out _)) return BadRequest("IdOrder must has format Guid");
+                if (!Guid.TryParse(idCartItem, out _)) return BadRequest("IdCartItem must has format Guid");
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
-                ValidationResult bodyReq = new OrderUpdateValidator().Validate(orderDto);
+                ValidationResult bodyReq = new CartItemUpdateValidator().Validate(orderDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
-                await _orderSer.Update(idOrder, idUser, orderDto);
-                return StatusCode(200, new MainResponse(true, "Order updated with success"));
+                await _ciService.Update(idCartItem, idUser, orderDto);
+                return StatusCode(200, new MainResponse(true, "CartItem updated with success"));
             }
             catch(MainException ex)
             {
@@ -100,16 +99,16 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
             }
         }
-        [HttpDelete][Route("{idOrder}/user/{idUser}")]
-        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string idOrder, [FromRoute]string idUser)
+        [HttpDelete][Route("{idCartItem}/user/{idUser}")]
+        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string idCartItem, [FromRoute]string idUser)
         {
             try
             {
-                if (!Guid.TryParse(idOrder, out _)) return BadRequest("IdOrder must has format Guid");
+                if (!Guid.TryParse(idCartItem, out _)) return BadRequest("IdCartItem must has format Guid");
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                await _orderSer.Delete(idOrder, idUser);
-                return StatusCode(200, new MainResponse(true, "Order deleted with success"));
+                await _ciService.Delete(idCartItem, idUser);
+                return StatusCode(200, new MainResponse(true, "CartItem deleted with success"));
             }
             catch(MainException ex)
             {
