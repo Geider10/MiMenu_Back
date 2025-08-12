@@ -11,6 +11,7 @@ namespace MiMenu_Back.Data
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<FoodModel> Foods { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<VoucherModel> Vouchers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -89,6 +90,25 @@ namespace MiMenu_Back.Data
                 tb.HasOne(col => col.User)
                 .WithMany(user => user.CartItems)
                 .HasForeignKey(col => col.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<VoucherModel>(tb =>
+            {
+                tb.ToTable("voucher");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.IdCategory).IsRequired();
+                tb.Property(col => col.Name).IsRequired().HasMaxLength(100);
+                tb.Property(col => col.Type).IsRequired().HasMaxLength(50);
+                tb.Property(col => col.Discount).IsRequired();
+                tb.Property(col => col.BuyMinimum).IsRequired();
+                tb.Property(col => col.Visibility).IsRequired();
+                tb.Property(col => col.DueDate).IsRequired();
+                tb.Property(col => col.CreateDate).ValueGeneratedOnAdd();
+
+                tb.HasOne(col => col.Category)
+                .WithMany(cat => cat.Vouchers)
+                .HasForeignKey(col => col.IdCategory)
                 .OnDelete(DeleteBehavior.Cascade);
             });
         }
