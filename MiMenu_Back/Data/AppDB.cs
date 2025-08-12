@@ -82,12 +82,12 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.PriceTotal).IsRequired();
 
                 tb.HasOne(col => col.Food)
-                .WithMany(food => food.Orders)
+                .WithMany(food => food.CartItems)
                 .HasForeignKey(col => col.IdFood)
                 .OnDelete(DeleteBehavior.Cascade);
 
                 tb.HasOne(col => col.User)
-                .WithMany(user => user.Orders)
+                .WithMany(user => user.CartItems)
                 .HasForeignKey(col => col.IdUser)
                 .OnDelete(DeleteBehavior.Cascade);
             });

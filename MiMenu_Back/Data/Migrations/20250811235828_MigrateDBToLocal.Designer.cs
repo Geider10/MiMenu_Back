@@ -4,6 +4,7 @@ using MiMenu_Back.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MiMenu_Back.Migrations
 {
     [DbContext(typeof(AppDB))]
-    partial class AppDBModelSnapshot : ModelSnapshot
+    [Migration("20250811235828_MigrateDBToLocal")]
+    partial class MigrateDBToLocal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,12 +190,12 @@ namespace MiMenu_Back.Migrations
             modelBuilder.Entity("MiMenu_Back.Data.Models.CartItem", b =>
                 {
                     b.HasOne("MiMenu_Back.Data.Models.FoodModel", "Food")
-                        .WithMany("CartItems")
+                        .WithMany("Orders")
                         .HasForeignKey("IdFood")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MiMenu_Back.Data.Models.UserModel", "User")
-                        .WithMany("CartItems")
+                        .WithMany("Orders")
                         .HasForeignKey("IdUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -231,7 +234,7 @@ namespace MiMenu_Back.Migrations
 
             modelBuilder.Entity("MiMenu_Back.Data.Models.FoodModel", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("MiMenu_Back.Data.Models.RolModel", b =>
@@ -242,7 +245,7 @@ namespace MiMenu_Back.Migrations
 
             modelBuilder.Entity("MiMenu_Back.Data.Models.UserModel", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

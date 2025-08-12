@@ -13,7 +13,7 @@ namespace MiMenu_Back.Data.Models
         public DateOnly? BirthDate { get; set; }
 
         public RolModel Rol { get; set; }
-        public ICollection<CartItem> Orders { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
         public UserModel()
         {
             Id = Guid.NewGuid();
