@@ -22,7 +22,7 @@ namespace MiMenu_Back.Services
             var userModel = await _userRepo.GetById(id);
             if (userModel == null) throw new MainException("User no found", 404);
 
-            string? birthDate = _util.FormatToString(userModel.BirthDate);
+            string? birthDate = _util.DateOnlyToString(userModel.BirthDate);
             var userDto = _userMap.UserModelToGet(userModel, birthDate);
             return userDto;
         }
@@ -31,7 +31,7 @@ namespace MiMenu_Back.Services
             var userModel = await _userRepo.GetById(id);
             if(userModel == null) throw new MainException("User no found", 404);
 
-            DateOnly? birthDate = _util.FormatToDateOnly(updateDto.BirthDate);
+            DateOnly? birthDate = _util.StringToDateOnly(updateDto.BirthDate);
             var userUpdated = _userMap.UpdateToUserModel(userModel, updateDto, birthDate);
             await _userRepo.Update(userUpdated);
         }

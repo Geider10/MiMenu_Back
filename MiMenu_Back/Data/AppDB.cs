@@ -104,7 +104,7 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.BuyMinimum).IsRequired();
                 tb.Property(col => col.Visibility).IsRequired();
                 tb.Property(col => col.DueDate).IsRequired();
-                tb.Property(col => col.CreateDate).ValueGeneratedOnAdd();
+                tb.Property(col => col.CreateDate).IsRequired();
 
                 tb.HasOne(col => col.Category)
                 .WithMany(cat => cat.Vouchers)

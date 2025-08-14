@@ -18,16 +18,24 @@ namespace MiMenu_Back.Utils
         {
             return BCrypt.Net.BCrypt.Verify(text, hashText);
         }
-        public DateOnly? FormatToDateOnly(string? date)
+        public DateOnly? VerifyFormatDate(string? date)
         {
             var dateFormat = new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$");//dd-mm-yyy||dd/mm/yyyy
             if (!dateFormat.IsMatch(date)) return null;
             return DateOnly.Parse(date);
         }
-        public string? FormatToString(DateOnly? date)
+        public DateOnly StringToDateOnly(string date)
+        {
+            return DateOnly.Parse(date);
+        }
+        public string? DateOnlyToString(DateOnly? date)
         {
             if (date == null) return null;
             return date.Value.ToString("dd-MM-yyyy");
+        }
+        public int CompareDate(DateOnly createDate, DateOnly dueDate)
+        {
+            return dueDate.CompareTo(createDate);
         }
         public string GenerateJWT(string id , string role)
         {

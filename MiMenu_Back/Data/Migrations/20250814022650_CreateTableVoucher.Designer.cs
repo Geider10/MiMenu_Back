@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MiMenu_Back.Migrations
 {
     [DbContext(typeof(AppDB))]
-    [Migration("20250812022022_CreateTableVoucher")]
+    [Migration("20250814022650_CreateTableVoucher")]
     partial class CreateTableVoucher
     {
         /// <inheritdoc />
@@ -197,7 +197,6 @@ namespace MiMenu_Back.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("CreateDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("date");
 
                     b.Property<int>("Discount")

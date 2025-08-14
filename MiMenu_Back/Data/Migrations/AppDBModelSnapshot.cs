@@ -194,7 +194,6 @@ namespace MiMenu_Back.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("CreateDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("date");
 
                     b.Property<int>("Discount")

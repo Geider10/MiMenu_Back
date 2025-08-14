@@ -16,7 +16,6 @@
         public VoucherModel()
         {
             Id = Guid.NewGuid();
-            CreateDate = new DateOnly();
         }
 
     }

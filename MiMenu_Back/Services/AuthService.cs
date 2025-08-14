@@ -22,7 +22,7 @@ namespace MiMenu_Back.Services
             if (userExists) throw new MainException("Email of user already registered", 400);
 
             string passwordHash = _util.HashText(signupDto.Password);
-            DateOnly? birthDate = _util.FormatToDateOnly(signupDto.BirthDate);
+            DateOnly? birthDate = _util.VerifyFormatDate(signupDto.BirthDate);
 
             var userModel = _authMap.SignupToUserModel(signupDto, passwordHash, birthDate);
             await _userRepo.Add(userModel);
