@@ -6,7 +6,7 @@ namespace MiMenu_Back.Mappers
 {
     public class UserMapper : IUserMapper
     {
-        public UserGetDto UserModelToGet(UserModel userModel, string birthDate)
+        public UserGetDto UserModelToGet(UserModel userModel, string? birthDate)
         {
             return new UserGetDto
             {

@@ -6,5 +6,6 @@ namespace MiMenu_Back.Repositories.Interfaces
     {
         Task<bool> ExistsByNameYCategory(string name, string idCategory);
         Task Add(VoucherModel voucher);
+        Task<VoucherModel?> GetById(string id);
     }
 }

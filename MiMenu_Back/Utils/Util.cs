@@ -28,6 +28,10 @@ namespace MiMenu_Back.Utils
         {
             return DateOnly.Parse(date);
         }
+        public string DateOnlyToString(DateOnly date)
+        {
+            return date.ToString("dd-MM-yyyy");
+        }
         public string? DateOnlyToString(DateOnly? date)
         {
             if (date == null) return null;

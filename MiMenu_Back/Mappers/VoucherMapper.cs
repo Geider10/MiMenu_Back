@@ -20,5 +20,19 @@ namespace MiMenu_Back.Mappers
                 CreateDate = createDate
             };
         }
+        public VoucherGetByIdDto ModelToVoucherDto(VoucherModel voucher, string dueDate, string createDate)
+        {
+            return new VoucherGetByIdDto
+            {
+                Name = voucher.Name,
+                Type = voucher.Type,
+                Discount = voucher.Discount,
+                BuyMinimum = voucher.BuyMinimum,
+                Visibility = voucher.Visibility,
+                DueDate = dueDate,
+                CreateDate = createDate
+            };
+        }
+        
     }
 }

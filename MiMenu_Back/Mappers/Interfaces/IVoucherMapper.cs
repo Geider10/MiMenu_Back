@@ -6,5 +6,6 @@ namespace MiMenu_Back.Mappers.Interfaces
     public interface IVoucherMapper
     {
         VoucherModel AddToVoucherModel(VoucherAddDto voucherDto, DateOnly dueDate, DateOnly createDate);
+        VoucherGetByIdDto ModelToVoucherDto(VoucherModel voucher, string dueDate, string createDate);
     }
 }

@@ -26,10 +26,21 @@ namespace MiMenu_Back.Services
             DateOnly dueDate = _util.StringToDateOnly(voucherDto.DueDate);
             DateOnly createDate = _util.StringToDateOnly(voucherDto.CreateDate);
             int dateValidate = _util.CompareDate(createDate, dueDate);
-            if (dateValidate < 0) throw new MainException("DueDate must be same or later than CreateDate", 400);
+            if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than CreateDate", 400);
 
             var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, dueDate, createDate);
             await _voucherRepo.Add(voucherModel);
+        }
+        public async Task<VoucherGetByIdDto> GetById (string id)
+        {
+            var voucherModel = await _voucherRepo.GetById(id);
+            if (voucherModel == null) throw new MainException("Voucher no found", 404);
+
+            string dueDate = _util.DateOnlyToString(voucherModel.DueDate);
+            string createDate = _util.DateOnlyToString(voucherModel.CreateDate);
+
+            var voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, dueDate, createDate);
+            return voucherDto;
         }
 
     }

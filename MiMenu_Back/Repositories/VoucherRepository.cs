@@ -21,6 +21,9 @@ namespace MiMenu_Back.Repositories
             _appDB.Vouchers.Add(voucher);
             await _appDB.SaveChangesAsync();
         }
-        
+        public async Task<VoucherModel?> GetById(string id)
+        {
+            return await _appDB.Vouchers.FirstOrDefaultAsync(v => v.Id == Guid.Parse(id));
+        }
     }
 }
