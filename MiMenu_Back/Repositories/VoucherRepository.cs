@@ -25,5 +25,28 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Vouchers.FirstOrDefaultAsync(v => v.Id == Guid.Parse(id));
         }
+        public async Task<List<VoucherModel>?> GetAll(string? category, string? sortName, bool? visibility)
+        {
+            var voucherList = await _appDB.Vouchers
+                .Include(v => v.Category)
+                .ToListAsync();
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                voucherList = voucherList.Where(v => v.Category.Name.ToLower() == category.ToLower()).ToList();
+            }
+            if (sortName == "asc" && !string.IsNullOrEmpty(sortName))
+            {
+                voucherList = voucherList.OrderBy(v => v.Name).ToList();
+            }else if(sortName == "desc" && !string.IsNullOrEmpty(sortName))
+            {
+                voucherList = voucherList.OrderByDescending(v => v.Name).ToList();
+            }
+            if (visibility.HasValue)
+            {
+                voucherList = voucherList.Where(v => v.Visibility == visibility).ToList();
+            }
+            return voucherList;
+        }
     }
 }

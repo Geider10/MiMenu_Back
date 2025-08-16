@@ -33,6 +33,20 @@ namespace MiMenu_Back.Mappers
                 CreateDate = createDate
             };
         }
-        
+        public List<VoucherGetAllDto> ModelListToDtoList(List<VoucherModel> voucherList)
+        {
+            var voucherDtoList = new List<VoucherGetAllDto>();
+            foreach (var item in voucherList)
+            {
+                voucherDtoList.Add(new VoucherGetAllDto
+                {
+                    Id = item.Id.ToString(),
+                    Name = item.Name,
+                    BuyMinimum = item.BuyMinimum,
+                    DueDate = item.DueDate.ToString("dd-MM-yyyy")
+                });
+            }
+            return voucherDtoList;
+        }
     }
 }

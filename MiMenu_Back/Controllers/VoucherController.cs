@@ -59,5 +59,22 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
             }
         }
+        [HttpGet]
+        public async Task<ActionResult<List<VoucherGetAllDto>>> GetAll([FromQuery]VoucherQueryDto voucherQuery)
+        {
+            try
+            {
+                var voucherDtoList = await _voucherService.GetAll(voucherQuery);
+                return StatusCode(200, voucherDtoList);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
+            }
+        }
     }
 }

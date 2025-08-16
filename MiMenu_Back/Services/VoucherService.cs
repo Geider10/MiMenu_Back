@@ -42,6 +42,28 @@ namespace MiMenu_Back.Services
             var voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, dueDate, createDate);
             return voucherDto;
         }
+        public async Task<List<VoucherGetAllDto>> GetAll (VoucherQueryDto voucherQuery)
+        {
+            var voucherList = await _voucherRepo.GetAll(voucherQuery.Category, voucherQuery.SortName, voucherQuery.Visibility);
+            if (voucherList.Count == 0 || voucherList == null) throw new MainException("There are no vouchers", 404);
+            if(voucherQuery.Expired.HasValue)
+            {
+                DateOnly dateRequest = new DateOnly();
+                voucherList = voucherList.FindAll(v =>
+                {
+                    int dateValidate = _util.CompareDate(dateRequest, v.DueDate);
+                    if(voucherQuery.Expired == false)
+                    {
+                        if (dateValidate >= 0) return true;
+                        return false;
+                    }
+                    if (dateValidate < 0) return true;
+                    return false;
+                });
+            }
+            var voucherDtoList = _voucherMap.ModelListToDtoList(voucherList);
+            return voucherDtoList;
+        }
 
     }
 }
