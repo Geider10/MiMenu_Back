@@ -24,6 +24,7 @@ namespace MiMenu_Back.Mappers
         {
             return new VoucherGetByIdDto
             {
+                Id = voucher.Id.ToString(),
                 Name = voucher.Name,
                 Type = voucher.Type,
                 Discount = voucher.Discount,

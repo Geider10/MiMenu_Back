@@ -10,5 +10,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<VoucherModel?> GetById(string id);
         Task<List<VoucherModel>?> GetAll(string? category, string? sortName, bool? visibility);
         Task Update(VoucherModel voucher);
+        Task Delete(VoucherModel voucher);
     }
 }

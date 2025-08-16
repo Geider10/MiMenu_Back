@@ -92,5 +92,12 @@ namespace MiMenu_Back.Services
             voucherModel.Visibility = visibleDto.Visibility;
             await _voucherRepo.Update(voucherModel);
         }
+        public async Task Delete (string id)
+        {
+            var voucherModel = await _voucherRepo.GetById(id);
+            if (voucherModel == null) throw new MainException("Voucher no found", 404);
+
+            await _voucherRepo.Delete(voucherModel);
+        }
     }
 }

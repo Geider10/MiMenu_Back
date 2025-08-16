@@ -57,5 +57,10 @@ namespace MiMenu_Back.Repositories
             _appDB.Vouchers.Update(voucher);
             await _appDB.SaveChangesAsync();
         }
+        public async Task Delete(VoucherModel voucher)
+        {
+            _appDB.Vouchers.Remove(voucher);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }
