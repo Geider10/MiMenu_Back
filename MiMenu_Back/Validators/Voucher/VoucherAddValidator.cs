@@ -29,9 +29,6 @@ namespace MiMenu_Back.Validators.Voucher
             RuleFor(prop => prop.DueDate)
                 .NotEmpty().WithMessage("DueDate is required")
                 .Matches(new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$")).WithMessage("DueDate must has format validate");
-            RuleFor(prop => prop.CreateDate)
-               .NotEmpty().WithMessage("CreateDate is required")
-               .Matches(new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$")).WithMessage("CreateDate must has format validate");
         }
     }
 }

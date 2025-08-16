@@ -16,6 +16,10 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Vouchers.AnyAsync(v => v.Name == name && v.IdCategory == Guid.Parse(idCategory));
         }
+        public async Task<bool> ExistsByNameYCategory(string name, string idCategory, string idIgnore)
+        {
+            return await _appDB.Vouchers.AnyAsync(v => v.Name == name && v.IdCategory == Guid.Parse(idCategory) && v.Id != Guid.Parse(idIgnore));
+        }
         public async Task Add(VoucherModel voucher)
         {
             _appDB.Vouchers.Add(voucher);
@@ -47,6 +51,11 @@ namespace MiMenu_Back.Repositories
                 voucherList = voucherList.Where(v => v.Visibility == visibility).ToList();
             }
             return voucherList;
+        }
+        public async Task Update(VoucherModel voucher)
+        {
+            _appDB.Vouchers.Update(voucher);
+            await _appDB.SaveChangesAsync();
         }
     }
 }

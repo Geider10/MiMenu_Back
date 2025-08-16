@@ -8,5 +8,6 @@ namespace MiMenu_Back.Mappers.Interfaces
         VoucherModel AddToVoucherModel(VoucherAddDto voucherDto, DateOnly dueDate, DateOnly createDate);
         VoucherGetByIdDto ModelToVoucherDto(VoucherModel voucher, string dueDate, string createDate);
         List<VoucherGetAllDto> ModelListToDtoList(List<VoucherModel> voucherList);
+        VoucherModel UpdateToVoucherModel(VoucherAddDto voucherDto, VoucherModel voucher, DateOnly dueDate);
     }
 }

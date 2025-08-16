@@ -9,6 +9,5 @@
         public int BuyMinimum { get; set; }
         public bool Visibility { get; set; }
         public string DueDate { get; set; }
-        public string CreateDate { get; set; }
     }
 }

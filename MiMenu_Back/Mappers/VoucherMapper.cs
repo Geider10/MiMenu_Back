@@ -48,5 +48,16 @@ namespace MiMenu_Back.Mappers
             }
             return voucherDtoList;
         }
+        public VoucherModel UpdateToVoucherModel(VoucherAddDto voucherDto,VoucherModel voucher, DateOnly dueDate)
+        {
+            voucher.IdCategory = Guid.Parse(voucherDto.IdCategory);
+            voucher.Name = voucherDto.Name;
+            voucher.Type = voucherDto.Type;
+            voucher.Discount = voucherDto.Discount;
+            voucher.BuyMinimum = voucherDto.BuyMinimum;
+            voucher.DueDate = dueDate;
+
+            return voucher;
+        }
     }
 }

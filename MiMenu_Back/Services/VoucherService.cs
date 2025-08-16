@@ -22,9 +22,9 @@ namespace MiMenu_Back.Services
             bool voucherExists = await _voucherRepo.ExistsByNameYCategory(voucherDto.Name, voucherDto.IdCategory);
             if (voucherExists) throw new MainException("Voucher already exists with this Name and Category", 400);
             if (voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
-
+            
+            DateOnly createDate = new DateOnly();
             DateOnly dueDate = _util.StringToDateOnly(voucherDto.DueDate);
-            DateOnly createDate = _util.StringToDateOnly(voucherDto.CreateDate);
             int dateValidate = _util.CompareDate(createDate, dueDate);
             if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than CreateDate", 400);
 
@@ -63,6 +63,25 @@ namespace MiMenu_Back.Services
             }
             var voucherDtoList = _voucherMap.ModelListToDtoList(voucherList);
             return voucherDtoList;
+        }
+        public async Task Update (string id, VoucherAddDto voucherDto)
+        {
+            var voucherModel = await _voucherRepo.GetById(id);
+            if (voucherModel == null) throw new MainException("Voucher no found", 404);
+            bool voucherExists = await _voucherRepo.ExistsByNameYCategory(voucherDto.Name, voucherDto.IdCategory, id);
+            if(voucherExists) throw new MainException("Voucher already exists with this Name and Category", 400);
+            if(voucherDto.Type == "Poriciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
+
+            DateOnly dueDate= _util.StringToDateOnly(voucherDto.DueDate);
+            int dateResult = _util.CompareDate(voucherModel.DueDate, dueDate);
+            if (dateResult != 0)
+            {
+                DateOnly dateUpdated = _util.CreateDateCurrent();
+                int dateResult2 = _util.CompareDate(dateUpdated, dueDate);
+                if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateUpdated", 400);
+            }
+            var voucherModelUpdated = _voucherMap.UpdateToVoucherModel(voucherDto, voucherModel, dueDate);
+            await _voucherRepo.Update(voucherModelUpdated);
         }
 
     }
