@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Voucher;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
@@ -22,13 +23,13 @@ namespace MiMenu_Back.Services
             bool voucherExists = await _voucherRepo.ExistsByNameYCategory(voucherDto.Name, voucherDto.IdCategory);
             if (voucherExists) throw new MainException("Voucher already exists with this Name and Category", 400);
             if (voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
-            
-            DateOnly createDate = new DateOnly();
+
+            DateOnly dateCurrent = _util.CreateDateCurrent();
             DateOnly dueDate = _util.StringToDateOnly(voucherDto.DueDate);
-            int dateValidate = _util.CompareDate(createDate, dueDate);
+            int dateValidate = _util.CompareDate(dateCurrent, dueDate);
             if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than CreateDate", 400);
 
-            var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, dueDate, createDate);
+            var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, dueDate, dateCurrent);
             await _voucherRepo.Add(voucherModel);
         }
         public async Task<VoucherGetByIdDto> GetById (string id)
@@ -48,10 +49,10 @@ namespace MiMenu_Back.Services
             if (voucherList.Count == 0 || voucherList == null) throw new MainException("There are no vouchers", 404);
             if(voucherQuery.Expired.HasValue)
             {
-                DateOnly dateRequest = new DateOnly();
+                DateOnly dateCurrent = _util.CreateDateCurrent();
                 voucherList = voucherList.FindAll(v =>
                 {
-                    int dateValidate = _util.CompareDate(dateRequest, v.DueDate);
+                    int dateValidate = _util.CompareDate(dateCurrent, v.DueDate);
                     if(voucherQuery.Expired == false)
                     {
                         if (dateValidate >= 0) return true;
@@ -76,13 +77,20 @@ namespace MiMenu_Back.Services
             int dateResult = _util.CompareDate(voucherModel.DueDate, dueDate);
             if (dateResult != 0)
             {
-                DateOnly dateUpdated = _util.CreateDateCurrent();
-                int dateResult2 = _util.CompareDate(dateUpdated, dueDate);
-                if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateUpdated", 400);
+                DateOnly dateCurrent = _util.CreateDateCurrent();
+                int dateResult2 = _util.CompareDate(dateCurrent, dueDate);
+                if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
             }
             var voucherModelUpdated = _voucherMap.UpdateToVoucherModel(voucherDto, voucherModel, dueDate);
             await _voucherRepo.Update(voucherModelUpdated);
         }
+        public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
+        {
+            var voucherModel = await _voucherRepo.GetById(id);
+            if (voucherModel == null) throw new MainException("Voucher no found", 404);
 
+            voucherModel.Visibility = visibleDto.Visibility;
+            await _voucherRepo.Update(voucherModel);
+        }
     }
 }
