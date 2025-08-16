@@ -12,6 +12,7 @@ namespace MiMenu_Back.Data
         public DbSet<FoodModel> Foods { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<VoucherModel> Vouchers { get; set; }
+        public DbSet<ItemVoucherModel> ItemsVoucher { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -109,6 +110,24 @@ namespace MiMenu_Back.Data
                 tb.HasOne(col => col.Category)
                 .WithMany(cat => cat.Vouchers)
                 .HasForeignKey(col => col.IdCategory)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<ItemVoucherModel>(tb =>
+            {
+                tb.ToTable("itemVoucher");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.IdUser).IsRequired();
+                tb.Property(col => col.IdVoucher).IsRequired();
+
+                tb.HasOne(col => col.User)
+                .WithMany(user => user.ItemsVoucher)
+                .HasForeignKey(col => col.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                tb.HasOne(col => col.Voucher)
+                .WithMany(vou => vou.ItemsVoucher)
+                .HasForeignKey(col => col.IdVoucher)
                 .OnDelete(DeleteBehavior.Cascade);
             });
         }

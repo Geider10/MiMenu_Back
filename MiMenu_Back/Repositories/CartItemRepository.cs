@@ -34,7 +34,6 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.CartItems
                 .Include(o => o.Food)
-                .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
 
         }
@@ -42,7 +41,6 @@ namespace MiMenu_Back.Repositories
         {
             var orderList = await _appDB.CartItems
                 .Include(o => o.Food)
-                .Include(o => o.User)
                 .Where(o => o.IdUser == Guid.Parse(idUser))
                 .ToListAsync();
 

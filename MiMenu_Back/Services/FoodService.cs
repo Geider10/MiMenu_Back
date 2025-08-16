@@ -11,12 +11,12 @@ namespace MiMenu_Back.Services
     {
         private readonly IFoodMapper _foodMap;
         private readonly IFoodRepository _foodRepo;
-        private readonly ICartItemRepository _orderRepo;
+        private readonly ICartItemRepository _cartItemRepo;
         public FoodService(IFoodMapper foodMap, IFoodRepository foodRepo, ICartItemRepository orderRepo)
         {
             _foodMap = foodMap;
             _foodRepo = foodRepo;
-            _orderRepo = orderRepo;
+            _cartItemRepo = orderRepo;
         }
         public async Task Add (FoodAddDto food)
         {
@@ -58,7 +58,7 @@ namespace MiMenu_Back.Services
             var foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
-            bool orderExists = await _orderRepo.ExistsByFoodId(id);
+            bool orderExists = await _cartItemRepo.ExistsByFoodId(id);
             if(orderExists) throw new MainException("Cannot be deleted because is associated with a order", 400);
 
             await _foodRepo.Delete(foodModel);

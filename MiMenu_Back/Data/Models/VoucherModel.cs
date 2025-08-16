@@ -13,6 +13,7 @@
         public DateOnly CreateDate { get; set; }
 
         public CategoryModel Category { get; set; }
+        public ICollection<ItemVoucherModel> ItemsVoucher { get; set; }
         public VoucherModel()
         {
             Id = Guid.NewGuid();
