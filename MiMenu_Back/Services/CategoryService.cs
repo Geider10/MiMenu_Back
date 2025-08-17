@@ -30,7 +30,7 @@ namespace MiMenu_Back.Services
         public async Task<List<CategoryGetDto>> GetAll(CategoryQueryDto queryParams)
         {
             var categoriesList = await _categoryRepo.GetAll(queryParams.TypeCategory, queryParams.SortName, queryParams.Visibility);
-            if (categoriesList.Count == 0 || categoriesList == null) throw new MainException("There are no categories from" + queryParams.TypeCategory, 404);
+            if (categoriesList.Count == 0 || categoriesList == null) throw new MainException("There are no categories from: " + queryParams.TypeCategory, 404);
 
             var categoriesGetList = _categoryMap.CategoryListToGetList(categoriesList);
             return categoriesGetList;

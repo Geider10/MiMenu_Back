@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiMenu_Back.Data;
+using MiMenu_Back.Data.DTOs.Voucher;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 
@@ -20,6 +21,14 @@ namespace MiMenu_Back.Repositories
         {
             _appDB.ItemsVoucher.Add(itemVoucher);
             await _appDB.SaveChangesAsync();
+        }
+        public async Task<List<ItemVoucherModel>?> GetAllByUserId(string idUser)
+        {
+            var ivList = await _appDB.ItemsVoucher
+                .Include(iv => iv.Voucher)
+                .Where(iv => iv.IdUser == Guid.Parse(idUser) && iv.Voucher.Visibility == true)
+                .ToListAsync();
+            return ivList;
         }
     }
 }
