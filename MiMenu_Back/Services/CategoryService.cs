@@ -59,17 +59,12 @@ namespace MiMenu_Back.Services
             var categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
-            if(visibleDto.Visibility == true)
-            {
-                categoryModel.Visibility = true;
-                await _categoryRepo.Update(categoryModel);
-            }
-            else
+            if(visibleDto.Visibility == false)
             {
                 await _foodRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
-                categoryModel.Visibility = false;
-                await _categoryRepo.Update(categoryModel);
             }
+            categoryModel.Visibility = visibleDto.Visibility;
+            await _categoryRepo.Update(categoryModel);
         }
     }
 }
