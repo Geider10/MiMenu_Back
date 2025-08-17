@@ -60,7 +60,7 @@ namespace MiMenu_Back.Services
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             bool ciExists = await _cartItemRepo.ExistsByFoodId(id);
-            if(ciExists) throw new MainException("Cannot be deleted because is associated with a cart item", 400);
+            if(ciExists) throw new MainException("Cannot be deleted because is associated with a cart", 400);
 
             await _foodRepo.Delete(foodModel);
         }

@@ -11,12 +11,14 @@ namespace MiMenu_Back.Services
     {
         private readonly IVoucherRepository _voucherRepo;
         private readonly IVoucherMapper _voucherMap;
+        private readonly IItemVoucherRepository _ivRepo;
         private readonly Util _util;
-        public VoucherService(IVoucherRepository voucherRepo, IVoucherMapper voucherMap, Util util)
+        public VoucherService(IVoucherRepository voucherRepo, IVoucherMapper voucherMap, Util util, IItemVoucherRepository ivRepo)
         {
             _voucherRepo = voucherRepo;
             _voucherMap = voucherMap;
             _util = util;
+            _ivRepo = ivRepo;
         }
         public async Task Add (VoucherAddDto voucherDto)
         {
@@ -96,6 +98,8 @@ namespace MiMenu_Back.Services
         {
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
+            bool ivExists = await _ivRepo.ExistsByVoucherId(id);
+            if (ivExists) throw new MainException("Cannot be deleted because is associated with a user", 400);
 
             await _voucherRepo.Delete(voucherModel);
         }

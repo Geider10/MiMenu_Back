@@ -17,6 +17,10 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.ItemsVoucher.AnyAsync(iv => iv.IdUser == Guid.Parse(idUser) && iv.IdVoucher == Guid.Parse(idVoucher));
         }
+        public async Task<bool> ExistsByVoucherId(string idVoucher)
+        {
+            return await _appDB.ItemsVoucher.AnyAsync(iv => iv.IdVoucher == Guid.Parse(idVoucher));
+        }
         public async Task Add(ItemVoucherModel itemVoucher)
         {
             _appDB.ItemsVoucher.Add(itemVoucher);
@@ -30,5 +34,6 @@ namespace MiMenu_Back.Repositories
                 .ToListAsync();
             return ivList;
         }
+       
     }
 }
