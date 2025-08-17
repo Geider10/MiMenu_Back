@@ -45,7 +45,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                if (queryParams.TypeCategory != "comida" && queryParams.TypeCategory != "cupón") return BadRequest("TypeCategory must be comida o cupón");
+                if (queryParams.TypeCategory.ToLower() != "comida" && queryParams.TypeCategory.ToLower() != "cupon") return BadRequest("TypeCategory must be comida o cupon");
 
                 var categoryGetList = await _categoryService.GetAll(queryParams);
                 return StatusCode(200, categoryGetList);

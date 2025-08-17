@@ -10,11 +10,13 @@ namespace MiMenu_Back.Services
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICategoryMapper _categoryMap;
         private readonly IFoodRepository _foodRepo;
-        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo)
+        private readonly IVoucherRepository _voucherRepo;
+        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo, IVoucherRepository voucherRepo)
         {
             _categoryRepo = categoryRepo;
             _categoryMap = categoryMap;
             _foodRepo = foodRepo;
+            _voucherRepo = voucherRepo;
         }
 
         public async Task Add(CategoryAddDto categoryDto)
@@ -49,9 +51,15 @@ namespace MiMenu_Back.Services
             var categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
-            bool foodExists = await _foodRepo.ExistsByCategoryId(id);
-            if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 400);
-
+            if(categoryModel.Type == "Comida")
+            {
+                bool foodExists = await _foodRepo.ExistsByCategoryId(id);
+                if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 400);
+            }else if(categoryModel.Type == "Cupon")
+            {
+                bool voucherExists = await _voucherRepo.ExistsByCategoryId(id);
+                if (voucherExists) throw new MainException("Cannot be deleted because is associated with a voucher", 400);
+            }
             await _categoryRepo.Delete(categoryModel);
         }
         public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
@@ -61,7 +69,13 @@ namespace MiMenu_Back.Services
 
             if(visibleDto.Visibility == false)
             {
-                await _foodRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
+                if(categoryModel.Type == "Comida")
+                {
+                    await _foodRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
+                }else if (categoryModel.Type == "Cupon")
+                {
+                    await _voucherRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
+                }
             }
             categoryModel.Visibility = visibleDto.Visibility;
             await _categoryRepo.Update(categoryModel);
