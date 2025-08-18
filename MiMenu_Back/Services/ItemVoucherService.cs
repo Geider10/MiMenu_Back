@@ -46,13 +46,38 @@ namespace MiMenu_Back.Services
             {
                 ivDtoList.Add(new VoucherGetAllDto
                 {
-                    Id = iv.Id.ToString(),//itemVoucher to food model
+                    Id = iv.Id.ToString(),//itemVoucher to order
                     Name = iv.Voucher.Name,
                     BuyMinimum = iv.Voucher.BuyMinimum,
                     DueDate = iv.Voucher.DueDate.ToString("dd-MM-yyyy")
                 });
             }
             return ivDtoList;
+        }
+        public async Task<VoucherDiscountDto> ApplyVoucher(VoucherApplyDto voucherDto)
+        {
+            var ivModel = await _ivRepo.GetById(voucherDto.idIV);
+            if (ivModel == null) throw new MainException("ItemVoucher no found", 404);
+            if (ivModel.IdUser != Guid.Parse(voucherDto.idUser)) throw new MainException("ItemVoucher must be from User", 400);
+
+            if (voucherDto.TotalOrder < ivModel.Voucher.BuyMinimum) throw new MainException("TotalOrder must be equal or greater than BuyMinimum from Voucher", 400);
+            DateOnly dateCurrent = _util.CreateDateCurrent();
+            int dateValidate = _util.CompareDate(dateCurrent, ivModel.Voucher.DueDate);
+            if (dateValidate < 0) throw new MainException("Voucher is expired");
+
+            var discount = ivModel.Voucher.Discount;
+            if (ivModel.Voucher.Type == "Porciento")
+            {
+                int calculateDiscount = (voucherDto.TotalOrder * discount) / 100;
+                discount = calculateDiscount;
+            }
+            return new VoucherDiscountDto
+            {
+                Discount = discount,
+                TypeDiscount = ivModel.Voucher.Type,
+                IdVoucher = ivModel.Voucher.Id.ToString()
+                //totalUpdated = totalOrder - discount
+            };
         }
     }
 }

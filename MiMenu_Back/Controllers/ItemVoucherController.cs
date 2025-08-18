@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs.ItemVoucher;
 using MiMenu_Back.Data.DTOs.Voucher;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
+using MiMenu_Back.Validators.Voucher;
 
 namespace MiMenu_Back.Controllers
 {
@@ -47,6 +49,26 @@ namespace MiMenu_Back.Controllers
 
                 var ivDtoList = await _ivService.GetAllByUser(idUser);
                 return StatusCode(200, ivDtoList);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error: " + ex.Message));
+            }
+        }
+        [HttpPost][Route("apply-voucher")]
+        public async Task<ActionResult<VoucherDiscountDto>> ApplyVoucher([FromBody]VoucherApplyDto voucherDto)
+        {
+            try
+            {
+                ValidationResult bodyReq = new VoucherApplyValidator().Validate(voucherDto);
+                if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
+
+                var voucherDiscount = await _ivService.ApplyVoucher(voucherDto);
+                return StatusCode(200, voucherDiscount);
             }
             catch (MainException ex)
             {

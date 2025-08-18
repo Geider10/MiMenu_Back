@@ -9,5 +9,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<bool> ExistsByVoucherId(string idVoucher);
         Task Add(ItemVoucherModel itemVoucher);
         Task<List<ItemVoucherModel>?> GetAllByUserId(string idUser);
+        Task<ItemVoucherModel?> GetById(string idIV); 
     }
 }

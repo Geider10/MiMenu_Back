@@ -34,6 +34,11 @@ namespace MiMenu_Back.Repositories
                 .ToListAsync();
             return ivList;
         }
-       
+        public async Task<ItemVoucherModel?> GetById(string idIV)
+        {
+            return await _appDB.ItemsVoucher
+                .Include(iv => iv.Voucher)
+                .FirstOrDefaultAsync(iv => iv.Id == Guid.Parse(idIV));
+        }
     }
 }
