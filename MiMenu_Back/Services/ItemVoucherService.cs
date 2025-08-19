@@ -49,7 +49,7 @@ namespace MiMenu_Back.Services
                     Id = iv.Id.ToString(),//itemVoucher to order
                     Name = iv.Voucher.Name,
                     BuyMinimum = iv.Voucher.BuyMinimum,
-                    DueDate = iv.Voucher.DueDate.ToString("dd-MM-yyyy")
+                    DueDate = _util.DateOnlyToString(iv.Voucher.DueDate)
                 });
             }
             return ivDtoList;

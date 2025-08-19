@@ -3,7 +3,6 @@
     public class VoucherModel
     {
         public Guid Id { get; set; }
-        public Guid IdCategory { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public int Discount { get; set; }
@@ -12,7 +11,6 @@
         public DateOnly DueDate { get; set; }
         public DateOnly CreateDate { get; set; }
 
-        public CategoryModel Category { get; set; }
         public ICollection<ItemVoucherModel> ItemsVoucher { get; set; }
         public VoucherModel()
         {

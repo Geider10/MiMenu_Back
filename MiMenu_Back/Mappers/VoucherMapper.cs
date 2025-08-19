@@ -10,7 +10,6 @@ namespace MiMenu_Back.Mappers
         {
             return new VoucherModel
             {
-                IdCategory = Guid.Parse(voucherDto.IdCategory),
                 Name = voucherDto.Name,
                 Type = voucherDto.Type,
                 Discount = voucherDto.Discount,
@@ -51,7 +50,6 @@ namespace MiMenu_Back.Mappers
         }
         public VoucherModel UpdateToVoucherModel(VoucherAddDto voucherDto,VoucherModel voucher, DateOnly dueDate)
         {
-            voucher.IdCategory = Guid.Parse(voucherDto.IdCategory);
             voucher.Name = voucherDto.Name;
             voucher.Type = voucherDto.Type;
             voucher.Discount = voucherDto.Discount;

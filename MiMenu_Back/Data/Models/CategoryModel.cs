@@ -8,7 +8,6 @@
         public bool Visibility { get; set; }
 
         public ICollection<FoodModel> Foods { get; set; }
-        public ICollection<VoucherModel> Vouchers { get; set; }
         public CategoryModel()
         {
             Id = Guid.NewGuid();

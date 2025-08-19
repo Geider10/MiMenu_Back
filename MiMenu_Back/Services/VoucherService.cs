@@ -22,14 +22,14 @@ namespace MiMenu_Back.Services
         }
         public async Task Add (VoucherAddDto voucherDto)
         {
-            bool voucherExists = await _voucherRepo.ExistsByNameYCategory(voucherDto.Name, voucherDto.IdCategory);
-            if (voucherExists) throw new MainException("Voucher already exists with this Name and Category", 400);
+            bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name);
+            if (voucherExists) throw new MainException("Voucher already exists with this Name", 400);
             if (voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
             DateOnly dueDate = _util.StringToDateOnly(voucherDto.DueDate);
             int dateValidate = _util.CompareDate(dateCurrent, dueDate);
-            if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than CreateDate", 400);
+            if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
 
             var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, dueDate, dateCurrent);
             await _voucherRepo.Add(voucherModel);
@@ -47,7 +47,7 @@ namespace MiMenu_Back.Services
         }
         public async Task<List<VoucherGetAllDto>> GetAll (VoucherQueryDto voucherQuery)
         {
-            var voucherList = await _voucherRepo.GetAll(voucherQuery.Category, voucherQuery.SortName, voucherQuery.Visibility);
+            var voucherList = await _voucherRepo.GetAll(voucherQuery.SortName, voucherQuery.Visibility);
             if (voucherList.Count == 0 || voucherList == null) throw new MainException("There are no vouchers", 404);
             if(voucherQuery.Expired.HasValue)
             {
@@ -71,9 +71,9 @@ namespace MiMenu_Back.Services
         {
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
-            bool voucherExists = await _voucherRepo.ExistsByNameYCategory(voucherDto.Name, voucherDto.IdCategory, id);
-            if(voucherExists) throw new MainException("Voucher already exists with this Name and Category", 400);
-            if(voucherDto.Type == "Poriciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
+            bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name, id);
+            if(voucherExists) throw new MainException("Voucher already exists with this Name", 400);
+            if(voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
 
             DateOnly dueDate= _util.StringToDateOnly(voucherDto.DueDate);
             int dateResult = _util.CompareDate(voucherModel.DueDate, dueDate);

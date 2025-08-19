@@ -8,9 +8,6 @@ namespace MiMenu_Back.Validators.Voucher
     {
         public VoucherAddValidator()
         {
-            RuleFor(prop => prop.IdCategory)
-                .NotEmpty().WithMessage("IdCategory is required")
-                .Must(value => Guid.TryParse(value, out _)).WithMessage("IdCategory must has format Guid");
             RuleFor(prop => prop.Name)
                 .NotEmpty().WithMessage("Name is required")
                 .MaximumLength(100).WithMessage("Name must has length maximum 100 characters");

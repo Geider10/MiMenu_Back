@@ -12,17 +12,13 @@ namespace MiMenu_Back.Repositories
         {
             _appDB = appDB;
         }
-        public async Task<bool> ExistsByNameYCategory(string name, string idCategory)
+        public async Task<bool> ExistsByName(string name)
         {
-            return await _appDB.Vouchers.AnyAsync(v => v.Name == name && v.IdCategory == Guid.Parse(idCategory));
+            return await _appDB.Vouchers.AnyAsync(v => v.Name == name);
         }
-        public async Task<bool> ExistsByNameYCategory(string name, string idCategory, string idIgnore)
+        public async Task<bool> ExistsByName(string name, string idIgnore)
         {
-            return await _appDB.Vouchers.AnyAsync(v => v.Name == name && v.IdCategory == Guid.Parse(idCategory) && v.Id != Guid.Parse(idIgnore));
-        }
-        public async Task<bool> ExistsByCategoryId(string idCategory)
-        {
-            return await _appDB.Vouchers.AnyAsync(v => v.IdCategory == Guid.Parse(idCategory));
+            return await _appDB.Vouchers.AnyAsync(v => v.Name == name && v.Id != Guid.Parse(idIgnore));
         }
         public async Task Add(VoucherModel voucher)
         {
@@ -33,16 +29,10 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Vouchers.FirstOrDefaultAsync(v => v.Id == Guid.Parse(id));
         }
-        public async Task<List<VoucherModel>?> GetAll(string? category, string? sortName, bool? visibility)
+        public async Task<List<VoucherModel>?> GetAll(string? sortName, bool? visibility)
         {
             var voucherList = await _appDB.Vouchers
-                .Include(v => v.Category)
                 .ToListAsync();
-
-            if (!string.IsNullOrEmpty(category))
-            {
-                voucherList = voucherList.Where(v => v.Category.Name.ToLower() == category.ToLower()).ToList();
-            }
             if (sortName == "asc" && !string.IsNullOrEmpty(sortName))
             {
                 voucherList = voucherList.OrderBy(v => v.Name).ToList();
@@ -65,17 +55,6 @@ namespace MiMenu_Back.Repositories
         {
             _appDB.Vouchers.Remove(voucher);
             await _appDB.SaveChangesAsync();
-        }
-        public async Task UpdateVisibilityByCategory(string idCategory, bool visible)
-        {
-            var vouchersList = await _appDB.Vouchers
-                .Where(v => v.IdCategory == Guid.Parse(idCategory))
-                .ToListAsync();
-            foreach(var voucher in vouchersList)
-            {
-                voucher.Visibility = visible;
-                await Update(voucher);
-            }
         }
     }
 }

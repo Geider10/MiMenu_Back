@@ -10,13 +10,11 @@ namespace MiMenu_Back.Services
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICategoryMapper _categoryMap;
         private readonly IFoodRepository _foodRepo;
-        private readonly IVoucherRepository _voucherRepo;
-        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo, IVoucherRepository voucherRepo)
+        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo)
         {
             _categoryRepo = categoryRepo;
             _categoryMap = categoryMap;
             _foodRepo = foodRepo;
-            _voucherRepo = voucherRepo;
         }
 
         public async Task Add(CategoryAddDto categoryDto)
@@ -55,10 +53,6 @@ namespace MiMenu_Back.Services
             {
                 bool foodExists = await _foodRepo.ExistsByCategoryId(id);
                 if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 400);
-            }else if(categoryModel.Type == "Cupon")
-            {
-                bool voucherExists = await _voucherRepo.ExistsByCategoryId(id);
-                if (voucherExists) throw new MainException("Cannot be deleted because is associated with a voucher", 400);
             }
             await _categoryRepo.Delete(categoryModel);
         }
@@ -72,9 +66,6 @@ namespace MiMenu_Back.Services
                 if(categoryModel.Type == "Comida")
                 {
                     await _foodRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
-                }else if (categoryModel.Type == "Cupon")
-                {
-                    await _voucherRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
                 }
             }
             categoryModel.Visibility = visibleDto.Visibility;
