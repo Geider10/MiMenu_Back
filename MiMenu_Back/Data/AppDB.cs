@@ -13,6 +13,7 @@ namespace MiMenu_Back.Data
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<VoucherModel> Vouchers { get; set; }
         public DbSet<ItemVoucherModel> ItemsVoucher { get; set; }
+        public DbSet<BannerModel> Banners { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -123,6 +124,16 @@ namespace MiMenu_Back.Data
                 .WithMany(vou => vou.ItemsVoucher)
                 .HasForeignKey(col => col.IdVoucher)
                 .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<BannerModel>(tb =>
+            {
+                tb.ToTable("banner");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.Description).IsRequired().HasMaxLength(250);
+                tb.Property(col => col.Priority).IsRequired();
+                tb.Property(col => col.ImgUrl);
+                tb.Property(col => col.Visibility).IsRequired();
             });
         }
     }
