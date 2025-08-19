@@ -34,16 +34,14 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.CartItems
                 .Include(o => o.Food)
-                .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
-
+                .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id) && o.Food.Visibility == true);
         }
         public async Task<List<CartItem>?> GetAllByUserId(string idUser)
         {
             var orderList = await _appDB.CartItems
                 .Include(o => o.Food)
-                .Where(o => o.IdUser == Guid.Parse(idUser))
+                .Where(o => o.IdUser == Guid.Parse(idUser) && o.Food.Visibility == true)
                 .ToListAsync();
-
             return orderList;
         }
         public async Task Update(CartItem cartItem)
@@ -51,7 +49,6 @@ namespace MiMenu_Back.Repositories
             _appDB.CartItems.Update(cartItem);
             await _appDB.SaveChangesAsync();
         }
-
         public async Task Delete(CartItem cartItem)
         {
             _appDB.CartItems.Remove(cartItem);

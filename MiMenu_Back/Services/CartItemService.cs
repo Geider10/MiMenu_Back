@@ -23,9 +23,9 @@ namespace MiMenu_Back.Services
             var cartItemModel = _cartItemMap.AddToCartItemModel(cartItemDto);
             await _cartItemRepo.Add(cartItemModel);
         }
-        public async Task<CartItemGetDto> GetById(string idOrder, string idUser)
+        public async Task<CartItemGetDto> GetById(string idCartItem, string idUser)
         {
-            var cartItemModel = await _cartItemRepo.GetById(idOrder);
+            var cartItemModel = await _cartItemRepo.GetById(idCartItem);
             if (cartItemModel == null) throw new MainException("CartItem no found", 404);
             if (cartItemModel.IdUser != Guid.Parse(idUser)) throw new MainException("CartItem must be from user", 403);
 
