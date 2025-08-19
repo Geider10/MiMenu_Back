@@ -9,14 +9,13 @@ namespace MiMenu_Back.Validators.Food
         {
             RuleFor(p => p.IdCategory)
                 .NotEmpty().WithMessage("ID category is required")
-                .Must(value => Guid.TryParse(value, out _)).WithMessage("ID category must has format Guid")
-                .MaximumLength(50).WithMessage("ID category must has length maximum 50 characters");
+                .Must(value => Guid.TryParse(value, out _)).WithMessage("ID category must has format Guid");
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("Name is required")
                 .MaximumLength(200).WithMessage("Name must has length maximum 200 characters");
             RuleFor(p => p.Description)
                 .NotEmpty().WithMessage("Description is required")
-                .MaximumLength(400).WithMessage("Description must has length 400 characters");
+                .MaximumLength(400).WithMessage("Description must has length maximum 400 characters");
             RuleFor(p => p.Price)
                 .NotEmpty().WithMessage("Price is required")
                 .GreaterThan(0).WithMessage("Price must be greater than 0");
