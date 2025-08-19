@@ -50,7 +50,6 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.Categories.FirstOrDefaultAsync(c => c.Id == Guid.Parse(id));
         }
-
         public async Task Update(CategoryModel category)
         {
             _appDB.Categories.Update(category);

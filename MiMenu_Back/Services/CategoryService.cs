@@ -65,7 +65,12 @@ namespace MiMenu_Back.Services
             {
                 if(categoryModel.Type == "Comida")
                 {
-                    await _foodRepo.UpdateVisibilityByCategory(id, visibleDto.Visibility);
+                    var foodList = await _foodRepo.GetAllByCategory(id);
+                    foreach (var f in foodList)
+                    {
+                        f.Visibility = visibleDto.Visibility;
+                        await _foodRepo.Update(f);
+                    }
                 }
             }
             categoryModel.Visibility = visibleDto.Visibility;
