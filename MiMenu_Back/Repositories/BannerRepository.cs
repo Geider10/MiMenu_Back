@@ -43,6 +43,10 @@ namespace MiMenu_Back.Repositories
             }
             return bannerList;
         }
+        public Task<BannerModel?> GetByPriority(int priority, string idIgnore)
+        {
+            return _appDB.Banners.FirstOrDefaultAsync(b => b.Priority == priority && b.Id != Guid.Parse(idIgnore));
+        }
         public async Task Update(BannerModel banner)
         {
             _appDB.Banners.Update(banner);

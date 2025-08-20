@@ -57,6 +57,22 @@ namespace MiMenu_Back.Services
             bannerModel.ImgUrl = imgDto.ImgUrl;
             await _bannerRepo.Update(bannerModel);
         }
+        public async Task Update(string id, BannerUpdateDto bannerDto)
+        {
+            var bannerModelA = await _bannerRepo.GetById(id);
+            if (bannerModelA == null) throw new MainException("Banner no found", 404);
+
+            var bannerModelB = await _bannerRepo.GetByPriority(bannerDto.Priority, id);
+            if (bannerModelB != null)
+            {
+                bannerModelB.Priority = bannerModelA.Priority;
+                await _bannerRepo.Update(bannerModelB);
+            }
+            bannerModelA.Priority = bannerDto.Priority;
+            bannerModelA.Description = bannerDto.Description;
+
+            await _bannerRepo.Update(bannerModelA);
+        }
         public async Task DeleteImg(string id)
         {
             var bannerModel = await _bannerRepo.GetById(id);
