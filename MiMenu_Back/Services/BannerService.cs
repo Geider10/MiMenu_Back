@@ -1,4 +1,5 @@
-﻿using MiMenu_Back.Data.DTOs.Banner;
+﻿using MiMenu_Back.Data.DTOs;
+using MiMenu_Back.Data.DTOs.Banner;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
@@ -39,6 +40,14 @@ namespace MiMenu_Back.Services
 
             var dtoList = _bannerMap.BannerListToGetList(bannerList);
             return dtoList;
+        }
+        public async Task UpdateVisibility(string id,VisibilityUpdateDto visibleDto)
+        {
+            var bannerModel = await _bannerRepo.GetById(id);
+            if (bannerModel == null) throw new MainException("Banner no found", 404);
+
+            bannerModel.Visibility = visibleDto.Visibility;
+            await _bannerRepo.Update(bannerModel);
         }
     }
 }

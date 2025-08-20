@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Banner;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
@@ -66,6 +67,27 @@ namespace MiMenu_Back.Controllers
             {
                 var dtoList = await _bannerService.GetAll(queryDto);
                 return StatusCode(200, dtoList);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
+            }
+        }
+        [Authorize(Roles="admin")]
+        [HttpPut][Route("{id}/visible")]
+        public async Task<ActionResult<MainResponse>> UpdateVisibility([FromRoute]string id, [FromBody] VisibilityUpdateDto visibleDto)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
+                if (visibleDto.Visibility != true && visibleDto.Visibility != false) return BadRequest("Visibility of banner must be true or false");
+
+                await _bannerService.UpdateVisibility(id, visibleDto);
+                return StatusCode(200, new MainResponse(true, "Visibility of banner updated with success"));
             }
             catch (MainException ex)
             {

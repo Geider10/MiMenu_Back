@@ -43,5 +43,10 @@ namespace MiMenu_Back.Repositories
             }
             return bannerList;
         }
+        public async Task Update(BannerModel banner)
+        {
+            _appDB.Banners.Update(banner);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }
