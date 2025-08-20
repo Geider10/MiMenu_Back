@@ -49,5 +49,21 @@ namespace MiMenu_Back.Services
             bannerModel.Visibility = visibleDto.Visibility;
             await _bannerRepo.Update(bannerModel);
         }
+        public async Task UpdateImg(string id, ImgUpdateDto imgDto)
+        {
+            var bannerModel = await _bannerRepo.GetById(id);
+            if (bannerModel == null) throw new MainException("Banner no found", 404);
+
+            bannerModel.ImgUrl = imgDto.ImgUrl;
+            await _bannerRepo.Update(bannerModel);
+        }
+        public async Task DeleteImg(string id)
+        {
+            var bannerModel = await _bannerRepo.GetById(id);
+            if (bannerModel == null) throw new MainException("Banner no found", 404);
+
+            bannerModel.ImgUrl = null;
+            await _bannerRepo.Update(bannerModel);
+        }
     }
 }
