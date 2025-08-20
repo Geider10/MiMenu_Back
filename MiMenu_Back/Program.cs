@@ -25,6 +25,7 @@ builder.Services.AddScoped<ICategoryMapper, CategoryMapper>();
 builder.Services.AddScoped<IFoodMapper, FoodMapper>();
 builder.Services.AddScoped<ICartItemMapper, CartItemMapper>();
 builder.Services.AddScoped<IVoucherMapper, VoucherMapper>();
+builder.Services.AddScoped<IBannerMapper, BannerMapper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IFoodRepository, FoodRepository>();
