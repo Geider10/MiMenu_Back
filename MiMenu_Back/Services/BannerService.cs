@@ -65,5 +65,12 @@ namespace MiMenu_Back.Services
             bannerModel.ImgUrl = null;
             await _bannerRepo.Update(bannerModel);
         }
+        public async Task Delete(string id)
+        {
+            var bannerModel = await _bannerRepo.GetById(id);
+            if (bannerModel == null) throw new MainException("Banner no found", 404);
+
+            await _bannerRepo.Delete(bannerModel);
+        }
     }
 }

@@ -48,5 +48,10 @@ namespace MiMenu_Back.Repositories
             _appDB.Banners.Update(banner);
             await _appDB.SaveChangesAsync();
         }
+        public async Task Delete(BannerModel banner)
+        {
+            _appDB.Banners.Remove(banner);
+            await _appDB.SaveChangesAsync();
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<BannerModel?> GetById(string id);
         Task<List<BannerModel>?> GetAll(string? sortPriority, bool? visibility);
         Task Update(BannerModel banner);
+        Task Delete(BannerModel banner);
     }
 }
