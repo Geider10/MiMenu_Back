@@ -2,23 +2,22 @@
 Es una aplicación móvil que permite realizar pedidos de comida y acceder a promociones. Para desarrollar la app me inspiré en la funcionalidades de Mostaza y de Mercado Pago "Delivery".
 
 ### Características 
-- Autenticación y autorización con JWT y manejo de roles.
-- Gestión de usuarios, roles, categorías, comidas, carritos, cupones y más.
+- Autenticación y autorización con JWT.
+- Gestión de usuarios, roles, comidas, carritos, cupones, pedidos, etc.
 - Validación de datos con FluentValidation.
-- Persistencia de datos en MySQL mediante EF Core.
+- Persistencia de datos en MySQL.
 
 ## Tecnologias
 - C#
 - .NET 8.0
 - Entity Framework Core
 - MySQL
-- JWT 
 - FluentValidation
-- DotEnv
+- JWT 
 
 ## Futuras Mejoras
-- Gestión de direcciones y locales.
-- Implementar ingregientes y combos personalizados.
+- Gestión de direcciones, locales y delivery.
+- Implementar combos personalizados e ingredientes.
 - Pruebas unitarias y de integración.
 
 ## Componentes destacados
