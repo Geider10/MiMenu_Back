@@ -14,6 +14,7 @@ namespace MiMenu_Back.Data
         public DbSet<VoucherModel> Vouchers { get; set; }
         public DbSet<ItemVoucherModel> ItemsVoucher { get; set; }
         public DbSet<BannerModel> Banners { get; set; }
+        public DbSet<PaymentModel> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -134,6 +135,24 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.Priority).IsRequired();
                 tb.Property(col => col.ImgUrl);
                 tb.Property(col => col.Visibility).IsRequired();
+            });
+            modelBuilder.Entity<PaymentModel>(tb =>
+            {
+                tb.ToTable("payment");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.IdUser).IsRequired();
+                tb.Property(col => col.Status).IsRequired();
+                tb.Property(col => col.PaymentMethod).IsRequired().HasMaxLength(50);
+                tb.Property(col => col.Currency).IsRequired().HasMaxLength(50);
+                tb.Property(col => col.PaymentTotal).IsRequired();
+                tb.Property(col => col.IdPublic).ValueGeneratedOnAdd();
+                tb.Property(col => col.CreateDate).IsRequired();
+
+                tb.HasOne(col => col.User)
+                .WithMany(user => user.Payments)
+                .HasForeignKey(col => col.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
