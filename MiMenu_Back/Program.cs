@@ -10,6 +10,7 @@ using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 using System.Text;
+using MercadoPago.Config;
 
 //register services and setup app
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.Load();
 var connectionString = System.Environment.GetEnvironmentVariable("MySQLConnection");
 var secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
+var accessToken = System.Environment.GetEnvironmentVariable("AccessToken");
 builder.Services.AddDbContext<AppDB>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
+MercadoPagoConfig.AccessToken = accessToken;
+
 builder.Services.AddSingleton<Util>();
 builder.Services.AddScoped<IAuthMapper, AuthMapper>();
 builder.Services.AddScoped<IUserMapper, UserMapper>();
@@ -41,6 +45,7 @@ builder.Services.AddScoped<CartItemService>();
 builder.Services.AddScoped<VoucherService>();
 builder.Services.AddScoped<ItemVoucherService>();
 builder.Services.AddScoped<BannerService>();
+builder.Services.AddScoped<PaymentService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
