@@ -22,7 +22,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                //validar datos de entrada
+                
                 var resPreference = await _paymentService.CreatePreference(preferenceDto);
                 return StatusCode(200, resPreference);
             }
@@ -35,5 +35,23 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
             }
         }
+        [HttpPost][Route("webhook")]//receive msj from server MP
+        public async Task<ActionResult> ReceiveNotification([FromBody] MPMessageDto messageDto)
+        {
+            try
+            {
+                await _paymentService.ReceiveNotification(messageDto);
+                return StatusCode(200);
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
+            }
+        }
+
     }
 }
