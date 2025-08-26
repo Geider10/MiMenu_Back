@@ -8,6 +8,6 @@ namespace MiMenu_Back.Mappers.Interfaces
     public interface IPaymentMapper
     {
         List<PreferenceItemRequest> ListDtoToListItem(List<CartItemGetDto> listDto);
-        PreferencePayerRequest UserToPayer(UserGetDto userDto);
+        PreferencePayerRequest UserToPayer(UserModel userModel);
     }
 }

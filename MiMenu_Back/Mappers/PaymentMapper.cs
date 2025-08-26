@@ -26,7 +26,7 @@ namespace MiMenu_Back.Mappers
             }
             return listItems;
         }
-        public PreferencePayerRequest UserToPayer(UserGetDto user)
+        public PreferencePayerRequest UserToPayer(UserModel user)
         {
             return new PreferencePayerRequest
             {

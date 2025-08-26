@@ -6,11 +6,11 @@ namespace MiMenu_Back.Data.Models
     {
         public Guid Id { get; set; }
         public Guid IdUser { get; set; }
-        public PaymentStatus Status { get; set; }
-        public string? PaymentMethod { get; set; }
+        public PaymentStatusEnum Status { get; set; }
+        public string PaymentMethod { get; set; }
         public string Currency { get; set; }
         public double? PaymentTotal { get; set; }
-        public string MPPayment { get; set; }
+        public string? IdPublicMP { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? ApprovedDate { get; set; }
 
