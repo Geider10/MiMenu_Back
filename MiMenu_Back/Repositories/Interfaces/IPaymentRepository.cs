@@ -5,6 +5,8 @@ namespace MiMenu_Back.Repositories.Interfaces
 {
     public interface IPaymentRepository
     {
-        Task<EntityEntry<PaymentModel>> Add (PaymentModel payment);
+        Task Add(PaymentModel payment);
+        Task<PaymentModel?> GetByIdPublic(string id);
+        Task Update(PaymentModel payment);
     }
 }

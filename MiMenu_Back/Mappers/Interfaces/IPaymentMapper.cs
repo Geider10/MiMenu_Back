@@ -1,6 +1,7 @@
 ﻿using MercadoPago.Client.Preference;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.DTOs.User;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 
 namespace MiMenu_Back.Mappers.Interfaces
@@ -9,5 +10,7 @@ namespace MiMenu_Back.Mappers.Interfaces
     {
         List<PreferenceItemRequest> ListDtoToListItem(List<CartItemGetDto> listDto);
         PreferencePayerRequest UserToPayer(UserModel userModel);
+        PaymentModel AddToPayment(PaymentStatusEnum status, string currency, decimal total, string idPublic);
+        PaymentModel UpdateToPayment(PaymentStatusEnum status, DateTime? dateApproved, string paymentMethod, PaymentModel payment);
     }
 }

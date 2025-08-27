@@ -2,6 +2,7 @@
 using MercadoPago.Client.Preference;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.DTOs.User;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 
@@ -38,6 +39,23 @@ namespace MiMenu_Back.Mappers
                     Number = user.Phone
                 }
             };
+        }
+        public PaymentModel AddToPayment(PaymentStatusEnum status, string currency, decimal total, string idPublic)
+        {
+            return new PaymentModel
+            {
+                Status = status,
+                Currency = currency,
+                Total = total,
+                IdPublic = idPublic,
+            };
+        }
+        public PaymentModel UpdateToPayment(PaymentStatusEnum status, DateTime? dateApproved, string paymentMethod, PaymentModel payment)
+        {
+            payment.Status = status;
+            payment.ApprovedDate = dateApproved;
+            payment.PaymentMethod = paymentMethod;
+            return payment;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using MercadoPago.Resource.Payment;
+using Microsoft.IdentityModel.Tokens;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.CompilerServices;
@@ -67,6 +69,19 @@ namespace MiMenu_Back.Utils
 
             return new JwtSecurityTokenHandler().WriteToken(token);
 
+        }
+        public PaymentStatusEnum FormatPaymentStatus(string status)
+        {
+            if (status.ToLower() == "approved")
+            {
+                return PaymentStatusEnum.Approved;
+            }else if (status.ToLower() == "rejected")
+            {
+                return PaymentStatusEnum.Rejected;
+            }else
+            {
+                return PaymentStatusEnum.Pending;
+            }
         }
     }
 }

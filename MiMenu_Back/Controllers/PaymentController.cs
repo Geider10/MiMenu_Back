@@ -22,7 +22,6 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                
                 var resPreference = await _paymentService.CreatePreference(preferenceDto);
                 return StatusCode(200, resPreference);
             }

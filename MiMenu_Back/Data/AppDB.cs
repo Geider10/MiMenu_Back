@@ -141,19 +141,13 @@ namespace MiMenu_Back.Data
                 tb.ToTable("payment");
                 tb.HasKey(col => col.Id);
                 tb.Property(col => col.Id).ValueGeneratedOnAdd();
-                tb.Property(col => col.IdUser).IsRequired();
                 tb.Property(col => col.Status).IsRequired();
                 tb.Property(col => col.PaymentMethod);
                 tb.Property(col => col.Currency).IsRequired().HasMaxLength(50);
-                tb.Property(col => col.PaymentTotal);
-                tb.Property(col => col.IdPublicMP);
+                tb.Property(col => col.Total).IsRequired().HasColumnType("(18,2)");
+                tb.Property(col => col.IdPublic).IsRequired();
                 tb.Property(col => col.CreateDate).IsRequired();
                 tb.Property(col => col.ApprovedDate);
-
-                tb.HasOne(col => col.User)
-                .WithMany(user => user.Payments)
-                .HasForeignKey(col => col.IdUser)
-                .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MiMenu_Back.Data;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
@@ -12,11 +13,19 @@ namespace MiMenu_Back.Repositories
         {
             _appDB = appDB;
         }
-        public async Task<EntityEntry<PaymentModel>> Add(PaymentModel payment)
+        public async Task Add(PaymentModel payment)
         {
-            var pay = _appDB.Payments.Add(payment);
+            _appDB.Payments.Add(payment);
             await _appDB.SaveChangesAsync();
-            return pay;
+        }
+        public async Task<PaymentModel?> GetByIdPublic(string idPublic)
+        {
+            return await _appDB.Payments.FirstOrDefaultAsync(p => p.IdPublic == idPublic);
+        }
+        public async Task Update(PaymentModel payment)
+        {
+            _appDB.Payments.Update(payment);
+            await _appDB.SaveChangesAsync();
         }
     }
 }
