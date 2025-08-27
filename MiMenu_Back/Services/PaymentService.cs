@@ -45,7 +45,7 @@ namespace MiMenu_Back.Services
                         new PreferencePaymentTypeRequest{ Id = "ticket"},
                         new PreferencePaymentTypeRequest{ Id = "credit_card"},
                         new PreferencePaymentTypeRequest{ Id = "debit_card"},
-                        //exclude card prepaga
+                        new PreferencePaymentTypeRequest{ Id = "prepaid_card"}
                         ],
                     DefaultPaymentMethodId = "account_money",
                 },

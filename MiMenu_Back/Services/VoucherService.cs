@@ -27,7 +27,7 @@ namespace MiMenu_Back.Services
             if (voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
-            DateOnly dueDate = _util.StringToDateOnly(voucherDto.DueDate);
+            DateOnly dueDate = _util.FormatDateOnly(voucherDto.DueDate);
             int dateValidate = _util.CompareDates(dateCurrent, dueDate);
             if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
 
@@ -39,8 +39,8 @@ namespace MiMenu_Back.Services
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
 
-            string dueDate = _util.DateOnlyToString(voucherModel.DueDate);
-            string createDate = _util.DateOnlyToString(voucherModel.CreateDate);
+            string dueDate = _util.FormatDateOnly(voucherModel.DueDate);
+            string createDate = _util.FormatDateOnly(voucherModel.CreateDate);
 
             var voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, dueDate, createDate);
             return voucherDto;
@@ -75,7 +75,7 @@ namespace MiMenu_Back.Services
             if(voucherExists) throw new MainException("Voucher already exists with this Name", 400);
             if(voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
 
-            DateOnly dueDate= _util.StringToDateOnly(voucherDto.DueDate);
+            DateOnly dueDate= _util.FormatDateOnly(voucherDto.DueDate);
             int dateResult = _util.CompareDates(voucherModel.DueDate, dueDate);
             if (dateResult != 0)
             {

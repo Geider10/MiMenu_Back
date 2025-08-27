@@ -20,38 +20,40 @@ namespace MiMenu_Back.Utils
         {
             return BCrypt.Net.BCrypt.Verify(text, hashText);
         }
-        public DateOnly CreateDateCurrent()
-        {
-            DateTime date = DateTime.Now;
-            return DateOnly.FromDateTime(date);
-        }
-        public DateOnly? VerifyFormatDate(string? date)
+        #region Date management
+        public DateOnly? VerifyFormatDateOnly(string? date)
         {
             var dateFormat = new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$");//dd-mm-yyy||dd/mm/yyyy
             if (!dateFormat.IsMatch(date)) return null;
             return DateOnly.Parse(date);
         }
-        public DateOnly StringToDateOnly(string date)
+        public DateOnly FormatDateOnly(string date)
         {
             return DateOnly.Parse(date);
         }
-        public string DateOnlyToString(DateOnly date)
+        public string FormatDateOnly(DateOnly date)
         {
             return date.ToString("dd-MM-yyyy");
         }
-        public string? DateOnlyToString(DateOnly? date)
+        public string? FormatDateOnly(DateOnly? date)
         {
             if (date == null) return null;
             return date.Value.ToString("dd-MM-yyyy");
-        }
-        public int CompareDates(DateOnly createDate, DateOnly dueDate)
-        {
-            return dueDate.CompareTo(createDate);
         }
         public string FormatDateTime(DateTime date)
         {
             return date.ToString("dd-MM-yyyy HH:mm:ss");
         }
+        public DateOnly CreateDateCurrent()
+        {
+            DateTime date = DateTime.Now;
+            return DateOnly.FromDateTime(date);
+        }
+        public int CompareDates(DateOnly createDate, DateOnly dueDate)
+        {
+            return dueDate.CompareTo(createDate);
+        }
+        #endregion
         public string GenerateJWT(string id , string role)
         {
             var claims = new List<Claim>
