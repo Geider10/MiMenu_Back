@@ -27,5 +27,9 @@ namespace MiMenu_Back.Repositories
             _appDB.Payments.Update(payment);
             await _appDB.SaveChangesAsync();
         }
+        public async Task<PaymentModel?> GetById(string id)
+        {
+            return await _appDB.Payments.FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+        }
     }
 }

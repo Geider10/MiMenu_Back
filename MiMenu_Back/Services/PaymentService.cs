@@ -45,6 +45,7 @@ namespace MiMenu_Back.Services
                         new PreferencePaymentTypeRequest{ Id = "ticket"},
                         new PreferencePaymentTypeRequest{ Id = "credit_card"},
                         new PreferencePaymentTypeRequest{ Id = "debit_card"},
+                        //exclude card prepaga
                         ],
                     DefaultPaymentMethodId = "account_money",
                 },
@@ -101,7 +102,16 @@ namespace MiMenu_Back.Services
 
             var paymentUpdated = _paymentMap.UpdateToPayment(PaymentStatusEnum.Approved, dateApproved, "Mercado Pago", payment);
             await _paymentRepo.Update(paymentUpdated);
-            Console.WriteLine("The payment this approved");
+        }
+        public async Task<PaymentGetDto> GetById(string id)
+        {
+            var paymentModel = await _paymentRepo.GetById(id);
+            if (paymentModel == null) throw new MainException("Payment no found", 404);
+
+            string status = _util.FormatPaymentStatus(paymentModel.Status);
+            string createDate = _util.FormatDateTime(paymentModel.CreateDate);
+            var paymentDto = _paymentMap.PaymentToGetDto(paymentModel, status, createDate);
+            return paymentDto;
         }
     }
 }

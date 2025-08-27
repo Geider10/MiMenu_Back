@@ -1,6 +1,7 @@
 ﻿using MercadoPago.Client.Common;
 using MercadoPago.Client.Preference;
 using MiMenu_Back.Data.DTOs.Order;
+using MiMenu_Back.Data.DTOs.Payment;
 using MiMenu_Back.Data.DTOs.User;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
@@ -56,6 +57,17 @@ namespace MiMenu_Back.Mappers
             payment.ApprovedDate = dateApproved;
             payment.PaymentMethod = paymentMethod;
             return payment;
+        }
+        public PaymentGetDto PaymentToGetDto(PaymentModel payment, string status, string createDate)
+        {
+            return new PaymentGetDto
+            {
+                IdPublic = payment.IdPublic,
+                Status = status,
+                PaymentMethod = payment.PaymentMethod,
+                Total = payment.Total,
+                CreateDate = createDate
+            };
         }
     }
 }

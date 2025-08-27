@@ -144,7 +144,7 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.Status).IsRequired();
                 tb.Property(col => col.PaymentMethod);
                 tb.Property(col => col.Currency).IsRequired().HasMaxLength(50);
-                tb.Property(col => col.Total).IsRequired().HasColumnType("(18,2)");
+                tb.Property(col => col.Total).IsRequired().HasColumnType("decimal(18,2)");
                 tb.Property(col => col.IdPublic).IsRequired();
                 tb.Property(col => col.CreateDate).IsRequired();
                 tb.Property(col => col.ApprovedDate);

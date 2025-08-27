@@ -44,9 +44,13 @@ namespace MiMenu_Back.Utils
             if (date == null) return null;
             return date.Value.ToString("dd-MM-yyyy");
         }
-        public int CompareDate(DateOnly createDate, DateOnly dueDate)
+        public int CompareDates(DateOnly createDate, DateOnly dueDate)
         {
             return dueDate.CompareTo(createDate);
+        }
+        public string FormatDateTime(DateTime date)
+        {
+            return date.ToString("dd-MM-yyyy HH:mm:ss");
         }
         public string GenerateJWT(string id , string role)
         {
@@ -81,6 +85,20 @@ namespace MiMenu_Back.Utils
             }else
             {
                 return PaymentStatusEnum.Pending;
+            }
+        }
+        public string FormatPaymentStatus(PaymentStatusEnum status)
+        {
+            if (status == PaymentStatusEnum.Approved)
+            {
+                return "Aprobado";
+            }else if(status == PaymentStatusEnum.Rejected)
+            {
+                return "Rechazado";
+            }
+            else
+            {
+                return "Pendiente";
             }
         }
     }

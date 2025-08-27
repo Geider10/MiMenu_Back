@@ -28,7 +28,7 @@ namespace MiMenu_Back.Services
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
             DateOnly dueDate = _util.StringToDateOnly(voucherDto.DueDate);
-            int dateValidate = _util.CompareDate(dateCurrent, dueDate);
+            int dateValidate = _util.CompareDates(dateCurrent, dueDate);
             if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
 
             var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, dueDate, dateCurrent);
@@ -54,7 +54,7 @@ namespace MiMenu_Back.Services
                 DateOnly dateCurrent = _util.CreateDateCurrent();
                 voucherList = voucherList.FindAll(v =>
                 {
-                    int dateValidate = _util.CompareDate(dateCurrent, v.DueDate);
+                    int dateValidate = _util.CompareDates(dateCurrent, v.DueDate);
                     if(voucherQuery.Expired == false)
                     {
                         if (dateValidate >= 0) return true;
@@ -76,11 +76,11 @@ namespace MiMenu_Back.Services
             if(voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
 
             DateOnly dueDate= _util.StringToDateOnly(voucherDto.DueDate);
-            int dateResult = _util.CompareDate(voucherModel.DueDate, dueDate);
+            int dateResult = _util.CompareDates(voucherModel.DueDate, dueDate);
             if (dateResult != 0)
             {
                 DateOnly dateCurrent = _util.CreateDateCurrent();
-                int dateResult2 = _util.CompareDate(dateCurrent, dueDate);
+                int dateResult2 = _util.CompareDates(dateCurrent, dueDate);
                 if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
             }
             var voucherModelUpdated = _voucherMap.UpdateToVoucherModel(voucherDto, voucherModel, dueDate);

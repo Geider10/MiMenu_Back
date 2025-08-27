@@ -35,7 +35,7 @@ namespace MiMenu_Back.Services
             DateOnly dateCurrent = _util.CreateDateCurrent();
             ivList = ivList.FindAll(iv =>
             {
-                int dateValidate = _util.CompareDate(dateCurrent, iv.Voucher.DueDate);
+                int dateValidate = _util.CompareDates(dateCurrent, iv.Voucher.DueDate);
                 if (dateValidate >= 0) return true;
                 return false;
             });
@@ -62,7 +62,7 @@ namespace MiMenu_Back.Services
 
             if (voucherDto.TotalOrder < ivModel.Voucher.BuyMinimum) throw new MainException("TotalOrder must be equal or greater than BuyMinimum from Voucher", 400);
             DateOnly dateCurrent = _util.CreateDateCurrent();
-            int dateValidate = _util.CompareDate(dateCurrent, ivModel.Voucher.DueDate);
+            int dateValidate = _util.CompareDates(dateCurrent, ivModel.Voucher.DueDate);
             if (dateValidate < 0) throw new MainException("Voucher is expired");
 
             var discount = ivModel.Voucher.Discount;
