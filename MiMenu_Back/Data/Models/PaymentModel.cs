@@ -13,6 +13,7 @@ namespace MiMenu_Back.Data.Models
         public DateTime CreateDate { get; set; }
         public DateTime? ApprovedDate { get; set; }
 
+        public OrderModel Order { get; set; }
         public PaymentModel()
         {
             Id = Guid.NewGuid();

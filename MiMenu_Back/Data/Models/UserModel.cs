@@ -15,6 +15,7 @@ namespace MiMenu_Back.Data.Models
         public RolModel Rol { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<ItemVoucherModel> ItemsVoucher { get; set; }
+        public ICollection<OrderModel> Orders { get; set; }
         public UserModel()
         {
             Id = Guid.NewGuid();

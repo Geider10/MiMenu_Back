@@ -15,6 +15,7 @@ namespace MiMenu_Back.Data
         public DbSet<ItemVoucherModel> ItemsVoucher { get; set; }
         public DbSet<BannerModel> Banners { get; set; }
         public DbSet<PaymentModel> Payments { get; set; }
+        public DbSet<OrderModel> Orders { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -148,6 +149,30 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.IdPublic).IsRequired();
                 tb.Property(col => col.CreateDate).IsRequired();
                 tb.Property(col => col.ApprovedDate);
+            });
+            modelBuilder.Entity<OrderModel>(tb =>
+            {
+                tb.ToTable("order");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.IdUser).IsRequired();
+                tb.Property(col => col.IdPayment).IsRequired();
+                tb.Property(col => col.Type).IsRequired();
+                tb.Property(col => col.Status).IsRequired();
+                tb.Property(col => col.RetirementTime).IsRequired();
+                tb.Property(col => col.RetirementInstruction).IsRequired();
+                tb.Property(col => col.IdPublic).IsRequired();
+                tb.Property(col => col.CreateDate).IsRequired();
+
+                tb.HasOne(col => col.User)
+                .WithMany(user => user.Orders)
+                .HasForeignKey(col => col.IdUser)
+                .OnDelete(DeleteBehavior.Cascade);
+               
+                tb.HasOne(col => col.Payment)
+                .WithOne(pay => pay.Order)
+                .HasForeignKey<OrderModel>(col => col.IdPayment)
+                .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
