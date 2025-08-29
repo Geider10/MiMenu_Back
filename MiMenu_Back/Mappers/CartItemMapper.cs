@@ -1,4 +1,5 @@
-﻿using MiMenu_Back.Data.DTOs.Order;
+﻿using MiMenu_Back.Data.DTOs.CartItem;
+using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 
@@ -6,46 +7,49 @@ namespace MiMenu_Back.Mappers
 {
     public class CartItemMapper : ICartItemMapper
     {
-        public CartItem AddToCartItemModel(CartItemAddDto cartItem)
+        public CartItemModel AddToCartItemModel(CartItemAddDto cartItem, decimal priceTotal)
         {
-            return new CartItem
+            return new CartItemModel
             {
                 IdFood = Guid.Parse(cartItem.IdFood),
                 IdUser = Guid.Parse(cartItem.IdUser),
                 Quantity = cartItem.Quantity,
-                PriceTotal = cartItem.PriceTotal
+                PriceUnit = cartItem.PriceUnit,
+                PriceTotal = priceTotal
             };
         }
-        public CartItemGetDto CartItemModelToGet(CartItem cartItem)
+        public CartItemGetDto CartItemModelToGet(CartItemModel cartItem)
         {
             return new CartItemGetDto
             {
-                Id = cartItem.Id.ToString(),
-                Name = cartItem.Food.Name,
-                Description = cartItem.Food.Description,
-                ImgUrl = cartItem.Food.ImgUrl,
-                Price = cartItem.Food.Price,
-                Discount = cartItem.Food.Discount,
+                IdItem = cartItem.Id.ToString(),
+                IdFood = cartItem.Food.Id.ToString(),
                 Quantity = cartItem.Quantity,
-                PriceTotal = cartItem.PriceTotal
+                PriceUnit = cartItem.PriceUnit
             };
         }
-        public List<CartItemGetDto> CartItemListToGetList(List<CartItem> cartItems)
+        public List<CartItemGetAllDto> ItemsToListDto(List<CartItemModel> cartItems)
         {
-            List<CartItemGetDto> itemsDtoList = new List<CartItemGetDto>();
+            List<CartItemGetAllDto> itemsDtoList = new List<CartItemGetAllDto>();
             
             foreach (var item in cartItems)
             {
-                var itemDto = CartItemModelToGet(item);
-                itemsDtoList.Add(itemDto);
+                itemsDtoList.Add(new CartItemGetAllDto
+                {
+                    IdItem = item.Id.ToString(),
+                    IdFood = item.Food.Id.ToString(),
+                    Name = item.Food.Name,
+                    ImgUrl = item.Food.ImgUrl,
+                    Quantity = item.Quantity,
+                    PriceUnit = item.PriceUnit,
+                });
             }
             return itemsDtoList;
         }
-
-        public CartItem UpdateToCartItemModel(CartItem cartItemModel, CartItemUpdateDto cartItemDto)
+        public CartItemModel UpdateToCartItemModel(CartItemModel cartItemModel, CartItemUpdateDto cartItemDto)
         {
             cartItemModel.Quantity = cartItemDto.Quantity;
-            cartItemModel.PriceTotal = cartItemDto.PriceTotal;
+            cartItemModel.PriceUnit = cartItemDto.PriceUnit;
 
             return cartItemModel;
         }

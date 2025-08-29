@@ -82,45 +82,17 @@ namespace MiMenu_Back.Utils
         #endregion
 
         #region Enum Formatting
-        public PaymentStatusEnum FormatPaymentStatus(string status)
+        public string FormatPaymentStatus(StatusPaymentEnum status)
         {
-            if (status.ToLower() == "approved")
-            {
-                return PaymentStatusEnum.Approved;
-            }else if (status.ToLower() == "rejected")
-            {
-                return PaymentStatusEnum.Rejected;
-            }else
-            {
-                return PaymentStatusEnum.Pending;
-            }
-        }
-        public string FormatPaymentStatus(PaymentStatusEnum status)
-        {
-            if (status == PaymentStatusEnum.Approved)
-            {
-                return "Aprobado";
-            }else if(status == PaymentStatusEnum.Rejected)
-            {
-                return "Rechazado";
-            }
-            else
-            {
-                return "Pendiente";
-            }
+            if (status == StatusPaymentEnum.Pending) return "Pending";
+            if (status == StatusPaymentEnum.Approved) return "Approved";
+            return "Rejected";
         }
         public TypeOrderEnum FormatTypeOrder(string type)
         {
-            if(type.ToLower() == "takeaway")
-            {
-                return TypeOrderEnum.TakeAway;
-            }else if(type.ToLower() == "dinein")
-            {
-                return TypeOrderEnum.DineIn;
-            }else
-            {
-                return TypeOrderEnum.Delivery;
-            }
+            if(type.ToLower() == "takeaway") return TypeOrderEnum.TakeAway;
+            if(type.ToLower() == "dinein") return TypeOrderEnum.DineIn;
+            return TypeOrderEnum.Delivery;
         }
         public StatusOrderEnum NextStatusOrder(StatusOrderEnum status)
         {

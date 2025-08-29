@@ -9,9 +9,9 @@ namespace MiMenu_Back.Validators.Order
             RuleFor(prop => prop.Quantity)
                .NotEmpty().WithMessage("Quantity is required")
                .GreaterThan(0).WithMessage("Quantity must be greater than 0");
-            RuleFor(prop => prop.PriceTotal)
-                .NotEmpty().WithMessage("PriceTotal is required")
-                .GreaterThan(0).WithMessage("PriceTotal must be greater than 0");
+            RuleFor(prop => prop.PriceUnit)
+                .NotEmpty().WithMessage("PriceUnit is required")
+                .GreaterThan(0).WithMessage("PriceUnit must be greater than 0");
         }
     }
 }

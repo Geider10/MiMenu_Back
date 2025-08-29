@@ -5,7 +5,7 @@ namespace MiMenu_Back.Data.Models
     public class PaymentModel
     {
         public Guid Id { get; set; }
-        public PaymentStatusEnum Status { get; set; }
+        public StatusPaymentEnum Status { get; set; }
         public string? PaymentMethod { get; set; }
         public string Currency { get; set; }
         public decimal Total { get; set; }

@@ -25,18 +25,18 @@ namespace MiMenu_Back.Repositories
         {
             return await _appDB.CartItems.AnyAsync(o => o.IdFood == Guid.Parse(idFood));
         }
-        public async Task Add(CartItem cartItem)
+        public async Task Add(CartItemModel cartItem)
         {
             _appDB.CartItems.Add(cartItem);
             await _appDB.SaveChangesAsync();
         }
-        public async Task<CartItem?> GetById(string id)
+        public async Task<CartItemModel?> GetById(string id)
         {
             return await _appDB.CartItems
                 .Include(o => o.Food)
                 .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id) && o.Food.Visibility == true);
         }
-        public async Task<List<CartItem>?> GetAllByUserId(string idUser)
+        public async Task<List<CartItemModel>?> GetAllByUserId(string idUser)
         {
             var orderList = await _appDB.CartItems
                 .Include(o => o.Food)
@@ -44,12 +44,12 @@ namespace MiMenu_Back.Repositories
                 .ToListAsync();
             return orderList;
         }
-        public async Task Update(CartItem cartItem)
+        public async Task Update(CartItemModel cartItem)
         {
             _appDB.CartItems.Update(cartItem);
             await _appDB.SaveChangesAsync();
         }
-        public async Task Delete(CartItem cartItem)
+        public async Task Delete(CartItemModel cartItem)
         {
             _appDB.CartItems.Remove(cartItem);
             await _appDB.SaveChangesAsync();

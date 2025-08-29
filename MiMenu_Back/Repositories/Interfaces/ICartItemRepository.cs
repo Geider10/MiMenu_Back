@@ -7,10 +7,10 @@ namespace MiMenu_Back.Repositories.Interfaces
     {
         Task<bool> ExistsByUserFood(string? idFood, string idUser);
         Task<bool> ExistsByFoodId(string idFood);
-        Task Add(CartItem cartItem);
-        Task<CartItem?> GetById(string id);
-        Task<List<CartItem>?> GetAllByUserId(string idUser);
-        Task Update(CartItem cartItem);
-        Task Delete(CartItem cartItem);
+        Task Add(CartItemModel cartItem);
+        Task<CartItemModel?> GetById(string id);
+        Task<List<CartItemModel>?> GetAllByUserId(string idUser);
+        Task Update(CartItemModel cartItem);
+        Task Delete(CartItemModel cartItem);
     }
 }

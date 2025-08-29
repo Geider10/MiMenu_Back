@@ -12,7 +12,7 @@
         public bool Visibility { get; set; }
 
         public CategoryModel Category { get; set; }
-        public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<CartItemModel> CartItems { get; set; }
         public FoodModel()
         {
             Id = Guid.NewGuid();

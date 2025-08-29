@@ -1,5 +1,6 @@
 ﻿using MercadoPago.Client.Common;
 using MercadoPago.Client.Preference;
+using MiMenu_Back.Data.DTOs.CartItem;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.DTOs.Payment;
 using MiMenu_Back.Data.DTOs.User;
@@ -11,19 +12,18 @@ namespace MiMenu_Back.Mappers
 {
     public class PaymentMapper : IPaymentMapper
     {
-        public List<PreferenceItemRequest> ListDtoToListItem(List<CartItemGetDto> listDto)
+        public List<PreferenceItemRequest> ListDtoToListItem(List<CartItemGetAllDto> listDto)
         {
             var listItems = new List<PreferenceItemRequest>();
             foreach (var item in listDto)
             {
                 listItems.Add(new PreferenceItemRequest
                 {
-                    Id = item.Id,
+                    Id = item.IdFood,
                     Title = item.Name,
-                    Description = item.Description,
                     Quantity = item.Quantity,
                     CurrencyId = "ARS",
-                    UnitPrice = (decimal)item.Price
+                    UnitPrice = item.PriceUnit,
                 });
             }
             return listItems;
@@ -41,7 +41,7 @@ namespace MiMenu_Back.Mappers
                 }
             };
         }
-        public PaymentModel AddToPayment(PaymentStatusEnum status, string currency, decimal total, string idPublic)
+        public PaymentModel AddToPayment(StatusPaymentEnum status, string currency, decimal total, string idPublic)
         {
             return new PaymentModel
             {
@@ -51,7 +51,7 @@ namespace MiMenu_Back.Mappers
                 IdPublic = idPublic,
             };
         }
-        public PaymentModel UpdateToPayment(PaymentStatusEnum status, DateTime? dateApproved, string paymentMethod, PaymentModel payment)
+        public PaymentModel UpdateToPayment(StatusPaymentEnum status, DateTime? dateApproved, string paymentMethod, PaymentModel payment)
         {
             payment.Status = status;
             payment.ApprovedDate = dateApproved;

@@ -1,6 +1,6 @@
 ﻿namespace MiMenu_Back.Data.Enums
 {
-    public enum PaymentStatusEnum
+    public enum StatusPaymentEnum
     {
         Pending = 0,
         Approved = 1,

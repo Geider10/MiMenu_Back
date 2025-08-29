@@ -3,6 +3,6 @@
     public class CartItemUpdateDto
     {
         public int Quantity { get; set; }
-        public double PriceTotal { get; set; }
+        public decimal PriceUnit { get; set; }
     }
 }

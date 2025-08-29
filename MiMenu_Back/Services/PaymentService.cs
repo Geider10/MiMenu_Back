@@ -94,7 +94,7 @@ namespace MiMenu_Back.Services
             if (totalCart != Convert.ToDouble(payment.Total)) throw new MainException("Total order is incorrect, the value is not expected", 400);
             
             string idPublic = Guid.NewGuid().ToString();
-            var paymentModel = _paymentMap.AddToPayment(PaymentStatusEnum.Pending, payment.Currency, payment.Total, idPublic);
+            var paymentModel = _paymentMap.AddToPayment(StatusPaymentEnum.Pending, payment.Currency, payment.Total, idPublic);
             await _paymentRepo.Add(paymentModel);
 
             return idPublic;
@@ -104,7 +104,7 @@ namespace MiMenu_Back.Services
             var payment = await _paymentRepo.GetByIdPublic(idPublic);
             if (payment == null) throw new MainException("Payment no found", 404);
 
-            var paymentUpdated = _paymentMap.UpdateToPayment(PaymentStatusEnum.Approved, dateApproved, "Mercado Pago", payment);
+            var paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", payment);
             await _paymentRepo.Update(paymentUpdated);
 
             return payment.Id.ToString();
