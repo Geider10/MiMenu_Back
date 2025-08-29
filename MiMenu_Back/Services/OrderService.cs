@@ -1,0 +1,32 @@
+﻿using MiMenu_Back.Data.DTOs.Order;
+using MiMenu_Back.Data.Models;
+using MiMenu_Back.Repositories.Interfaces;
+using MiMenu_Back.Data.Enums;
+using MiMenu_Back.Utils;
+using MiMenu_Back.Mappers.Interfaces;
+namespace MiMenu_Back.Services
+{
+    public class OrderService
+    {
+        private readonly IOrderRepository _orderRepo;
+        private readonly IOrderMapper _orderMap;
+        private readonly Util _util;
+        public OrderService(IOrderRepository orderRepo, IOrderMapper orderMap, Util util)
+        {
+            _orderRepo = orderRepo;
+            _orderMap = orderMap;
+            _util = util;
+        }
+        public async Task<string> Add (string idUser,string idPayment, OrderAddDto orderDto)
+        {
+            TypeOrderEnum typeOrder = _util.FormatTypeOrder(orderDto.Type);
+            TimeOnly retirementTime = _util.FormatTimeOnly(orderDto.RetirementTime);
+            string idPublic = Guid.NewGuid().ToString();
+            DateOnly createDate = _util.CreateDateCurrent();
+
+            var orderModel = _orderMap.AddToOrder(idUser, idPayment, idPublic, typeOrder, StatusOrderEnum.Pending, retirementTime, orderDto.RetirementInstruction, createDate);
+            await _orderRepo.Add(orderModel);
+            return idPublic;
+        }
+    }
+}

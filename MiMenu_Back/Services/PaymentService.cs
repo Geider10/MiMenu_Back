@@ -35,6 +35,12 @@ namespace MiMenu_Back.Services
             string idPublic = await AddPayment(preferenceDto.Payment, preferenceDto.IdUser);
             var itemsPreference = _paymentMap.ListDtoToListItem(preferenceDto.ItemsCart);
             var payerReference = _paymentMap.UserToPayer(user);
+            var metaDataPreference = new Dictionary<string, object>
+            {
+                {"idUser", preferenceDto.IdUser },
+                {"order", preferenceDto.Order },
+                {"itemsCart", preferenceDto.ItemsCart }
+            };
             var request = new PreferenceRequest
             {
                 Items = itemsPreference,
@@ -51,7 +57,7 @@ namespace MiMenu_Back.Services
                 },
                 //AdditionalInfo = "Discount 4000.00",
                 ExternalReference = idPublic,
-                StatementDescriptor = "MercadoPago"
+                Metadata  =  metaDataPreference
             };
             var client = new PreferenceClient();
             Preference preference = await client.CreateAsync(request);
@@ -71,7 +77,7 @@ namespace MiMenu_Back.Services
                 Payment paymentMP = await client.GetAsync(Convert.ToInt64(id));
                 if (paymentMP.Status == "approved")
                 {
-                    await UpdatePayment(paymentMP.ExternalReference, paymentMP.DateApproved);
+                    string idPayment = await UpdatePayment(paymentMP.ExternalReference, paymentMP.DateApproved);
                     //luego crear order y order items
                 }
             }
@@ -88,20 +94,20 @@ namespace MiMenu_Back.Services
             if (totalCart != Convert.ToDouble(payment.Total)) throw new MainException("Total order is incorrect, the value is not expected", 400);
             
             string idPublic = Guid.NewGuid().ToString();
-            PaymentStatusEnum status = _util.FormatPaymentStatus(payment.Status);
-
-            var paymentModel = _paymentMap.AddToPayment(status, payment.Currency, payment.Total, idPublic);
+            var paymentModel = _paymentMap.AddToPayment(PaymentStatusEnum.Pending, payment.Currency, payment.Total, idPublic);
             await _paymentRepo.Add(paymentModel);
 
             return idPublic;
         }
-        private async Task UpdatePayment(string idPublic, DateTime? dateApproved)
+        private async Task<string> UpdatePayment(string idPublic, DateTime? dateApproved)
         {
             var payment = await _paymentRepo.GetByIdPublic(idPublic);
             if (payment == null) throw new MainException("Payment no found", 404);
 
             var paymentUpdated = _paymentMap.UpdateToPayment(PaymentStatusEnum.Approved, dateApproved, "Mercado Pago", payment);
             await _paymentRepo.Update(paymentUpdated);
+
+            return payment.Id.ToString();
         }
         public async Task<PaymentGetDto> GetById(string id)
         {

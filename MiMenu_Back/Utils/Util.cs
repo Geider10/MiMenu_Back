@@ -20,7 +20,29 @@ namespace MiMenu_Back.Utils
         {
             return BCrypt.Net.BCrypt.Verify(text, hashText);
         }
-        #region Date management
+        public string GenerateJWT(string id, string role)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, id),
+                new Claim(ClaimTypes.Role, role)
+            };
+
+            DotNetEnv.Env.Load();
+            var secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
+            var encodingSecreKet = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(encodingSecreKet, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: credentials
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
+        }
+        #region Date Formatting
         public DateOnly? VerifyFormatDateOnly(string? date)
         {
             var dateFormat = new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$");//dd-mm-yyy||dd/mm/yyyy
@@ -44,6 +66,10 @@ namespace MiMenu_Back.Utils
         {
             return date.ToString("dd-MM-yyyy HH:mm:ss");
         }
+        public TimeOnly FormatTimeOnly(string time)
+        {
+            return TimeOnly.Parse(time);
+        }
         public DateOnly CreateDateCurrent()
         {
             DateTime date = DateTime.Now;
@@ -54,28 +80,8 @@ namespace MiMenu_Back.Utils
             return dueDate.CompareTo(createDate);
         }
         #endregion
-        public string GenerateJWT(string id , string role)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, id),
-                new Claim(ClaimTypes.Role, role)
-            };
 
-            DotNetEnv.Env.Load();
-            var secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
-            var encodingSecreKet = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(encodingSecreKet, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials
-                );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-
-        }
+        #region Enum Formatting
         public PaymentStatusEnum FormatPaymentStatus(string status)
         {
             if (status.ToLower() == "approved")
@@ -103,5 +109,19 @@ namespace MiMenu_Back.Utils
                 return "Pendiente";
             }
         }
+        public TypeOrderEnum FormatTypeOrder(string type)
+        {
+            if(type.ToLower() == "takeaway")
+            {
+                return TypeOrderEnum.TakeAway;
+            }else if(type.ToLower() == "dinein")
+            {
+                return TypeOrderEnum.DineIn;
+            }else
+            {
+                return TypeOrderEnum.Delivery;
+            }
+        }
+        #endregion
     }
 }
