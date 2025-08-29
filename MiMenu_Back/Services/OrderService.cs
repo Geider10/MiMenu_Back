@@ -28,5 +28,15 @@ namespace MiMenu_Back.Services
             await _orderRepo.Add(orderModel);
             return idPublic;
         }
+        public async Task UpdateStatus (string id)
+        {
+            var orderModel = await _orderRepo.GetById(id);
+            if (orderModel == null) throw new MainException("Order no found", 404);
+
+            StatusOrderEnum statusNext = _util.NextStatusOrder(orderModel.Status);
+            orderModel.Status = statusNext;
+
+            await _orderRepo.Update(orderModel);
+        }
     }
 }

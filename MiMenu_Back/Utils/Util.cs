@@ -122,6 +122,13 @@ namespace MiMenu_Back.Utils
                 return TypeOrderEnum.Delivery;
             }
         }
+        public StatusOrderEnum NextStatusOrder(StatusOrderEnum status)
+        {
+            if (status == StatusOrderEnum.Pending) return StatusOrderEnum.InPreparation;
+            if (status == StatusOrderEnum.InPreparation) return StatusOrderEnum.Ready;
+            if (status == StatusOrderEnum.Ready) return StatusOrderEnum.Delivered;
+            return status;
+        }
         #endregion
     }
 }

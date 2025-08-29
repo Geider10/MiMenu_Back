@@ -34,5 +34,25 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
             }
         }
+        //protected by local jwt
+        [HttpPut][Route("{id}/status")]
+        public async Task<ActionResult<MainResponse>> UpdateStatus([FromRoute]string id)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
+
+                await _orderService.UpdateStatus(id);
+                return StatusCode(200, new MainResponse(true, "Status from order updated with success"));
+            }
+            catch (MainException ex)
+            {
+                return StatusCode(ex.StatusCode, new MainResponse(false, ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
+            }
+        }
     }
 }
