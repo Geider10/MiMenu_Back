@@ -50,5 +50,15 @@ namespace MiMenu_Back.Services
                 await _orderRepo.AddOrderItem(itemModel);
             }
         }
+        public async Task<List<CartItemGetDto>> GetDetailByOrderId (string idOrder)
+        {
+            var orderItemList = await _orderRepo.GetAllByOrderId(idOrder);
+            if (orderItemList == null || orderItemList.Count == 0) throw new MainException("There are no items in this order", 404);
+
+            var detailList = _orderMap.ItemToListDetails(orderItemList);
+            return detailList;
+        }
+
+
     }
 }

@@ -23,8 +23,9 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                await _orderService.AddOrder(idUser, idPayment, orderDto.Order, orderDto.ItemsCart);
-                return StatusCode(201, "Order and OrderItems added with success");
+                //await _orderService.AddOrder(idUser, idPayment, orderDto.Order, orderDto.ItemsCart);
+                var detailList = await _orderService.GetDetailByOrderId(idPayment);
+                return StatusCode(201, detailList);
             }
             catch (MainException ex)
             {

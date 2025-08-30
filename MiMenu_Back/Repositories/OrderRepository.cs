@@ -35,5 +35,13 @@ namespace MiMenu_Back.Repositories
             _appDB.OrderItems.Add(orderItem);
             await _appDB.SaveChangesAsync();
         }
+        public async Task<List<OrderItemModel>?> GetAllByOrderId(string idOrder)
+        {
+            var itemsList = await _appDB.OrderItems
+                .Include(i => i.Food)
+                .Where(i => i.IdOrder == Guid.Parse(idOrder))
+                .ToListAsync();
+            return itemsList;
+        }
     }
 }
