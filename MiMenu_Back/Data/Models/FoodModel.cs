@@ -13,6 +13,7 @@
 
         public CategoryModel Category { get; set; }
         public ICollection<CartItemModel> CartItems { get; set; }
+        public ICollection<OrderItemModel> OrderItems { get; set; }
         public FoodModel()
         {
             Id = Guid.NewGuid();

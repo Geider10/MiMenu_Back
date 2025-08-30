@@ -16,6 +16,7 @@ namespace MiMenu_Back.Data
         public DbSet<BannerModel> Banners { get; set; }
         public DbSet<PaymentModel> Payments { get; set; }
         public DbSet<OrderModel> Orders { get; set; }
+        public DbSet<OrderItemModel> OrderItems { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //base.OnModelCreating(modelBuilder);
@@ -173,6 +174,27 @@ namespace MiMenu_Back.Data
                 tb.HasOne(col => col.Payment)
                 .WithOne(pay => pay.Order)
                 .HasForeignKey<OrderModel>(col => col.IdPayment)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<OrderItemModel>(tb =>
+            {
+                tb.ToTable("orderItem");
+                tb.HasKey(col => col.Id);
+                tb.Property(col => col.Id).ValueGeneratedOnAdd();
+                tb.Property(col => col.IdOrder).IsRequired();
+                tb.Property(col => col.IdFood).IsRequired();
+                tb.Property(col => col.Quantity).IsRequired();
+                tb.Property(col => col.PriceUnit).IsRequired().HasColumnType("decimal(18,2)");
+                tb.Property(col => col.PriceTotal).IsRequired().HasColumnType("decimal(18,2)");
+
+                tb.HasOne(col => col.Order)
+                .WithMany(ord => ord.OrderItems)
+                .HasForeignKey(col => col.IdOrder)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                tb.HasOne(col => col.Food)
+                .WithMany(food => food.OrderItems)
+                .HasForeignKey(col => col.IdFood)
                 .OnDelete(DeleteBehavior.Cascade);
             });
         }

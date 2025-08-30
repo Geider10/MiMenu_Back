@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MiMenu_Back.Data.DTOs.CartItem;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
@@ -59,7 +60,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpGet][Route("user/{idUser}")]
-        public async Task<ActionResult<List<CartItemGetDto>>> GetAllByUserId([FromRoute]string idUser)
+        public async Task<ActionResult<List<CartItemGetAllDto>>> GetAllByUserId([FromRoute]string idUser)
         {
             try
             {

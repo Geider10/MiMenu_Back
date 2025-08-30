@@ -16,6 +16,7 @@ namespace MiMenu_Back.Data.Models
 
         public UserModel User { get; set; }
         public PaymentModel Payment { get; set; }
+        public ICollection<OrderItemModel> OrderItems { get; set; }
         public OrderModel()
         {
             Id = Guid.NewGuid();
