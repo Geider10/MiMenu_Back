@@ -17,6 +17,10 @@ namespace MiMenu_Back.Repositories
             _appDB.Orders.Add(order);
             await _appDB.SaveChangesAsync();
         }
+        public async Task<OrderModel?> GetByIdPublic(string idPublic)
+        {
+            return await _appDB.Orders.FirstOrDefaultAsync(o => o.IdPublic == idPublic);
+        }
         public async Task<OrderModel?> GetById(string id)
         {
             return await _appDB.Orders.FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
@@ -24,6 +28,11 @@ namespace MiMenu_Back.Repositories
         public async Task Update(OrderModel order)
         {
             _appDB.Orders.Update(order);
+            await _appDB.SaveChangesAsync();
+        }
+        public async Task AddOrderItem(OrderItemModel orderItem)
+        {
+            _appDB.OrderItems.Add(orderItem);
             await _appDB.SaveChangesAsync();
         }
     }

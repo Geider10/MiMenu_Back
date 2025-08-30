@@ -17,7 +17,7 @@ namespace MiMenu_Back.Services
             _orderMap = orderMap;
             _util = util;
         }
-        public async Task<string> Add (string idUser,string idPayment, OrderAddDto orderDto)
+        public async Task AddOrder (string idUser,string idPayment, OrderAddDto orderDto, List<CartItemGetDto> itemsDto)
         {
             TypeOrderEnum typeOrder = _util.FormatTypeOrder(orderDto.Type);
             TimeOnly retirementTime = _util.FormatTimeOnly(orderDto.RetirementTime);
@@ -26,7 +26,7 @@ namespace MiMenu_Back.Services
 
             var orderModel = _orderMap.AddToOrder(idUser, idPayment, idPublic, typeOrder, StatusOrderEnum.Pending, retirementTime, orderDto.RetirementInstruction, createDate);
             await _orderRepo.Add(orderModel);
-            return idPublic;
+            await AddOrderItem(idPublic, itemsDto);
         }
         public async Task UpdateStatus (string id)
         {
@@ -37,6 +37,18 @@ namespace MiMenu_Back.Services
             orderModel.Status = statusNext;
 
             await _orderRepo.Update(orderModel);
+        }
+        private async Task AddOrderItem (string idPublic, List<CartItemGetDto> itemsDto)
+        {
+            var orderModel = await _orderRepo.GetByIdPublic(idPublic);
+            if (orderModel == null) throw new MainException("Order no found", 404);
+
+            foreach(var item in itemsDto)
+            {
+                decimal priceTotal = item.PriceUnit * item.Quantity;
+                var itemModel = _orderMap.AddToOrderItem(orderModel.Id.ToString(), item.Food.IdFood, item.Quantity, item.PriceUnit, priceTotal);
+                await _orderRepo.AddOrderItem(itemModel);
+            }
         }
     }
 }

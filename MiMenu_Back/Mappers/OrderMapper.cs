@@ -20,5 +20,16 @@ namespace MiMenu_Back.Mappers
                 CreateDate = createDate
             };
         }
+        public OrderItemModel AddToOrderItem(string idOrder, string idFood, int quantity, decimal priceUnit, decimal priceTotal)
+        {
+            return new OrderItemModel
+            {
+                IdOrder = Guid.Parse(idOrder),
+                IdFood = Guid.Parse(idFood),
+                Quantity = quantity,
+                PriceUnit = priceUnit,
+                PriceTotal = priceTotal
+            };
+        }
     }
 }
