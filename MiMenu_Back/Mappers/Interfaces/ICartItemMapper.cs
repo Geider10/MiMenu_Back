@@ -9,6 +9,6 @@ namespace MiMenu_Back.Mappers.Interfaces
         CartItemModel AddToCartItemModel(CartItemAddDto cartItem, decimal priceTotal);
         CartItemGetDto CartItemModelToGet(CartItemModel cartItem);
         List<CartItemGetAllDto> ItemsToListDto(List<CartItemModel> cartItems);
-        CartItemModel UpdateToCartItemModel(CartItemModel cartItemModel, CartItemUpdateDto cartItemDto);
+        CartItemModel UpdateToCartItemModel(CartItemModel cartItemModel, CartItemUpdateDto cartItemDto, decimal priceTotal);
     }
 }

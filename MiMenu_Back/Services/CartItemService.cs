@@ -47,8 +47,9 @@ namespace MiMenu_Back.Services
             var cartItemModel = await _cartItemRepo.GetById(idCartItem);
             if (cartItemModel == null) throw new MainException("CartItem no found", 404);
             if (cartItemModel.IdUser != Guid.Parse(idUser)) throw new MainException("CartItem must be from user", 403);
-            //update price total
-            var cartItemUpdate = _cartItemMap.UpdateToCartItemModel(cartItemModel, cartItemDto);
+
+            decimal priceTotal = cartItemDto.PriceUnit * cartItemDto.Quantity;
+            var cartItemUpdate = _cartItemMap.UpdateToCartItemModel(cartItemModel, cartItemDto, priceTotal);
             await _cartItemRepo.Update(cartItemUpdate);
         }
         public async Task Delete(string idCartItem, string idUser)

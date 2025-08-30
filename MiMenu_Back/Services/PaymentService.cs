@@ -88,7 +88,7 @@ namespace MiMenu_Back.Services
             double totalCart = 0;
             foreach (var item in itemsCart)
             {
-                var totalProduct = item.Food.Price * item.Quantity;
+                double totalProduct = item.Food.Price * item.Quantity;
                 totalCart += totalProduct;
             }
             if (totalCart != Convert.ToDouble(payment.Total)) throw new MainException("Total order is incorrect, the value is not expected", 400);

@@ -19,7 +19,7 @@ namespace MiMenu_Back.Mappers
             {
                 listItems.Add(new PreferenceItemRequest
                 {
-                    Id = item.IdFood,
+                    Id = item.IdItem,
                     Title = item.Name,
                     Quantity = item.Quantity,
                     CurrencyId = "ARS",

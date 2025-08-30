@@ -23,9 +23,16 @@ namespace MiMenu_Back.Mappers
             return new CartItemGetDto
             {
                 IdItem = cartItem.Id.ToString(),
-                IdFood = cartItem.Food.Id.ToString(),
                 Quantity = cartItem.Quantity,
-                PriceUnit = cartItem.PriceUnit
+                PriceUnit = cartItem.PriceUnit,
+                Food = new FoodDetailDto
+                {
+                    IdFood = cartItem.Food.Id.ToString(),
+                    Name = cartItem.Food.Name,
+                    Description = cartItem.Food.Description,
+                    ImgUrl = cartItem.Food.ImgUrl,
+                    Discount = cartItem.Food.Discount
+                }
             };
         }
         public List<CartItemGetAllDto> ItemsToListDto(List<CartItemModel> cartItems)
@@ -37,7 +44,6 @@ namespace MiMenu_Back.Mappers
                 itemsDtoList.Add(new CartItemGetAllDto
                 {
                     IdItem = item.Id.ToString(),
-                    IdFood = item.Food.Id.ToString(),
                     Name = item.Food.Name,
                     ImgUrl = item.Food.ImgUrl,
                     Quantity = item.Quantity,
@@ -46,11 +52,11 @@ namespace MiMenu_Back.Mappers
             }
             return itemsDtoList;
         }
-        public CartItemModel UpdateToCartItemModel(CartItemModel cartItemModel, CartItemUpdateDto cartItemDto)
+        public CartItemModel UpdateToCartItemModel(CartItemModel cartItemModel, CartItemUpdateDto cartItemDto, decimal priceTotal)
         {
             cartItemModel.Quantity = cartItemDto.Quantity;
             cartItemModel.PriceUnit = cartItemDto.PriceUnit;
-
+            cartItemModel.PriceTotal = priceTotal;
             return cartItemModel;
         }
     }
