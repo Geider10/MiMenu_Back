@@ -12,18 +12,20 @@ namespace MiMenu_Back.Mappers
 {
     public class PaymentMapper : IPaymentMapper
     {
-        public List<PreferenceItemRequest> ListDtoToListItem(List<CartItemGetAllDto> listDto)
+        public List<PreferenceItemRequest> ListDtoToListItem(List<CartItemGetDto> listDto)
         {
-            var listItems = new List<PreferenceItemRequest>();
+            List<PreferenceItemRequest> listItems = new List<PreferenceItemRequest>();
             foreach (var item in listDto)
             {
                 listItems.Add(new PreferenceItemRequest
                 {
-                    Id = item.IdItem,
-                    Title = item.Name,
+                    Id = item.Food.IdFood,
+                    Title = item.Food.Name,
+                    Description = item.Food.Description,
+                    PictureUrl = item.Food.ImgUrl,
                     Quantity = item.Quantity,
-                    CurrencyId = "ARS",
                     UnitPrice = item.PriceUnit,
+                    CurrencyId = "ARS",
                 });
             }
             return listItems;

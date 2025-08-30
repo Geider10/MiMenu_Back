@@ -42,6 +42,14 @@ namespace MiMenu_Back.Services
             var dtoList = _cartItemMap.ItemsToListDto(cartItemList);
             return dtoList;
         }
+        public async Task<List<CartItemGetDto>> GetDetailByUserId(string idUser)
+        {
+            var cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
+            if (cartItemList == null || cartItemList.Count == 0) throw new MainException("There are no cartItem for this user", 404);
+
+            var detailList = _cartItemMap.ItemToListDetails(cartItemList);
+            return detailList;
+        }
         public async Task Update(string idCartItem, string idUser, CartItemUpdateDto cartItemDto)
         {
             var cartItemModel = await _cartItemRepo.GetById(idCartItem);

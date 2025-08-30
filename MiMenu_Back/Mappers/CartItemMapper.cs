@@ -38,7 +38,6 @@ namespace MiMenu_Back.Mappers
         public List<CartItemGetAllDto> ItemsToListDto(List<CartItemModel> cartItems)
         {
             List<CartItemGetAllDto> itemsDtoList = new List<CartItemGetAllDto>();
-            
             foreach (var item in cartItems)
             {
                 itemsDtoList.Add(new CartItemGetAllDto
@@ -51,6 +50,16 @@ namespace MiMenu_Back.Mappers
                 });
             }
             return itemsDtoList;
+        }
+        public List<CartItemGetDto> ItemToListDetails(List<CartItemModel> cartItems)
+        {
+            List<CartItemGetDto> detailList = new List<CartItemGetDto>();
+            foreach (var item in cartItems)
+            {
+                var ciModel = CartItemModelToGet(item);
+                detailList.Add(ciModel);
+            }
+            return detailList;
         }
         public CartItemModel UpdateToCartItemModel(CartItemModel cartItemModel, CartItemUpdateDto cartItemDto, decimal priceTotal)
         {

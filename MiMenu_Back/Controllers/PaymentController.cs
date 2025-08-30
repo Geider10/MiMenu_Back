@@ -39,7 +39,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                await _paymentService.ReceiveNotification(messageDto);
+                await _paymentService.ReceiveWebhook(messageDto);
                 return StatusCode(200);
             }
             catch (MainException ex)

@@ -67,7 +67,7 @@ namespace MiMenu_Back.Services
                 InitPoint = preference.InitPoint
             };
         }
-        public async Task ReceiveNotification (MPMessageDto messageDto)
+        public async Task ReceiveWebhook (MPMessageDto messageDto)
         {
             //validar secret key
             if (messageDto.type == "payment")
@@ -85,13 +85,13 @@ namespace MiMenu_Back.Services
         private async Task<string> AddPayment(PaymentAddDto payment,string idUser)
         {
             var itemsCart = await _ciRepo.GetAllByUserId(idUser);
-            double totalCart = 0;
+            decimal totalCart = 0;
             foreach (var item in itemsCart)
             {
-                double totalProduct = item.Food.Price * item.Quantity;
+                decimal totalProduct = item.PriceUnit * item.Quantity;
                 totalCart += totalProduct;
             }
-            if (totalCart != Convert.ToDouble(payment.Total)) throw new MainException("Total order is incorrect, the value is not expected", 400);
+            if (totalCart != payment.Total) throw new MainException("Total order is incorrect, the value is not expected", 400);
             
             string idPublic = Guid.NewGuid().ToString();
             var paymentModel = _paymentMap.AddToPayment(StatusPaymentEnum.Pending, payment.Currency, payment.Total, idPublic);
@@ -101,13 +101,13 @@ namespace MiMenu_Back.Services
         }
         private async Task<string> UpdatePayment(string idPublic, DateTime? dateApproved)
         {
-            var payment = await _paymentRepo.GetByIdPublic(idPublic);
-            if (payment == null) throw new MainException("Payment no found", 404);
+            var paymentModel = await _paymentRepo.GetByIdPublic(idPublic);
+            if (paymentModel == null) throw new MainException("Payment no found", 404);
 
-            var paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", payment);
+            var paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", paymentModel);
             await _paymentRepo.Update(paymentUpdated);
 
-            return payment.Id.ToString();
+            return paymentModel.Id.ToString();
         }
         public async Task<PaymentGetDto> GetById(string id)
         {
