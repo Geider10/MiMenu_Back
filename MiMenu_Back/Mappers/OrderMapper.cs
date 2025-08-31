@@ -3,6 +3,7 @@ using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
+using MiMenu_Back.Utils;
 
 namespace MiMenu_Back.Mappers
 {
@@ -55,6 +56,32 @@ namespace MiMenu_Back.Mappers
                 });
             }
             return detailList;
+        }
+        public List<OrderGetAllDto> ItemToListGeneral(List<OrderModel> itemList, Util util)
+        {
+            List<OrderGetAllDto> generalList = new List<OrderGetAllDto>();
+            foreach (var order in itemList)
+            {
+                int quantityItems = 0;
+                foreach(var item in order.OrderItems)
+                {
+                    quantityItems += item.Quantity;
+                }
+                generalList.Add(new OrderGetAllDto
+                {
+                    IdOrder = order.Id.ToString(),
+                    QuantityItems = quantityItems,
+                    PriceTotal = order.Payment.Total,
+                    OrderGeneral = new OrderGeneralDto
+                    {
+                        Type = util.FormatTypeOrder(order.Type),
+                        Status = util.FormatStatusOrder(order.Status),
+                        RetirementTime = util.FormatTimeOnly(order.RetirementTime),
+                        CreateDate = util.FormatDateOnly(order.CreateDate)
+                    }
+                });
+            }
+            return generalList;
         }
     }
 }

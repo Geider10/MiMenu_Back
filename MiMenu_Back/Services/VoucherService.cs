@@ -54,7 +54,7 @@ namespace MiMenu_Back.Services
                 DateOnly dateCurrent = _util.CreateDateCurrent();
                 voucherList = voucherList.FindAll(v =>
                 {
-                    int dateValidate = _util.CompareDates(dateCurrent, v.DueDate);
+                    int dateValidate = _util.CompareDates(dateCurrent, v.DueDate);//DueDate voucher >= DateCurrent user
                     if(voucherQuery.Expired == false)
                     {
                         if (dateValidate >= 0) return true;

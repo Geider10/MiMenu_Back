@@ -38,6 +38,29 @@ namespace MiMenu_Back.Services
 
             await _orderRepo.Update(orderModel);
         }
+        public async Task<List<OrderGetAllDto>> GetAllByUserId(string idUser, OrderQueryDto queryDto)
+        {
+            var ordersList = await _orderRepo.GetAllByUserId(idUser,queryDto.TypeOrder);
+            if (ordersList == null || ordersList.Count == 0) throw new MainException("There are no orders for this user", 404);
+            foreach(var order in ordersList)
+            {
+                var itemsList = await GetAllByOrderId(order.Id.ToString());
+                order.OrderItems = itemsList;
+            }
+
+            if (queryDto.OldMonth.HasValue)
+            {
+                DateOnly oldDate = _util.CreateDateOld((int)queryDto.OldMonth);
+                ordersList = ordersList.FindAll(o =>
+                {
+                    int dateValidate = _util.CompareDates(oldDate, o.CreateDate);//CreateDate order >= OldDate user
+                    if (dateValidate >= 0) return true;
+                    return false;
+                });
+            }
+            var generalList = _orderMap.ItemToListGeneral(ordersList, _util);
+            return generalList;
+        }
         private async Task AddOrderItem (string idPublic, List<CartItemGetDto> itemsDto)
         {
             var orderModel = await _orderRepo.GetByIdPublic(idPublic);
@@ -50,13 +73,12 @@ namespace MiMenu_Back.Services
                 await _orderRepo.AddOrderItem(itemModel);
             }
         }
-        public async Task<List<CartItemGetDto>> GetDetailByOrderId (string idOrder)
+        private async Task<List<OrderItemModel>> GetAllByOrderId(string idOrder)
         {
             var orderItemList = await _orderRepo.GetAllByOrderId(idOrder);
             if (orderItemList == null || orderItemList.Count == 0) throw new MainException("There are no items in this order", 404);
 
-            var detailList = _orderMap.ItemToListDetails(orderItemList);
-            return detailList;
+            return orderItemList;
         }
 
 

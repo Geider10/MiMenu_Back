@@ -1,4 +1,5 @@
-﻿using MiMenu_Back.Data.Models;
+﻿using MiMenu_Back.Data.Enums;
+using MiMenu_Back.Data.Models;
 
 namespace MiMenu_Back.Repositories.Interfaces
 {
@@ -10,5 +11,6 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task Update(OrderModel order);
         Task AddOrderItem(OrderItemModel orderItem);
         Task<List<OrderItemModel>?> GetAllByOrderId(string idOrder);
+        Task<List<OrderModel>?> GetAllByUserId(string idUser, string? typeOrder);
     }
 }

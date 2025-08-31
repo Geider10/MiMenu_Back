@@ -114,7 +114,7 @@ namespace MiMenu_Back.Services
             var paymentModel = await _paymentRepo.GetById(id);
             if (paymentModel == null) throw new MainException("Payment no found", 404);
 
-            string status = _util.FormatPaymentStatus(paymentModel.Status);
+            string status = _util.FormatStatusPayment(paymentModel.Status);
             string createDate = _util.FormatDateTime(paymentModel.CreateDate);
             var paymentDto = _paymentMap.PaymentToGetDto(paymentModel, status, createDate);
             return paymentDto;

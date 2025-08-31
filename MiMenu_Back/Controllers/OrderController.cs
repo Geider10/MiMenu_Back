@@ -18,14 +18,15 @@ namespace MiMenu_Back.Controllers
             _orderService = orderService;
         }
         [Authorize(Roles ="client")]
-        [HttpPost][Route("user/{idUser}/payment/{idPayment}")]
-        public async Task<ActionResult> Add ([FromRoute]string idUser,[FromRoute] string idPayment, [FromBody]CreatePreferenceDto orderDto)
+        [HttpGet][Route("user/{idUser}")]
+        public async Task<ActionResult<List<OrderGetAllDto>>> GetAllByUserId([FromRoute]string idUser, [FromQuery]OrderQueryDto queryDto)
         {
             try
             {
-                //await _orderService.AddOrder(idUser, idPayment, orderDto.Order, orderDto.ItemsCart);
-                var detailList = await _orderService.GetDetailByOrderId(idPayment);
-                return StatusCode(201, detailList);
+                if (!Guid.TryParse(idUser, out _)) return BadRequest("Id must has format Guid");
+
+                var generalList = await _orderService.GetAllByUserId(idUser, queryDto);
+                return StatusCode(201, generalList);
             }
             catch (MainException ex)
             {

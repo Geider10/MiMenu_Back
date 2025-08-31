@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiMenu_Back.Data;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 
@@ -42,6 +43,22 @@ namespace MiMenu_Back.Repositories
                 .Where(i => i.IdOrder == Guid.Parse(idOrder))
                 .ToListAsync();
             return itemsList;
+        }
+        public async Task<List<OrderModel>?> GetAllByUserId(string idUser, string? typeOrder)
+        {
+            var orderList = await _appDB.Orders
+                .Include(o => o.Payment)
+                .Where(o => o.IdUser == Guid.Parse(idUser))
+                .ToListAsync();
+
+            if (typeOrder == "takeaway" &&!string.IsNullOrEmpty(typeOrder))
+            {
+                orderList = orderList.FindAll(o => o.Type == TypeOrderEnum.TakeAway);
+            }else if(typeOrder == "dinein" && !string.IsNullOrEmpty(typeOrder))
+            {
+                orderList = orderList.FindAll(o => o.Type == TypeOrderEnum.DineIn);
+            }
+            return orderList;
         }
     }
 }

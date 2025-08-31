@@ -70,29 +70,54 @@ namespace MiMenu_Back.Utils
         {
             return TimeOnly.Parse(time);
         }
+        public string FormatTimeOnly(TimeOnly time)
+        {
+            return time.ToString("HH:mm");
+        }
         public DateOnly CreateDateCurrent()
         {
             DateTime date = DateTime.Now;
             return DateOnly.FromDateTime(date);
         }
-        public int CompareDates(DateOnly createDate, DateOnly dueDate)
+        public DateOnly CreateDateOld(int oldMonth)
         {
-            return dueDate.CompareTo(createDate);
+            DateTime date = DateTime.Now.AddMonths(-oldMonth);
+            return DateOnly.FromDateTime(date);
+        }
+        public int CompareDates(DateOnly minorDate, DateOnly majorDate)
+        {
+            return majorDate.CompareTo(minorDate);
         }
         #endregion
 
         #region Enum Formatting
-        public string FormatPaymentStatus(StatusPaymentEnum status)
+        public string FormatStatusPayment(StatusPaymentEnum status)
         {
             if (status == StatusPaymentEnum.Pending) return "Pending";
             if (status == StatusPaymentEnum.Approved) return "Approved";
-            return "Rejected";
+            if (status == StatusPaymentEnum.Rejected) return "Rejected";
+            throw new Exception("StatusPayment must be Pending, Approved or Rejected");
         }
         public TypeOrderEnum FormatTypeOrder(string type)
         {
             if(type.ToLower() == "takeaway") return TypeOrderEnum.TakeAway;
             if(type.ToLower() == "dinein") return TypeOrderEnum.DineIn;
-            return TypeOrderEnum.Delivery;
+            throw new Exception("TypeOrder must be TakeAway or DineIn");
+        }
+        public string FormatTypeOrder(TypeOrderEnum type)
+        {
+            if (type == TypeOrderEnum.TakeAway) return "TakeAway";
+            if (type == TypeOrderEnum.DineIn) return "DineIn";
+            if (type == TypeOrderEnum.Delivery) return "Delivery";
+            throw new Exception("TypeOrder must be TakeAway or DineIn");
+        }
+        public string FormatStatusOrder(StatusOrderEnum status)
+        {
+            if (status == StatusOrderEnum.Pending) return "Pending";
+            if (status == StatusOrderEnum.InPreparation) return "InPreparation";
+            if (status == StatusOrderEnum.Ready) return "Ready";
+            if (status == StatusOrderEnum.Delivered) return "Delivered";
+            throw new Exception("StatusOrder must be Pending, InPreparation, Ready or Delivered");
         }
         public StatusOrderEnum NextStatusOrder(StatusOrderEnum status)
         {
