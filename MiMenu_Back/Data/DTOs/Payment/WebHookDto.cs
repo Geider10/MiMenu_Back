@@ -1,6 +1,6 @@
 ﻿namespace MiMenu_Back.Data.DTOs.Payment
 {
-    public class MPMessageDto
+    public class WebHookDto
     {
         public string action { get; set; }
         public string api_version { get; set; }

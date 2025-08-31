@@ -11,5 +11,6 @@ namespace MiMenu_Back.Mappers.Interfaces
         OrderItemModel AddToOrderItem(string idOrder, string idFood, int quantity, decimal priceUnit, decimal priceTotal);
         List<CartItemGetDto> ItemToListDetails(List<OrderItemModel> itemsList);
         List<OrderGetAllDto> ItemToListGeneral(List<OrderModel> itemList, Util util);
+        OrderGetDto OrderToOrderDto(OrderModel order, Util util);
     }
 }

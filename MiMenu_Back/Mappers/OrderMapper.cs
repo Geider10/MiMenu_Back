@@ -1,5 +1,6 @@
 ﻿using MiMenu_Back.Data.DTOs.CartItem;
 using MiMenu_Back.Data.DTOs.Order;
+using MiMenu_Back.Data.DTOs.Payment;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
@@ -82,6 +83,31 @@ namespace MiMenu_Back.Mappers
                 });
             }
             return generalList;
+        }
+        public OrderGetDto OrderToOrderDto(OrderModel order, Util util)
+        {
+            return new OrderGetDto
+            {
+                IdOrder = order.Id.ToString(),
+                Payment = new PaymentGetDto
+                {
+                    IdPublic = order.Payment.IdPublic,
+                    Status = util.FormatStatusPayment(order.Payment.Status),
+                    PaymentMethod = order.Payment.PaymentMethod,
+                    Total = order.Payment.Total,
+                    CreateDate = util.FormatDateTime(order.Payment.CreateDate),
+                },
+                OrderDetail = new OrderDetailDto
+                {
+                    IdPublic = order.IdPublic,
+                    Type = util.FormatTypeOrder(order.Type),
+                    Status = util.FormatStatusOrder(order.Status),
+                    RetirementTime = util.FormatTimeOnly(order.RetirementTime),
+                    RetirementInstruction = order.RetirementInstruction,
+                    CreateDate = util.FormatDateOnly(order.CreateDate)
+                },
+                ItemsDetail = ItemToListDetails(order.OrderItems.ToList())
+            };
         }
     }
 }

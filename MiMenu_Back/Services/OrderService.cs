@@ -61,6 +61,17 @@ namespace MiMenu_Back.Services
             var generalList = _orderMap.ItemToListGeneral(ordersList, _util);
             return generalList;
         }
+        public async Task<OrderGetDto> GetById(string idOrder,string idUser)
+        {
+            var orderModel = await _orderRepo.GetById(idOrder);
+            if (orderModel == null) throw new MainException("Order no found", 404);
+            if (orderModel.IdUser.ToString() != idUser) throw new MainException("Order must be the user", 403);
+
+            var itemsList = await GetAllByOrderId(idOrder);
+            orderModel.OrderItems = itemsList;
+            var orderDto = _orderMap.OrderToOrderDto(orderModel, _util);
+            return orderDto;
+        }
         private async Task AddOrderItem (string idPublic, List<CartItemGetDto> itemsDto)
         {
             var orderModel = await _orderRepo.GetByIdPublic(idPublic);

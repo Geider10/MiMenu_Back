@@ -35,7 +35,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpPost][Route("webhook")]//receive msj from server MP
-        public async Task<ActionResult> ReceiveNotification([FromBody] MPMessageDto messageDto)
+        public async Task<ActionResult> ReceiveNotification([FromBody] WebHookDto messageDto)
         {
             try
             {

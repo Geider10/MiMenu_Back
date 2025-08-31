@@ -67,7 +67,7 @@ namespace MiMenu_Back.Services
                 InitPoint = preference.InitPoint
             };
         }
-        public async Task ReceiveWebhook (MPMessageDto messageDto)
+        public async Task ReceiveWebhook (WebHookDto messageDto)
         {
             //validar secret key
             if (messageDto.type == "payment")

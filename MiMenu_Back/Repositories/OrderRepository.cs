@@ -24,7 +24,9 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<OrderModel?> GetById(string id)
         {
-            return await _appDB.Orders.FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+            return await _appDB.Orders
+                .Include(o => o.Payment)
+                .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
         }
         public async Task Update(OrderModel order)
         {
