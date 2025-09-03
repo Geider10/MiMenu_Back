@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs.Payment;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
+using MiMenu_Back.Validators.Payment;
 
 namespace MiMenu_Back.Controllers
 {
@@ -22,6 +24,9 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
+                ValidationResult result = new CreatePreferenceValidator().Validate(preferenceDto);
+                if (!result.IsValid) return BadRequest(result.Errors);
+
                 var resPreference = await _paymentService.CreatePreference(preferenceDto);
                 return StatusCode(200, resPreference);
             }
@@ -34,8 +39,8 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
             }
         }
-        [HttpPost][Route("webhook")]//receive msj from server MP
-        public async Task<ActionResult> ReceiveNotification([FromBody] WebHookDto messageDto)
+        [HttpPost][Route("webhook")]
+        public async Task<ActionResult> ReceiveWebhook([FromBody] WebHookDto messageDto)
         {
             try
             {

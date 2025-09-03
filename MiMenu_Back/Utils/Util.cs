@@ -108,7 +108,6 @@ namespace MiMenu_Back.Utils
         {
             if (type == TypeOrderEnum.TakeAway) return "TakeAway";
             if (type == TypeOrderEnum.DineIn) return "DineIn";
-            if (type == TypeOrderEnum.Delivery) return "Delivery";
             throw new Exception("TypeOrder must be TakeAway or DineIn");
         }
         public string FormatStatusOrder(StatusOrderEnum status)

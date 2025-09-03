@@ -162,7 +162,7 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.Type).IsRequired();
                 tb.Property(col => col.Status).IsRequired();
                 tb.Property(col => col.RetirementTime).IsRequired();
-                tb.Property(col => col.RetirementInstruction).IsRequired();
+                tb.Property(col => col.RetirementInstruction);
                 tb.Property(col => col.IdPublic).IsRequired();
                 tb.Property(col => col.CreateDate).IsRequired();
 

@@ -4,11 +4,14 @@ using MercadoPago.Client.Preference;
 using MercadoPago.Resource.Payment;
 using MercadoPago.Resource.Preference;
 using Microsoft.AspNetCore.Routing.Constraints;
+using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.DTOs.Payment;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MiMenu_Back.Services
 {
@@ -19,13 +22,15 @@ namespace MiMenu_Back.Services
         private readonly IUserRepository _userRepo;
         private readonly ICartItemRepository _ciRepo;
         private readonly Util _util;
-        public PaymentService(IUserRepository userRepo, IPaymentMapper paymentMap, IPaymentRepository paymentRepo, ICartItemRepository ciRepo, Util util)
+        private readonly OrderService _orderService;
+        public PaymentService(IUserRepository userRepo, IPaymentMapper paymentMap, IPaymentRepository paymentRepo, ICartItemRepository ciRepo, Util util, OrderService orderService)
         {
             _paymentMap = paymentMap;
             _paymentRepo = paymentRepo;
             _userRepo = userRepo;
             _ciRepo = ciRepo;
             _util = util;
+            _orderService = orderService;
         }
         public async Task<ResponsePreferenceDto> CreatePreference(CreatePreferenceDto preferenceDto)
         {
@@ -38,8 +43,8 @@ namespace MiMenu_Back.Services
             var metaDataPreference = new Dictionary<string, object>
             {
                 {"idUser", preferenceDto.IdUser },
-                {"order", preferenceDto.Order },
-                {"itemsCart", preferenceDto.ItemsCart }
+                {"order", JsonConvert.SerializeObject(preferenceDto.Order)},
+                {"itemsCart", JsonConvert.SerializeObject(preferenceDto.ItemsCart)}
             };
             var request = new PreferenceRequest
             {
@@ -57,7 +62,7 @@ namespace MiMenu_Back.Services
                 },
                 //AdditionalInfo = "Discount 4000.00",
                 ExternalReference = idPublic,
-                Metadata  =  metaDataPreference
+                Metadata = metaDataPreference
             };
             var client = new PreferenceClient();
             Preference preference = await client.CreateAsync(request);
@@ -67,18 +72,22 @@ namespace MiMenu_Back.Services
                 InitPoint = preference.InitPoint
             };
         }
-        public async Task ReceiveWebhook (WebHookDto messageDto)
+        public async Task ReceiveWebhook (WebHookDto webhookDto)
         {
             //validar secret key
-            if (messageDto.type == "payment")
+            if (webhookDto.type == "payment")
             {
-                string id = messageDto.data.id;
+                string id = webhookDto.data.id;
                 var client = new PaymentClient();
                 Payment paymentMP = await client.GetAsync(Convert.ToInt64(id));
                 if (paymentMP.Status == "approved")
                 {
                     string idPayment = await UpdatePayment(paymentMP.ExternalReference, paymentMP.DateApproved);
-                    //luego crear order y order items
+                    string idUser = (string)paymentMP.Metadata["id_user"];
+                    OrderAddDto orderDto = JsonConvert.DeserializeObject<OrderAddDto>(paymentMP.Metadata["order"].ToString());
+                    List<CartItemGetDto> itemsCart = JsonConvert.DeserializeObject<List<CartItemGetDto>>(paymentMP.Metadata["items_cart"].ToString());
+
+                    await _orderService.AddOrder(idUser,idPayment,orderDto,itemsCart);
                 }
             }
         }

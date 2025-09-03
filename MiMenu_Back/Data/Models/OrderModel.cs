@@ -10,7 +10,7 @@ namespace MiMenu_Back.Data.Models
         public TypeOrderEnum Type { get; set; }
         public StatusOrderEnum Status { get; set; }
         public TimeOnly RetirementTime { get; set; }
-        public string RetirementInstruction { get; set; }
+        public string? RetirementInstruction { get; set; }
         public string IdPublic { get; set; }
         public DateOnly CreateDate  { get; set; }
 
