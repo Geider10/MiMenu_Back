@@ -68,5 +68,16 @@ namespace MiMenu_Back.Services
 
             await _cartItemRepo.Delete(cartItemModel);
         }
+        public async Task DeleteAllByUserId(string idUser)
+        {
+            var cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
+            if (cartItemList == null || cartItemList.Count == 0) throw new MainException("There are no cartItem for this user", 404);
+
+            foreach(var item in cartItemList)
+            {
+                await _cartItemRepo.Delete(item);
+            }
+
+        }
     }
 }

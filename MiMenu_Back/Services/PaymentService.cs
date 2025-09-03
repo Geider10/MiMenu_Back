@@ -23,7 +23,8 @@ namespace MiMenu_Back.Services
         private readonly ICartItemRepository _ciRepo;
         private readonly Util _util;
         private readonly OrderService _orderService;
-        public PaymentService(IUserRepository userRepo, IPaymentMapper paymentMap, IPaymentRepository paymentRepo, ICartItemRepository ciRepo, Util util, OrderService orderService)
+        private readonly CartItemService _ciService;
+        public PaymentService(IUserRepository userRepo, IPaymentMapper paymentMap, IPaymentRepository paymentRepo, ICartItemRepository ciRepo, Util util, OrderService orderService, CartItemService ciService)
         {
             _paymentMap = paymentMap;
             _paymentRepo = paymentRepo;
@@ -31,6 +32,7 @@ namespace MiMenu_Back.Services
             _ciRepo = ciRepo;
             _util = util;
             _orderService = orderService;
+            _ciService = ciService;
         }
         public async Task<ResponsePreferenceDto> CreatePreference(CreatePreferenceDto preferenceDto)
         {
@@ -88,6 +90,7 @@ namespace MiMenu_Back.Services
                     List<CartItemGetDto> itemsCart = JsonConvert.DeserializeObject<List<CartItemGetDto>>(paymentMP.Metadata["items_cart"].ToString());
 
                     await _orderService.AddOrder(idUser,idPayment,orderDto,itemsCart);
+                    await _ciService.DeleteAllByUserId(idUser);
                 }
             }
         }
@@ -112,6 +115,7 @@ namespace MiMenu_Back.Services
         {
             var paymentModel = await _paymentRepo.GetByIdPublic(idPublic);
             if (paymentModel == null) throw new MainException("Payment no found", 404);
+            if (paymentModel.Status == StatusPaymentEnum.Approved) throw new MainException("Payment already approved", 400);
 
             var paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", paymentModel);
             await _paymentRepo.Update(paymentUpdated);

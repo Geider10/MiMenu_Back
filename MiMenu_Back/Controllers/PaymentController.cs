@@ -39,12 +39,16 @@ namespace MiMenu_Back.Controllers
                 return StatusCode(500, new MainResponse(false, "Internal server error " + ex.Message));
             }
         }
+        //api very private
         [HttpPost][Route("webhook")]
-        public async Task<ActionResult> ReceiveWebhook([FromBody] WebHookDto messageDto)
+        public async Task<ActionResult> ReceiveWebhook([FromBody] WebHookDto webhookDto)
         {
             try
             {
-                await _paymentService.ReceiveWebhook(messageDto);
+                ValidationResult result = new WebhookValidator().Validate(webhookDto);
+                if (!result.IsValid) return BadRequest(result.Errors);
+
+                await _paymentService.ReceiveWebhook(webhookDto);
                 return StatusCode(200);
             }
             catch (MainException ex)
