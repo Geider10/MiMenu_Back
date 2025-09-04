@@ -1,4 +1,5 @@
-﻿using MiMenu_Back.Data.Models;
+﻿using MiMenu_Back.Data.Enums;
+using MiMenu_Back.Data.Models;
 
 namespace MiMenu_Back.Repositories.Interfaces
 {
@@ -7,7 +8,7 @@ namespace MiMenu_Back.Repositories.Interfaces
         Task<bool> ExistsByName(string name);
         Task<bool> ExistsByName(string name, string idIgnore);
         Task Add(CategoryModel category);
-        Task<List<CategoryModel>> GetAll(string typeCategory, string? sortName, bool? visibility);
+        Task<List<CategoryModel>> GetAll(TypeCategoryEnum typeCategory, string? sortName, bool? visibility);
         Task<CategoryModel?> GetById(string id);
         Task Update(CategoryModel category);
         Task Delete(CategoryModel category);

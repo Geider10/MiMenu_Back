@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiMenu_Back.Data;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 
@@ -25,10 +26,10 @@ namespace MiMenu_Back.Repositories
             _appDB.Categories.Add(category);
             await _appDB.SaveChangesAsync();
         }
-        public async Task<List<CategoryModel>> GetAll(string typeCategory, string? sortName, bool? visibility)
+        public async Task<List<CategoryModel>> GetAll(TypeCategoryEnum typeCategory, string? sortName, bool? visibility)
         {
             var categories = await _appDB.Categories
-                .Where(c => c.Type.ToLower() == typeCategory.ToLower())
+                .Where(c => c.Type == typeCategory)
                 .ToListAsync();
 
             if(sortName == "asc" && !string.IsNullOrEmpty(sortName))

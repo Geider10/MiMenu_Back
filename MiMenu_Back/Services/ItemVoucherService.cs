@@ -65,7 +65,7 @@ namespace MiMenu_Back.Services
             int dateValidate = _util.CompareDates(dateCurrent, ivModel.Voucher.DueDate);
             if (dateValidate < 0) throw new MainException("Voucher is expired");
 
-            var discount = ivModel.Voucher.Discount;
+            int discount = ivModel.Voucher.Discount;
             if (ivModel.Voucher.Type == Data.Enums.TypeVoucherEnum.Percentage)
             {
                 int calculateDiscount = (voucherDto.TotalOrder * discount) / 100;

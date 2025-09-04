@@ -1,4 +1,5 @@
 ﻿using MiMenu_Back.Data.DTOs.Category;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 
@@ -6,12 +7,12 @@ namespace MiMenu_Back.Mappers
 {
     public class CategoryMapper : ICategoryMapper
     {
-        public CategoryModel AddToCategoryModel(CategoryAddDto attributeDto)
+        public CategoryModel AddToCategoryModel(CategoryAddDto attributeDto, TypeCategoryEnum type)
         {
             return new CategoryModel
             {
                 Name = attributeDto.Name,
-                Type = attributeDto.Type,
+                Type = type,
                 Visibility = attributeDto.Visibility
             };
         }

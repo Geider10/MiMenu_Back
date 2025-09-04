@@ -45,10 +45,10 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                if (queryParams.TypeCategory.ToLower() != "comida") return BadRequest("TypeCategory must be comida");
+                if (string.IsNullOrEmpty(queryParams.TypeCategory)) return BadRequest("TypeCategory is required");
 
-                var categoryGetList = await _categoryService.GetAll(queryParams);
-                return StatusCode(200, categoryGetList);
+                var dtoList = await _categoryService.GetAll(queryParams);
+                return StatusCode(200, dtoList);
             }
             catch (MainException ex)
             {
@@ -66,7 +66,7 @@ namespace MiMenu_Back.Controllers
             try
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
-                if (string.IsNullOrWhiteSpace(category.Name)) return BadRequest("Name is required");
+                if (string.IsNullOrEmpty(category.Name)) return BadRequest("Name is required");
 
                 await _categoryService.Update(id, category);
                 return StatusCode(200, new MainResponse(true, "Category updated with success"));

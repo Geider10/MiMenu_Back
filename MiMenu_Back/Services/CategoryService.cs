@@ -1,5 +1,6 @@
 ﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Category;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -10,28 +11,31 @@ namespace MiMenu_Back.Services
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICategoryMapper _categoryMap;
         private readonly IFoodRepository _foodRepo;
-        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo)
+        private readonly Util _util;
+        public CategoryService(ICategoryRepository categoryRepo, ICategoryMapper categoryMap, IFoodRepository foodRepo, Util util)
         {
             _categoryRepo = categoryRepo;
             _categoryMap = categoryMap;
             _foodRepo = foodRepo;
+            _util = util;
         }
-
         public async Task Add(CategoryAddDto categoryDto)
         {
             bool categoryExists = await _categoryRepo.ExistsByName(categoryDto.Name);
             if (categoryExists) throw new MainException("Name of category already exists", 400);
+            TypeCategoryEnum typeCategory = _util.FormatTypeCategory(categoryDto.Type);
 
-            var categoryModel = _categoryMap.AddToCategoryModel(categoryDto);
+            var categoryModel = _categoryMap.AddToCategoryModel(categoryDto, typeCategory);
             await _categoryRepo.Add(categoryModel);
         }
         public async Task<List<CategoryGetDto>> GetAll(CategoryQueryDto queryParams)
         {
-            var categoriesList = await _categoryRepo.GetAll(queryParams.TypeCategory, queryParams.SortName, queryParams.Visibility);
+            TypeCategoryEnum typeCategory = _util.FormatTypeCategory(queryParams.TypeCategory);
+            var categoriesList = await _categoryRepo.GetAll(typeCategory, queryParams.SortName, queryParams.Visibility);
             if (categoriesList.Count == 0 || categoriesList == null) throw new MainException("There are no categories from: " + queryParams.TypeCategory, 404);
 
-            var categoriesGetList = _categoryMap.CategoryListToGetList(categoriesList);
-            return categoriesGetList;
+            var dtoList = _categoryMap.CategoryListToGetList(categoriesList);
+            return dtoList;
         }
         public async Task Update (string id, CategoryUpdateDto category)
         {
@@ -49,7 +53,7 @@ namespace MiMenu_Back.Services
             var categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
-            if(categoryModel.Type == "Comida")
+            if(categoryModel.Type == TypeCategoryEnum.Food)
             {
                 bool foodExists = await _foodRepo.ExistsByCategoryId(id);
                 if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 400);
@@ -63,7 +67,7 @@ namespace MiMenu_Back.Services
 
             if(visibleDto.Visibility == false)
             {
-                if(categoryModel.Type == "Comida")
+                if(categoryModel.Type == TypeCategoryEnum.Food)
                 {
                     var foodList = await _foodRepo.GetAllByCategory(id);
                     foreach (var f in foodList)

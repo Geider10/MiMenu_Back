@@ -137,6 +137,11 @@ namespace MiMenu_Back.Utils
             if (type == TypeVoucherEnum.Percentage) return "Percentage";
             throw new Exception("TypeVoucher must be Percentage or Pesos");
         }
+        public TypeCategoryEnum FormatTypeCategory(string type)
+        {
+            if (type.ToLower() == "food") return TypeCategoryEnum.Food;
+            throw new Exception("TypeCategory must be Food");
+        }
         #endregion
     }
 }
