@@ -20,7 +20,7 @@ namespace MiMenu_Back.Services
         public async Task Signup(SignupDto signupDto)
         {
             bool userExists = await _userRepo.ExistsByEmail(signupDto.Email);
-            if (userExists) throw new MainException("Email of user already registered", 400);
+            if (userExists) throw new MainException("Email of user already registered", 409);
 
             string passwordHash = _util.HashText(signupDto.Password);
             DateOnly? birthDate = _util.VerifyFormatDateOnly(signupDto.BirthDate);
@@ -31,11 +31,11 @@ namespace MiMenu_Back.Services
         public async Task<string> Login(LoginDto loginDto)
         {
             bool userExists = await _userRepo.ExistsByEmail(loginDto.Email);
-            if (!userExists) throw new MainException("Email of user no registered", 400);
+            if (!userExists) throw new MainException("Email of user no registered", 409);
 
             var userModel = await _userRepo.GetByEmail(loginDto.Email);
             bool passwordMatch = _util.VerifyHashText(loginDto.Password, userModel.Password);
-            if (!passwordMatch) throw new MainException("Password of user incorrect", 400);
+            if (!passwordMatch) throw new MainException("Password of user incorrect", 409);
 
             string typeRol = _util.FormatTypeRol(userModel.Rol.Type);
             string token = _util.GenerateJWT(userModel.Id.ToString(), typeRol);

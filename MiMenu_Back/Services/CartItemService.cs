@@ -19,7 +19,7 @@ namespace MiMenu_Back.Services
         public async Task Add(CartItemAddDto cartItemDto)
         {
             bool cartItemExists = await _cartItemRepo.ExistsByUserFood(cartItemDto.IdFood, cartItemDto.IdUser);
-            if (cartItemExists) throw new MainException("CartItem already exists with this FoodId and UserId", 400);
+            if (cartItemExists) throw new MainException("CartItem already exists with this FoodId and UserId", 409);
 
             decimal priceTotal = cartItemDto.PriceUnit * cartItemDto.Quantity;
             var cartItemModel = _cartItemMap.AddToCartItemModel(cartItemDto, priceTotal);

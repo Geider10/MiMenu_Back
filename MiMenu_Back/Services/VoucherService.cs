@@ -23,14 +23,14 @@ namespace MiMenu_Back.Services
         public async Task Add (VoucherAddDto voucherDto)
         {
             bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name);
-            if (voucherExists) throw new MainException("Voucher already exists with this Name", 400);
+            if (voucherExists) throw new MainException("Voucher already exists with this Name", 409);
             TypeVoucherEnum typeVoucher = _util.FormatTypeVoucher(voucherDto.Type);
-            if (typeVoucher == TypeVoucherEnum.Percentage && voucherDto.Discount > 100) throw new MainException("If voucher is typePercentage, discount must be between 1 to 100");
+            if (typeVoucher == TypeVoucherEnum.Percentage && voucherDto.Discount > 100) throw new MainException("If voucher is typePercentage, discount must be between 1 to 100",422);
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
             DateOnly dueDate = _util.FormatDateOnly(voucherDto.DueDate);
             int dateValidate = _util.CompareDates(dateCurrent, dueDate);
-            if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
+            if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 422);
 
             var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, typeVoucher, dueDate, dateCurrent);
             await _voucherRepo.Add(voucherModel);
@@ -74,7 +74,7 @@ namespace MiMenu_Back.Services
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
             bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name, id);
-            if(voucherExists) throw new MainException("Voucher already exists with this Name", 400);
+            if(voucherExists) throw new MainException("Voucher already exists with this Name", 409);
 
             DateOnly dueDate = _util.FormatDateOnly(voucherDto.DueDate);
             int dateResult = _util.CompareDates(voucherModel.DueDate, dueDate);
@@ -82,7 +82,7 @@ namespace MiMenu_Back.Services
             {
                 DateOnly dateCurrent = _util.CreateDateCurrent();
                 int dateResult2 = _util.CompareDates(dateCurrent, dueDate);
-                if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
+                if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 422);
             }
             var voucherModelUpdated = _voucherMap.UpdateToVoucherModel(voucherDto, voucherModel, dueDate);
             await _voucherRepo.Update(voucherModelUpdated);
@@ -100,7 +100,7 @@ namespace MiMenu_Back.Services
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
             bool ivExists = await _ivRepo.ExistsByVoucherId(id);
-            if (ivExists) throw new MainException("Cannot be deleted because is associated with a user", 400);
+            if (ivExists) throw new MainException("Cannot be deleted because is associated with a user", 422);
 
             await _voucherRepo.Delete(voucherModel);
         }

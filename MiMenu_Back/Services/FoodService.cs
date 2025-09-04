@@ -21,8 +21,8 @@ namespace MiMenu_Back.Services
         public async Task Add (FoodAddDto food)
         {
             bool foodExists = await _foodRepo.ExistsByName(food.Name);
-            if (foodExists) throw new MainException("Name of food already exists", 400);
-            if (food.Discount != null && food.Discount > 100) throw new MainException("Discount must be between 1 and 100");
+            if (foodExists) throw new MainException("Name of food already exists", 409);
+            if (food.Discount != null && food.Discount > 100) throw new MainException("Discount must be between 1 and 100",422);
 
             var foodModel = _foodMap.AddToFoodModel(food);
             await _foodRepo.Add(foodModel);
@@ -49,7 +49,7 @@ namespace MiMenu_Back.Services
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             bool foodExists = await _foodRepo.ExistsByName(food.Name, id);
-            if (foodExists) throw new MainException("Name of food already exists", 400);
+            if (foodExists) throw new MainException("Name of food already exists", 409);
 
             var foodModelUpdate = _foodMap.UpdateToFoodModel(food, foodModel);
             await _foodRepo.Update(foodModelUpdate);
@@ -60,7 +60,7 @@ namespace MiMenu_Back.Services
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             bool ciExists = await _cartItemRepo.ExistsByFoodId(id);
-            if(ciExists) throw new MainException("Cannot be deleted because is associated with a cart", 400);
+            if(ciExists) throw new MainException("Cannot be deleted because is associated with a cart", 422);
 
             await _foodRepo.Delete(foodModel);
         }

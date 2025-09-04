@@ -120,7 +120,7 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpDelete][Route("{idCartItem}/user/{idUser}")]
-        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string idCartItem, [FromRoute]string idUser)
+        public async Task<ActionResult> Delete([FromRoute]string idCartItem, [FromRoute]string idUser)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace MiMenu_Back.Controllers
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
                 await _ciService.Delete(idCartItem, idUser);
-                return StatusCode(200, new MainResponse(true, "CartItem deleted with success"));
+                return StatusCode(204);
             }
             catch(MainException ex)
             {

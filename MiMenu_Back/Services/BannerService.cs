@@ -20,7 +20,7 @@ namespace MiMenu_Back.Services
         public async Task Add (BannerAddDto bannerDto)
         {
             bool bannerExists = await _bannerRepo.ExistsByPriority(bannerDto.Priority);
-            if (bannerExists) throw new MainException("Priority of banner already exists", 400);
+            if (bannerExists) throw new MainException("Priority of banner already exists", 409);
 
             var bannerModel = _bannerMap.AddToBanner(bannerDto);
             await _bannerRepo.Add(bannerModel);

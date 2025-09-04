@@ -103,7 +103,7 @@ namespace MiMenu_Back.Services
                 decimal totalProduct = item.PriceUnit * item.Quantity;
                 totalCart += totalProduct;
             }
-            if (totalCart != payment.Total) throw new MainException("Total order is incorrect, the value is not expected", 400);
+            if (totalCart != payment.Total) throw new MainException("Total order is incorrect, the value is not expected", 422);
             
             string idPublic = Guid.NewGuid().ToString();
             var paymentModel = _paymentMap.AddToPayment(StatusPaymentEnum.Pending, payment.Currency, payment.Total, idPublic);
@@ -115,7 +115,7 @@ namespace MiMenu_Back.Services
         {
             var paymentModel = await _paymentRepo.GetByIdPublic(idPublic);
             if (paymentModel == null) throw new MainException("Payment no found", 404);
-            if (paymentModel.Status == StatusPaymentEnum.Approved) throw new MainException("Payment already approved", 400);
+            if (paymentModel.Status == StatusPaymentEnum.Approved) throw new MainException("Payment already approved", 409);
 
             var paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", paymentModel);
             await _paymentRepo.Update(paymentUpdated);

@@ -18,7 +18,7 @@ namespace MiMenu_Back.Services
         public async Task Add(ItemVoucherAddDto ivDto)
         {
             bool ivExists = await _ivRepo.ExistsByUserYVoucher(ivDto.IdUser, ivDto.IdVoucher);
-            if (ivExists) throw new MainException("ItemVoucher already exists with this UserId and VoucherId", 400);
+            if (ivExists) throw new MainException("ItemVoucher already exists with this UserId and VoucherId", 409);
 
             var ivModel = new ItemVoucherModel
             {
@@ -30,7 +30,7 @@ namespace MiMenu_Back.Services
         public async Task<List<VoucherGetAllDto>> GetAllByUser(string idUser)
         {
             var ivList = await _ivRepo.GetAllByUserId(idUser);
-            if (ivList == null || ivList.Count == 0) throw new MainException("There are no voucher from user", 400);
+            if (ivList == null || ivList.Count == 0) throw new MainException("There are no voucher from user", 404);
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
             ivList = ivList.FindAll(iv =>
@@ -39,7 +39,7 @@ namespace MiMenu_Back.Services
                 if (dateValidate >= 0) return true;
                 return false;
             });
-            if (ivList == null || ivList.Count == 0) throw new MainException("There are no voucher from user", 400);
+            if (ivList == null || ivList.Count == 0) throw new MainException("There are no voucher from user", 404);
 
             List<VoucherGetAllDto> ivDtoList = new List<VoucherGetAllDto>();
             foreach(var iv in ivList)
@@ -58,12 +58,12 @@ namespace MiMenu_Back.Services
         {
             var ivModel = await _ivRepo.GetById(voucherDto.idItemVoucher);
             if (ivModel == null) throw new MainException("ItemVoucher no found", 404);
-            if (ivModel.IdUser != Guid.Parse(voucherDto.idUser)) throw new MainException("ItemVoucher must be from User", 400);
+            if (ivModel.IdUser != Guid.Parse(voucherDto.idUser)) throw new MainException("ItemVoucher must be from User", 403);
 
-            if (voucherDto.TotalOrder < ivModel.Voucher.BuyMinimum) throw new MainException("TotalOrder must be equal or greater than BuyMinimum from Voucher", 400);
+            if (voucherDto.TotalOrder < ivModel.Voucher.BuyMinimum) throw new MainException("TotalOrder must be equal or greater than BuyMinimum from Voucher", 422);
             DateOnly dateCurrent = _util.CreateDateCurrent();
             int dateValidate = _util.CompareDates(dateCurrent, ivModel.Voucher.DueDate);
-            if (dateValidate < 0) throw new MainException("Voucher is expired");
+            if (dateValidate < 0) throw new MainException("Voucher is expired",422);
 
             int discount = ivModel.Voucher.Discount;
             if (ivModel.Voucher.Type == Data.Enums.TypeVoucherEnum.Percentage)

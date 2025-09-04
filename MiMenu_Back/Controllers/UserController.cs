@@ -60,14 +60,14 @@ namespace MiMenu_Back.Controllers
             }
         }
         [HttpDelete][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Delete([FromRoute]string id)
+        public async Task<ActionResult> Delete([FromRoute]string id)
         {
             try
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _userService.Delete(id);
-                return StatusCode(200, new MainResponse(true, "User deleted with success"));
+                return StatusCode(204);
             }
             catch (MainException ex)
             {

@@ -98,14 +98,14 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpDelete][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Delete([FromRoute] string id)
+        public async Task<ActionResult> Delete([FromRoute] string id)
         {
             try
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _foodService.Delete(id);
-                return StatusCode(200, new MainResponse(true, "Food deleted with success"));
+                return StatusCode(204);
             }
             catch (MainException ex)
             {
@@ -139,14 +139,14 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpDelete][Route("{id}/image")]
-        public async Task<ActionResult<MainResponse>> DeleteImg([FromRoute]string id)
+        public async Task<ActionResult> DeleteImg([FromRoute]string id)
         {
             try
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _foodService.DeleteImg(id);
-                return StatusCode(200, new MainResponse(true, "Image of food deleted with success"));
+                return StatusCode(204);
             }
             catch (MainException ex)
             {

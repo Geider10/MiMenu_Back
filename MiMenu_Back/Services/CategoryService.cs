@@ -22,7 +22,7 @@ namespace MiMenu_Back.Services
         public async Task Add(CategoryAddDto categoryDto)
         {
             bool categoryExists = await _categoryRepo.ExistsByName(categoryDto.Name);
-            if (categoryExists) throw new MainException("Name of category already exists", 400);
+            if (categoryExists) throw new MainException("Name of category already exists", 409);
             TypeCategoryEnum typeCategory = _util.FormatTypeCategory(categoryDto.Type);
 
             var categoryModel = _categoryMap.AddToCategoryModel(categoryDto, typeCategory);
@@ -43,7 +43,7 @@ namespace MiMenu_Back.Services
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
             bool categoryExists = await _categoryRepo.ExistsByName(category.Name,id);
-            if (categoryExists) throw new MainException("Name of category already exists", 400);
+            if (categoryExists) throw new MainException("Name of category already exists", 409);
 
             categoryModel.Name = category.Name;
             await _categoryRepo.Update(categoryModel);
@@ -56,7 +56,7 @@ namespace MiMenu_Back.Services
             if(categoryModel.Type == TypeCategoryEnum.Food)
             {
                 bool foodExists = await _foodRepo.ExistsByCategoryId(id);
-                if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 400);
+                if (foodExists) throw new MainException("Cannot be deleted because is associated with a food", 422);
             }
             await _categoryRepo.Delete(categoryModel);
         }
