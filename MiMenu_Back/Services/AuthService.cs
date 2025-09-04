@@ -2,6 +2,7 @@
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
+using System.Reflection.Metadata;
 
 namespace MiMenu_Back.Services
 {
@@ -36,7 +37,8 @@ namespace MiMenu_Back.Services
             bool passwordMatch = _util.VerifyHashText(loginDto.Password, userModel.Password);
             if (!passwordMatch) throw new MainException("Password of user incorrect", 400);
 
-            string token = _util.GenerateJWT(userModel.Id.ToString(), userModel.Rol.Name);
+            string typeRol = _util.FormatTypeRol(userModel.Rol.Type);
+            string token = _util.GenerateJWT(userModel.Id.ToString(), typeRol);
             return token;
         }
     }

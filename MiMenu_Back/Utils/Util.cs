@@ -45,7 +45,7 @@ namespace MiMenu_Back.Utils
         #region Date Formatting
         public DateOnly? VerifyFormatDateOnly(string? date)
         {
-            var dateFormat = new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$");//dd-mm-yyy||dd/mm/yyyy
+            Regex dateFormat = new Regex(@"^(?:3[01]|[12][0-9]|0?[1-9])([\-/.])(0?[1-9]|1[0-2])\1\d{4}$");//dd-mm-yyy||dd/mm/yyyy
             if (!dateFormat.IsMatch(date)) return null;
             return DateOnly.Parse(date);
         }
@@ -141,6 +141,13 @@ namespace MiMenu_Back.Utils
         {
             if (type.ToLower() == "food") return TypeCategoryEnum.Food;
             throw new Exception("TypeCategory must be Food");
+        }
+        public string FormatTypeRol(TypeRolEnum type)
+        {
+            if (type == TypeRolEnum.Client) return "client";
+            if (type == TypeRolEnum.Admin) return "admin";
+            if (type == TypeRolEnum.Local) return "local";
+            throw new Exception("TypeRol must be Client, Admin or Local");
         }
         #endregion
     }

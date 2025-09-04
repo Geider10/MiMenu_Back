@@ -26,12 +26,12 @@ namespace MiMenu_Back.Data
                 tb.ToTable("rol");
                 tb.HasKey(col => col.Id);
                 tb.Property(col => col.Id).ValueGeneratedOnAdd();
-                tb.Property(col => col.Name).IsRequired().HasMaxLength(50);
+                tb.Property(col => col.Type).IsRequired();
             });
             modelBuilder.Entity<RolModel>().HasData(
-                new RolModel { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Name = "client" },
-                new RolModel { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Name = "admin" },
-                new RolModel { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Name = "local"}
+                new RolModel { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Type = TypeRolEnum.Client},
+                new RolModel { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Type = TypeRolEnum.Admin},
+                new RolModel { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Type = TypeRolEnum.Local}
             );
 
             modelBuilder.Entity<UserModel>(tb =>
@@ -47,9 +47,9 @@ namespace MiMenu_Back.Data
                 tb.Property(col => col.BirthDate);
 
                 tb.HasOne(col => col.Rol)
-                .WithOne(rol => rol.User)
-                .HasForeignKey<UserModel>(col => col.IdRol)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(rol => rol.Users)
+                .HasForeignKey(col => col.IdRol);
+                //restrict;
             });
             modelBuilder.Entity<CategoryModel>(tb =>
             {
@@ -196,7 +196,7 @@ namespace MiMenu_Back.Data
                 tb.HasOne(col => col.Food)
                 .WithMany(food => food.OrderItems)
                 .HasForeignKey(col => col.IdFood)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
