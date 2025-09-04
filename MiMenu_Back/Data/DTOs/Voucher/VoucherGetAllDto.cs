@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public int BuyMinimum { get; set; }
+        public decimal BuyMinimum { get; set; }
         public string DueDate { get; set; }
     }
 }

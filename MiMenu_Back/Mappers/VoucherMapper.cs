@@ -1,4 +1,5 @@
 ﻿using MiMenu_Back.Data.DTOs.Voucher;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 
@@ -6,12 +7,12 @@ namespace MiMenu_Back.Mappers
 {
     public class VoucherMapper : IVoucherMapper
     {
-        public VoucherModel AddToVoucherModel(VoucherAddDto voucherDto, DateOnly dueDate, DateOnly createDate)
+        public VoucherModel AddToVoucherModel(VoucherAddDto voucherDto, TypeVoucherEnum type, DateOnly dueDate, DateOnly createDate)
         {
             return new VoucherModel
             {
                 Name = voucherDto.Name,
-                Type = voucherDto.Type,
+                Type = type,
                 Discount = voucherDto.Discount,
                 BuyMinimum = voucherDto.BuyMinimum,
                 Visibility = voucherDto.Visibility,
@@ -19,13 +20,13 @@ namespace MiMenu_Back.Mappers
                 CreateDate = createDate
             };
         }
-        public VoucherGetByIdDto ModelToVoucherDto(VoucherModel voucher, string dueDate, string createDate)
+        public VoucherGetByIdDto ModelToVoucherDto(VoucherModel voucher, string type, string dueDate, string createDate)
         {
             return new VoucherGetByIdDto
             {
                 Id = voucher.Id.ToString(),
                 Name = voucher.Name,
-                Type = voucher.Type,
+                Type = type,
                 Discount = voucher.Discount,
                 BuyMinimum = voucher.BuyMinimum,
                 Visibility = voucher.Visibility,
@@ -48,14 +49,12 @@ namespace MiMenu_Back.Mappers
             }
             return voucherDtoList;
         }
-        public VoucherModel UpdateToVoucherModel(VoucherAddDto voucherDto,VoucherModel voucher, DateOnly dueDate)
+        public VoucherModel UpdateToVoucherModel(VoucherUpdateDto voucherDto,VoucherModel voucher, DateOnly dueDate)
         {
             voucher.Name = voucherDto.Name;
-            voucher.Type = voucherDto.Type;
             voucher.Discount = voucherDto.Discount;
             voucher.BuyMinimum = voucherDto.BuyMinimum;
             voucher.DueDate = dueDate;
-
             return voucher;
         }
     }

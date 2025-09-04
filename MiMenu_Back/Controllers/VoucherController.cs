@@ -1,6 +1,5 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Voucher;
@@ -79,12 +78,12 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles="admin")]
         [HttpPut][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody]VoucherAddDto voucherDto)
+        public async Task<ActionResult<MainResponse>> Update([FromRoute]string id, [FromBody]VoucherUpdateDto voucherDto)
         {
             try
             {
-                if (!Guid.TryParse(id, out _)) return BadRequest("Id mus has format Guid");
-                ValidationResult bodyReq = new VoucherAddValidator().Validate(voucherDto);
+                if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
+                ValidationResult bodyReq = new VoucherUpdateValidator().Validate(voucherDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
                 await _voucherService.Update(id, voucherDto);

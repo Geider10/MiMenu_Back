@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 
 namespace MiMenu_Back.Data
@@ -104,9 +105,9 @@ namespace MiMenu_Back.Data
                 tb.HasKey(col => col.Id);
                 tb.Property(col => col.Id).ValueGeneratedOnAdd();
                 tb.Property(col => col.Name).IsRequired().HasMaxLength(100);
-                tb.Property(col => col.Type).IsRequired().HasMaxLength(50);
+                tb.Property(col => col.Type).IsRequired();
                 tb.Property(col => col.Discount).IsRequired();
-                tb.Property(col => col.BuyMinimum).IsRequired();
+                tb.Property(col => col.BuyMinimum).IsRequired().HasColumnType("decimal(18,2)");
                 tb.Property(col => col.Visibility).IsRequired();
                 tb.Property(col => col.DueDate).IsRequired();
                 tb.Property(col => col.CreateDate).IsRequired();

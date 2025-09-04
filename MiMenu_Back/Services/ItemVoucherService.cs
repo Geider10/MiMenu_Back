@@ -56,7 +56,7 @@ namespace MiMenu_Back.Services
         }
         public async Task<VoucherDiscountDto> ApplyVoucher(VoucherApplyDto voucherDto)
         {
-            var ivModel = await _ivRepo.GetById(voucherDto.idIV);
+            var ivModel = await _ivRepo.GetById(voucherDto.idItemVoucher);
             if (ivModel == null) throw new MainException("ItemVoucher no found", 404);
             if (ivModel.IdUser != Guid.Parse(voucherDto.idUser)) throw new MainException("ItemVoucher must be from User", 400);
 
@@ -66,7 +66,7 @@ namespace MiMenu_Back.Services
             if (dateValidate < 0) throw new MainException("Voucher is expired");
 
             var discount = ivModel.Voucher.Discount;
-            if (ivModel.Voucher.Type == "Porciento")
+            if (ivModel.Voucher.Type == Data.Enums.TypeVoucherEnum.Percentage)
             {
                 int calculateDiscount = (voucherDto.TotalOrder * discount) / 100;
                 discount = calculateDiscount;
@@ -74,7 +74,7 @@ namespace MiMenu_Back.Services
             return new VoucherDiscountDto
             {
                 Discount = discount,
-                TypeDiscount = ivModel.Voucher.Type,
+                TypeDiscount = _util.FormatTypeVoucher(ivModel.Voucher.Type),
                 IdVoucher = ivModel.Voucher.Id.ToString()
                 //totalUpdated = totalOrder - discount
             };

@@ -125,6 +125,18 @@ namespace MiMenu_Back.Utils
             if (status == StatusOrderEnum.Ready) return StatusOrderEnum.Delivered;
             return status;
         }
+        public TypeVoucherEnum FormatTypeVoucher(string type)
+        {
+            if (type.ToLower() == "pesos") return TypeVoucherEnum.Pesos;
+            if (type.ToLower() == "percentage") return TypeVoucherEnum.Percentage;
+            throw new Exception("TypeVoucher must be Percentage or Pesos");
+        }
+        public string FormatTypeVoucher(TypeVoucherEnum type)
+        {
+            if (type == TypeVoucherEnum.Pesos) return "Pesos";
+            if (type == TypeVoucherEnum.Percentage) return "Percentage";
+            throw new Exception("TypeVoucher must be Percentage or Pesos");
+        }
         #endregion
     }
 }

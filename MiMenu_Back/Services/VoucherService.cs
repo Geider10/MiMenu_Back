@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Voucher;
+using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
-using System.Diagnostics;
 namespace MiMenu_Back.Services
 {
     public class VoucherService
@@ -24,14 +24,15 @@ namespace MiMenu_Back.Services
         {
             bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name);
             if (voucherExists) throw new MainException("Voucher already exists with this Name", 400);
-            if (voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
+            TypeVoucherEnum typeVoucher = _util.FormatTypeVoucher(voucherDto.Type);
+            if (typeVoucher == TypeVoucherEnum.Percentage && voucherDto.Discount > 100) throw new MainException("If voucher is typePercentage, discount must be between 1 to 100");
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
             DateOnly dueDate = _util.FormatDateOnly(voucherDto.DueDate);
             int dateValidate = _util.CompareDates(dateCurrent, dueDate);
             if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 400);
 
-            var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, dueDate, dateCurrent);
+            var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, typeVoucher, dueDate, dateCurrent);
             await _voucherRepo.Add(voucherModel);
         }
         public async Task<VoucherGetByIdDto> GetById (string id)
@@ -39,10 +40,11 @@ namespace MiMenu_Back.Services
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
 
+            string typeVoucher = _util.FormatTypeVoucher(voucherModel.Type);
             string dueDate = _util.FormatDateOnly(voucherModel.DueDate);
             string createDate = _util.FormatDateOnly(voucherModel.CreateDate);
 
-            var voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, dueDate, createDate);
+            var voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, typeVoucher,dueDate, createDate);
             return voucherDto;
         }
         public async Task<List<VoucherGetAllDto>> GetAll (VoucherQueryDto voucherQuery)
@@ -67,15 +69,14 @@ namespace MiMenu_Back.Services
             var voucherDtoList = _voucherMap.ModelListToDtoList(voucherList);
             return voucherDtoList;
         }
-        public async Task Update (string id, VoucherAddDto voucherDto)
+        public async Task Update (string id, VoucherUpdateDto voucherDto)
         {
             var voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
             bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name, id);
             if(voucherExists) throw new MainException("Voucher already exists with this Name", 400);
-            if(voucherDto.Type == "Porciento" && voucherDto.Discount > 100) throw new MainException("If voucher is type Porciento, discount must be between 1 to 100");
 
-            DateOnly dueDate= _util.FormatDateOnly(voucherDto.DueDate);
+            DateOnly dueDate = _util.FormatDateOnly(voucherDto.DueDate);
             int dateResult = _util.CompareDates(voucherModel.DueDate, dueDate);
             if (dateResult != 0)
             {

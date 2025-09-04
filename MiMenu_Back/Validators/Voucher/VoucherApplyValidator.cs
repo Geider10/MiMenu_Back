@@ -13,7 +13,7 @@ namespace MiMenu_Back.Validators.Voucher
             RuleFor(prop => prop.idUser)
                 .NotEmpty().WithMessage("IdUser is required")
                 .Must(value => Guid.TryParse(value, out _)).WithMessage("IdUser must has format Guid");
-            RuleFor(prop => prop.idIV)
+            RuleFor(prop => prop.idItemVoucher)
                 .NotEmpty().WithMessage("IdItemVoucher is required")
                 .Must(value => Guid.TryParse(value, out _)).WithMessage("IdItemVoucher must has format Guid");
         }

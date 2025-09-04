@@ -1,12 +1,14 @@
-﻿namespace MiMenu_Back.Data.Models
+﻿using MiMenu_Back.Data.Enums;
+
+namespace MiMenu_Back.Data.Models
 {
     public class VoucherModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public TypeVoucherEnum Type { get; set; }
         public int Discount { get; set; }
-        public int BuyMinimum { get; set; }
+        public decimal BuyMinimum { get; set; }
         public bool Visibility { get; set; }
         public DateOnly DueDate { get; set; }
         public DateOnly CreateDate { get; set; }
