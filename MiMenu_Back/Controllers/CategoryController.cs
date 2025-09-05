@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 using MiMenu_Back.Data.DTOs.Category;
-using MiMenu_Back.Validators.Category;
+using MiMenu_Back.Validators;
 using Microsoft.IdentityModel.Tokens;
 using MiMenu_Back.Data.DTOs;
 namespace MiMenu_Back.Controllers

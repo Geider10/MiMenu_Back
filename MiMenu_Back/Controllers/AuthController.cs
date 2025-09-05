@@ -4,9 +4,8 @@ using MiMenu_Back.Data.DTOs.Auth;
 using MiMenu_Back.Services;
 using FluentValidation;
 using FluentValidation.Results;
-using MiMenu_Back.Validators.Auth;
 using MiMenu_Back.Utils;
-
+using MiMenu_Back.Validators;
 namespace MiMenu_Back.Controllers
 {
     [Route("api/auth")]

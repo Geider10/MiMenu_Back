@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs.User;
 using MiMenu_Back.Services;
 using FluentValidation.Results;
-using MiMenu_Back.Validators.User;
+using MiMenu_Back.Validators;
 using MiMenu_Back.Utils;
 using Microsoft.AspNetCore.Authorization;
 

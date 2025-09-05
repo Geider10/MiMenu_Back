@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MiMenu_Back.Data.DTOs.Banner;
 
-namespace MiMenu_Back.Validators.Banner
+namespace MiMenu_Back.Validators
 {
     public class BannerAddValidator : AbstractValidator<BannerAddDto>
     {

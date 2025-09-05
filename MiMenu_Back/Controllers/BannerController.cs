@@ -6,7 +6,7 @@ using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Banner;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
-using MiMenu_Back.Validators.Banner;
+using MiMenu_Back.Validators;
 
 namespace MiMenu_Back.Controllers
 {

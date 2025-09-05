@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MiMenu_Back.Data.DTOs.Food;
 
-namespace MiMenu_Back.Validators.Food
+namespace MiMenu_Back.Validators
 {
     public class FoodAddValidator : AbstractValidator<FoodAddDto>
     {

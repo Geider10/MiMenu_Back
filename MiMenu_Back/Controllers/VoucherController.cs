@@ -5,7 +5,7 @@ using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Voucher;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
-using MiMenu_Back.Validators.Voucher;
+using MiMenu_Back.Validators;
 
 namespace MiMenu_Back.Controllers
 {

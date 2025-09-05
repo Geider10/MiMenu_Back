@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MiMenu_Back.Data.DTOs.Category;
 
-namespace MiMenu_Back.Validators.Category
+namespace MiMenu_Back.Validators
 {
     public class CategoryAddValidator : AbstractValidator<CategoryAddDto>
     {

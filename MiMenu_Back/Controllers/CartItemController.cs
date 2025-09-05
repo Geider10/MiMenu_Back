@@ -5,7 +5,7 @@ using MiMenu_Back.Data.DTOs.CartItem;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
-using MiMenu_Back.Validators.Order;
+using MiMenu_Back.Validators;
 
 namespace MiMenu_Back.Controllers
 {

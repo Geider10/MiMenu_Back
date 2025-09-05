@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MiMenu_Back.Data.DTOs.Order;
 
-namespace MiMenu_Back.Validators.Order
+namespace MiMenu_Back.Validators
 {
     public class CartItemAddValidator : AbstractValidator<CartItemAddDto>
     {
@@ -18,6 +18,18 @@ namespace MiMenu_Back.Validators.Order
             RuleFor(prop => prop.PriceUnit)
                 .NotEmpty().WithMessage("PriceTotal is required")
                 .GreaterThan(0).WithMessage("PriceTotal must be greater than 0");
+        }
+    }
+    public class CartItemUpdateValidator : AbstractValidator<CartItemUpdateDto>
+    {
+        public CartItemUpdateValidator()
+        {
+            RuleFor(prop => prop.Quantity)
+               .NotEmpty().WithMessage("Quantity is required")
+               .GreaterThan(0).WithMessage("Quantity must be greater than 0");
+            RuleFor(prop => prop.PriceUnit)
+                .NotEmpty().WithMessage("PriceUnit is required")
+                .GreaterThan(0).WithMessage("PriceUnit must be greater than 0");
         }
     }
 }
