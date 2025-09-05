@@ -48,7 +48,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
-                var bannerDto = await _bannerService.GetById(id);
+                BannerGetOneDto bannerDto = await _bannerService.GetById(id);
                 return StatusCode(200, bannerDto);
             }
             catch (MainException ex)
@@ -65,7 +65,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var dtoList = await _bannerService.GetAll(queryDto);
+                List<BannerGetAllDto> dtoList = await _bannerService.GetAll(queryDto);
                 return StatusCode(200, dtoList);
             }
             catch (MainException ex)

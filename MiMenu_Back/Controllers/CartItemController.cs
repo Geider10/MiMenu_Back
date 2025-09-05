@@ -47,7 +47,7 @@ namespace MiMenu_Back.Controllers
                 if (!Guid.TryParse(idCartItem, out _)) return BadRequest("IdCartItem must has format Guid");
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var cartItemDto = await _ciService.GetById(idCartItem, idUser);
+                CartItemGetDto cartItemDto = await _ciService.GetById(idCartItem, idUser);
                 return StatusCode(200, cartItemDto);
             }
             catch(MainException ex)
@@ -66,7 +66,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var dtoList = await _ciService.GetAllByUserId(idUser);
+                List<CartItemGetAllDto> dtoList = await _ciService.GetAllByUserId(idUser);
                 return StatusCode(200, dtoList);
             }
             catch (MainException ex)
@@ -85,7 +85,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var detailList = await _ciService.GetDetailByUserId(idUser);
+                List<CartItemGetDto> detailList = await _ciService.GetDetailByUserId(idUser);
                 return StatusCode(200, detailList);
             }
             catch (MainException ex)

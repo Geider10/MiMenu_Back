@@ -27,7 +27,7 @@ namespace MiMenu_Back.Controllers
                 ValidationResult result = new CreatePreferenceValidator().Validate(preferenceDto);
                 if (!result.IsValid) return BadRequest(result.Errors);
 
-                var resPreference = await _paymentService.CreatePreference(preferenceDto);
+                ResponsePreferenceDto resPreference = await _paymentService.CreatePreference(preferenceDto);
                 return StatusCode(200, resPreference);
             }
             catch (MainException ex)
@@ -68,7 +68,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
-                var paymentDto = await _paymentService.GetById(id);
+                PaymentGetDto paymentDto = await _paymentService.GetById(id);
                 return StatusCode(200, paymentDto);
             }
             catch (MainException ex)

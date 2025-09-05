@@ -28,7 +28,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<ItemVoucherModel>?> GetAllByUserId(string idUser)
         {
-            var ivList = await _appDB.ItemsVoucher
+            List<ItemVoucherModel>? ivList = await _appDB.ItemsVoucher
                 .Include(iv => iv.Voucher)
                 .Where(iv => iv.IdUser == Guid.Parse(idUser) && iv.Voucher.Visibility == true)
                 .ToListAsync();

@@ -19,25 +19,25 @@ namespace MiMenu_Back.Services
         }
         public async Task<UserGetDto> GetById(string id)
         {
-            var userModel = await _userRepo.GetById(id);
+            UserModel? userModel = await _userRepo.GetById(id);
             if (userModel == null) throw new MainException("User no found", 404);
 
             string? birthDate = _util.FormatDateOnly(userModel.BirthDate);
-            var userDto = _userMap.UserModelToGet(userModel, birthDate);
+            UserGetDto userDto = _userMap.UserModelToGet(userModel, birthDate);
             return userDto;
         }
         public async Task Update(string id,UserUpdateDto updateDto)
         {
-            var userModel = await _userRepo.GetById(id);
+            UserModel? userModel = await _userRepo.GetById(id);
             if(userModel == null) throw new MainException("User no found", 404);
 
             DateOnly? birthDate = _util.FormatDateOnly(updateDto.BirthDate);
-            var userUpdated = _userMap.UpdateToUserModel(userModel, updateDto, birthDate);
+            UserModel userUpdated = _userMap.UpdateToUserModel(userModel, updateDto, birthDate);
             await _userRepo.Update(userUpdated);
         }
         public async Task Delete(string id)
         {
-            var userModel = await _userRepo.GetById(id);
+            UserModel? userModel = await _userRepo.GetById(id);
             if (userModel == null) throw new MainException("User no found", 404);
 
             await _userRepo.Delete(userModel);

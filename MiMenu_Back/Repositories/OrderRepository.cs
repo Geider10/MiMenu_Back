@@ -40,7 +40,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<OrderItemModel>?> GetAllByOrderId(string idOrder)
         {
-            var itemsList = await _appDB.OrderItems
+            List<OrderItemModel>? itemsList = await _appDB.OrderItems
                 .Include(i => i.Food)
                 .Where(i => i.IdOrder == Guid.Parse(idOrder))
                 .ToListAsync();
@@ -48,7 +48,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<OrderModel>?> GetAllByUserId(string idUser, string? typeOrder)
         {
-            var orderList = await _appDB.Orders
+            List<OrderModel>? orderList = await _appDB.Orders
                 .Include(o => o.Payment)
                 .Where(o => o.IdUser == Guid.Parse(idUser))
                 .ToListAsync();

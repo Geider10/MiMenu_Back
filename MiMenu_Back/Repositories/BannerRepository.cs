@@ -27,7 +27,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<BannerModel>?> GetAll(string? sortPriority, bool? visibility)
         {
-            var bannerList = await _appDB.Banners
+            List<BannerModel>? bannerList = await _appDB.Banners
                 .ToListAsync();
 
             if(sortPriority == "asc" && !string.IsNullOrEmpty(sortPriority))

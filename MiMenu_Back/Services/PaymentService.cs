@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using MiMenu_Back.Data.DTOs.Order;
 using MiMenu_Back.Data.DTOs.Payment;
 using MiMenu_Back.Data.Enums;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -36,19 +37,19 @@ namespace MiMenu_Back.Services
         }
         public async Task<ResponsePreferenceDto> CreatePreference(CreatePreferenceDto preferenceDto)
         {
-            var user = await _userRepo.GetById(preferenceDto.IdUser);
+            UserModel? user = await _userRepo.GetById(preferenceDto.IdUser);
             if (user == null) throw new MainException("User no found", 404);
 
             string idPublic = await AddPayment(preferenceDto.Payment, preferenceDto.IdUser);
             var itemsPreference = _paymentMap.ListDtoToListItem(preferenceDto.ItemsCart);
             var payerReference = _paymentMap.UserToPayer(user);
-            var metaDataPreference = new Dictionary<string, object>
+            Dictionary<string, object> metaDataPreference = new Dictionary<string, object>
             {
                 {"idUser", preferenceDto.IdUser },
                 {"order", JsonConvert.SerializeObject(preferenceDto.Order)},
                 {"itemsCart", JsonConvert.SerializeObject(preferenceDto.ItemsCart)}
             };
-            var request = new PreferenceRequest
+            PreferenceRequest request = new PreferenceRequest
             {
                 Items = itemsPreference,
                 Payer = payerReference,
@@ -66,7 +67,7 @@ namespace MiMenu_Back.Services
                 ExternalReference = idPublic,
                 Metadata = metaDataPreference
             };
-            var client = new PreferenceClient();
+            PreferenceClient client = new PreferenceClient();
             Preference preference = await client.CreateAsync(request);
             return new ResponsePreferenceDto
             {
@@ -80,7 +81,7 @@ namespace MiMenu_Back.Services
             if (webhookDto.type == "payment")
             {
                 string id = webhookDto.data.id;
-                var client = new PaymentClient();
+                PaymentClient client = new PaymentClient();
                 Payment paymentMP = await client.GetAsync(Convert.ToInt64(id));
                 if (paymentMP.Status == "approved")
                 {
@@ -96,9 +97,9 @@ namespace MiMenu_Back.Services
         }
         private async Task<string> AddPayment(PaymentAddDto payment,string idUser)
         {
-            var itemsCart = await _ciRepo.GetAllByUserId(idUser);
+            List<CartItemModel>? itemsCart = await _ciRepo.GetAllByUserId(idUser);
             decimal totalCart = 0;
-            foreach (var item in itemsCart)
+            foreach (CartItemModel item in itemsCart)
             {
                 decimal totalProduct = item.PriceUnit * item.Quantity;
                 totalCart += totalProduct;
@@ -106,30 +107,30 @@ namespace MiMenu_Back.Services
             if (totalCart != payment.Total) throw new MainException("Total order is incorrect, the value is not expected", 422);
             
             string idPublic = Guid.NewGuid().ToString();
-            var paymentModel = _paymentMap.AddToPayment(StatusPaymentEnum.Pending, payment.Currency, payment.Total, idPublic);
+            PaymentModel paymentModel = _paymentMap.AddToPayment(StatusPaymentEnum.Pending, payment.Currency, payment.Total, idPublic);
             await _paymentRepo.Add(paymentModel);
 
             return idPublic;
         }
         private async Task<string> UpdatePayment(string idPublic, DateTime? dateApproved)
         {
-            var paymentModel = await _paymentRepo.GetByIdPublic(idPublic);
+            PaymentModel? paymentModel = await _paymentRepo.GetByIdPublic(idPublic);
             if (paymentModel == null) throw new MainException("Payment no found", 404);
             if (paymentModel.Status == StatusPaymentEnum.Approved) throw new MainException("Payment already approved", 409);
 
-            var paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", paymentModel);
+            PaymentModel paymentUpdated = _paymentMap.UpdateToPayment(StatusPaymentEnum.Approved, dateApproved, "Mercado Pago", paymentModel);
             await _paymentRepo.Update(paymentUpdated);
 
             return paymentModel.Id.ToString();
         }
         public async Task<PaymentGetDto> GetById(string id)
         {
-            var paymentModel = await _paymentRepo.GetById(id);
+            PaymentModel? paymentModel = await _paymentRepo.GetById(id);
             if (paymentModel == null) throw new MainException("Payment no found", 404);
 
             string status = _util.FormatStatusPayment(paymentModel.Status);
             string createDate = _util.FormatDateTime(paymentModel.CreateDate);
-            var paymentDto = _paymentMap.PaymentToGetDto(paymentModel, status, createDate);
+            PaymentGetDto paymentDto = _paymentMap.PaymentToGetDto(paymentModel, status, createDate);
             return paymentDto;
         }
     }

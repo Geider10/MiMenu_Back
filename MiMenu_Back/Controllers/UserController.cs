@@ -26,7 +26,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
-                var userDto = await _userService.GetById(id);
+                UserGetDto userDto = await _userService.GetById(id);
                 return StatusCode(200, userDto);
             }
             catch (MainException ex)

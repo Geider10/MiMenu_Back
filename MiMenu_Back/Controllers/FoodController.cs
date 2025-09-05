@@ -46,7 +46,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
-                var foodDto = await _foodService.GetById(id);
+                FoodGetDto foodDto = await _foodService.GetById(id);
                 return StatusCode(200, foodDto);
             }
             catch (MainException ex) {
@@ -62,7 +62,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var foodsDtoList = await _foodService.GetAll(foodQuery);
+                List<FoodGetDto> foodsDtoList = await _foodService.GetAll(foodQuery);
                 return StatusCode(200, foodsDtoList);
             }
             catch (MainException ex)

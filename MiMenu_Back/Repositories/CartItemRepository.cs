@@ -38,7 +38,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<CartItemModel>?> GetAllByUserId(string idUser)
         {
-            var orderList = await _appDB.CartItems
+            List<CartItemModel>? orderList = await _appDB.CartItems
                 .Include(o => o.Food)
                 .Where(o => o.IdUser == Guid.Parse(idUser) && o.Food.Visibility == true)
                 .ToListAsync();

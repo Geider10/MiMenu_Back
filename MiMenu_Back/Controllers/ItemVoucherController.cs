@@ -47,7 +47,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var ivDtoList = await _ivService.GetAllByUser(idUser);
+                List<VoucherGetAllDto> ivDtoList = await _ivService.GetAllByUser(idUser);
                 return StatusCode(200, ivDtoList);
             }
             catch (MainException ex)
@@ -67,7 +67,7 @@ namespace MiMenu_Back.Controllers
                 ValidationResult bodyReq = new VoucherApplyValidator().Validate(voucherDto);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
-                var voucherDiscount = await _ivService.ApplyVoucher(voucherDto);
+                VoucherDiscountDto voucherDiscount = await _ivService.ApplyVoucher(voucherDto);
                 return StatusCode(200, voucherDiscount);
             }
             catch (MainException ex)

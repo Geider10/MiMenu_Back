@@ -2,6 +2,7 @@
 using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Voucher;
 using MiMenu_Back.Data.Enums;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -32,24 +33,24 @@ namespace MiMenu_Back.Services
             int dateValidate = _util.CompareDates(dateCurrent, dueDate);
             if (dateValidate < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 422);
 
-            var voucherModel = _voucherMap.AddToVoucherModel(voucherDto, typeVoucher, dueDate, dateCurrent);
+            VoucherModel voucherModel = _voucherMap.AddToVoucherModel(voucherDto, typeVoucher, dueDate, dateCurrent);
             await _voucherRepo.Add(voucherModel);
         }
         public async Task<VoucherGetByIdDto> GetById (string id)
         {
-            var voucherModel = await _voucherRepo.GetById(id);
+            VoucherModel? voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
 
             string typeVoucher = _util.FormatTypeVoucher(voucherModel.Type);
             string dueDate = _util.FormatDateOnly(voucherModel.DueDate);
             string createDate = _util.FormatDateOnly(voucherModel.CreateDate);
 
-            var voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, typeVoucher,dueDate, createDate);
+            VoucherGetByIdDto voucherDto = _voucherMap.ModelToVoucherDto(voucherModel, typeVoucher,dueDate, createDate);
             return voucherDto;
         }
         public async Task<List<VoucherGetAllDto>> GetAll (VoucherQueryDto voucherQuery)
         {
-            var voucherList = await _voucherRepo.GetAll(voucherQuery.SortName, voucherQuery.Visibility);
+            List<VoucherModel>? voucherList = await _voucherRepo.GetAll(voucherQuery.SortName, voucherQuery.Visibility);
             if (voucherList.Count == 0 || voucherList == null) throw new MainException("There are no vouchers", 404);
             if(voucherQuery.Expired.HasValue)
             {
@@ -66,12 +67,12 @@ namespace MiMenu_Back.Services
                     return false;
                 });
             }
-            var voucherDtoList = _voucherMap.ModelListToDtoList(voucherList);
+            List<VoucherGetAllDto> voucherDtoList = _voucherMap.ModelListToDtoList(voucherList);
             return voucherDtoList;
         }
         public async Task Update (string id, VoucherUpdateDto voucherDto)
         {
-            var voucherModel = await _voucherRepo.GetById(id);
+            VoucherModel? voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
             bool voucherExists = await _voucherRepo.ExistsByName(voucherDto.Name, id);
             if(voucherExists) throw new MainException("Voucher already exists with this Name", 409);
@@ -84,12 +85,12 @@ namespace MiMenu_Back.Services
                 int dateResult2 = _util.CompareDates(dateCurrent, dueDate);
                 if (dateResult2 < 0) throw new MainException("DueDate must be equal to or later than DateCurrent", 422);
             }
-            var voucherModelUpdated = _voucherMap.UpdateToVoucherModel(voucherDto, voucherModel, dueDate);
+            VoucherModel voucherModelUpdated = _voucherMap.UpdateToVoucherModel(voucherDto, voucherModel, dueDate);
             await _voucherRepo.Update(voucherModelUpdated);
         }
         public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
         {
-            var voucherModel = await _voucherRepo.GetById(id);
+            VoucherModel? voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
 
             voucherModel.Visibility = visibleDto.Visibility;
@@ -97,7 +98,7 @@ namespace MiMenu_Back.Services
         }
         public async Task Delete (string id)
         {
-            var voucherModel = await _voucherRepo.GetById(id);
+            VoucherModel? voucherModel = await _voucherRepo.GetById(id);
             if (voucherModel == null) throw new MainException("Voucher no found", 404);
             bool ivExists = await _ivRepo.ExistsByVoucherId(id);
             if (ivExists) throw new MainException("Cannot be deleted because is associated with a user", 422);

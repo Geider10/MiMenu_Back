@@ -47,7 +47,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (string.IsNullOrEmpty(queryParams.TypeCategory)) return BadRequest("TypeCategory is required");
 
-                var dtoList = await _categoryService.GetAll(queryParams);
+                List<CategoryGetDto> dtoList = await _categoryService.GetAll(queryParams);
                 return StatusCode(200, dtoList);
             }
             catch (MainException ex)

@@ -1,6 +1,7 @@
 ﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Category;
 using MiMenu_Back.Data.Enums;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -25,21 +26,21 @@ namespace MiMenu_Back.Services
             if (categoryExists) throw new MainException("Name of category already exists", 409);
             TypeCategoryEnum typeCategory = _util.FormatTypeCategory(categoryDto.Type);
 
-            var categoryModel = _categoryMap.AddToCategoryModel(categoryDto, typeCategory);
+            CategoryModel categoryModel = _categoryMap.AddToCategoryModel(categoryDto, typeCategory);
             await _categoryRepo.Add(categoryModel);
         }
         public async Task<List<CategoryGetDto>> GetAll(CategoryQueryDto queryParams)
         {
             TypeCategoryEnum typeCategory = _util.FormatTypeCategory(queryParams.TypeCategory);
-            var categoriesList = await _categoryRepo.GetAll(typeCategory, queryParams.SortName, queryParams.Visibility);
+            List<CategoryModel> categoriesList = await _categoryRepo.GetAll(typeCategory, queryParams.SortName, queryParams.Visibility);
             if (categoriesList.Count == 0 || categoriesList == null) throw new MainException("There are no categories from: " + queryParams.TypeCategory, 404);
 
-            var dtoList = _categoryMap.CategoryListToGetList(categoriesList);
+            List<CategoryGetDto> dtoList = _categoryMap.CategoryListToGetList(categoriesList);
             return dtoList;
         }
         public async Task Update (string id, CategoryUpdateDto category)
         {
-            var categoryModel = await _categoryRepo.GetById(id);
+            CategoryModel? categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
             bool categoryExists = await _categoryRepo.ExistsByName(category.Name,id);
@@ -50,7 +51,7 @@ namespace MiMenu_Back.Services
         }
         public async Task Delete(string id)
         {
-            var categoryModel = await _categoryRepo.GetById(id);
+            CategoryModel? categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
             if(categoryModel.Type == TypeCategoryEnum.Food)
@@ -62,15 +63,15 @@ namespace MiMenu_Back.Services
         }
         public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
         {
-            var categoryModel = await _categoryRepo.GetById(id);
+            CategoryModel? categoryModel = await _categoryRepo.GetById(id);
             if (categoryModel == null) throw new MainException("Category no found", 404);
 
             if(visibleDto.Visibility == false)
             {
                 if(categoryModel.Type == TypeCategoryEnum.Food)
                 {
-                    var foodList = await _foodRepo.GetAllByCategory(id);
-                    foreach (var f in foodList)
+                    List<FoodModel>? foodList = await _foodRepo.GetAllByCategory(id);
+                    foreach (FoodModel f in foodList)
                     {
                         f.Visibility = visibleDto.Visibility;
                         await _foodRepo.Update(f);

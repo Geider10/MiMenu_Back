@@ -20,7 +20,7 @@ namespace MiMenu_Back.Services
             bool ivExists = await _ivRepo.ExistsByUserYVoucher(ivDto.IdUser, ivDto.IdVoucher);
             if (ivExists) throw new MainException("ItemVoucher already exists with this UserId and VoucherId", 409);
 
-            var ivModel = new ItemVoucherModel
+            ItemVoucherModel ivModel = new ItemVoucherModel
             {
                 IdUser = Guid.Parse(ivDto.IdUser),
                 IdVoucher = Guid.Parse(ivDto.IdVoucher)
@@ -29,7 +29,7 @@ namespace MiMenu_Back.Services
         }
         public async Task<List<VoucherGetAllDto>> GetAllByUser(string idUser)
         {
-            var ivList = await _ivRepo.GetAllByUserId(idUser);
+            List<ItemVoucherModel>? ivList = await _ivRepo.GetAllByUserId(idUser);
             if (ivList == null || ivList.Count == 0) throw new MainException("There are no voucher from user", 404);
 
             DateOnly dateCurrent = _util.CreateDateCurrent();
@@ -42,7 +42,7 @@ namespace MiMenu_Back.Services
             if (ivList == null || ivList.Count == 0) throw new MainException("There are no voucher from user", 404);
 
             List<VoucherGetAllDto> ivDtoList = new List<VoucherGetAllDto>();
-            foreach(var iv in ivList)
+            foreach(ItemVoucherModel iv in ivList)
             {
                 ivDtoList.Add(new VoucherGetAllDto
                 {
@@ -56,7 +56,7 @@ namespace MiMenu_Back.Services
         }
         public async Task<VoucherDiscountDto> ApplyVoucher(VoucherApplyDto voucherDto)
         {
-            var ivModel = await _ivRepo.GetById(voucherDto.idItemVoucher);
+            ItemVoucherModel? ivModel = await _ivRepo.GetById(voucherDto.idItemVoucher);
             if (ivModel == null) throw new MainException("ItemVoucher no found", 404);
             if (ivModel.IdUser != Guid.Parse(voucherDto.idUser)) throw new MainException("ItemVoucher must be from User", 403);
 

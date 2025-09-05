@@ -1,5 +1,6 @@
 ﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.DTOs.Food;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -24,39 +25,39 @@ namespace MiMenu_Back.Services
             if (foodExists) throw new MainException("Name of food already exists", 409);
             if (food.Discount != null && food.Discount > 100) throw new MainException("Discount must be between 1 and 100",422);
 
-            var foodModel = _foodMap.AddToFoodModel(food);
+            FoodModel foodModel = _foodMap.AddToFoodModel(food);
             await _foodRepo.Add(foodModel);
         }
         public async Task<FoodGetDto> GetById (string id)
         {
-            var foodModel = await _foodRepo.GetById(id);
+            FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
-            var foodDto = _foodMap.FoodModelToGet(foodModel);
+            FoodGetDto foodDto = _foodMap.FoodModelToGet(foodModel);
             return foodDto;
         }
         public async Task<List<FoodGetDto>> GetAll(FoodQueryDto foodQuery)
         {
-            var foodsList = await _foodRepo.GetAll(foodQuery.Category, foodQuery.SortName, foodQuery.Visibility);
+            List<FoodModel>? foodsList = await _foodRepo.GetAll(foodQuery.Category, foodQuery.SortName, foodQuery.Visibility);
             if (foodsList.Count == 0 || foodsList == null) throw new MainException("There are no foodsList", 404);
 
-            var foodsDtoList = _foodMap.FoodListToGetList(foodsList);
+            List<FoodGetDto> foodsDtoList = _foodMap.FoodListToGetList(foodsList);
             return foodsDtoList;
         }
         public async Task Update(string id,FoodAddDto food)
         {
-            var foodModel = await _foodRepo.GetById(id);
+            FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             bool foodExists = await _foodRepo.ExistsByName(food.Name, id);
             if (foodExists) throw new MainException("Name of food already exists", 409);
 
-            var foodModelUpdate = _foodMap.UpdateToFoodModel(food, foodModel);
+            FoodModel foodModelUpdate = _foodMap.UpdateToFoodModel(food, foodModel);
             await _foodRepo.Update(foodModelUpdate);
         }
         public async Task Delete (string id)
         {
-            var foodModel = await _foodRepo.GetById(id);
+            FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             bool ciExists = await _cartItemRepo.ExistsByFoodId(id);
@@ -66,7 +67,7 @@ namespace MiMenu_Back.Services
         }
         public async Task UpdateImg(string id, ImgUpdateDto imgDto)
         {
-            var foodModel = await _foodRepo.GetById(id);
+            FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             foodModel.ImgUrl = imgDto.ImgUrl;
@@ -74,7 +75,7 @@ namespace MiMenu_Back.Services
         }
         public async Task DeleteImg(string id)
         {
-            var foodModel = await _foodRepo.GetById(id);
+            FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             foodModel.ImgUrl = null;
@@ -82,7 +83,7 @@ namespace MiMenu_Back.Services
         }
         public async Task UpdateVisibility(string id, VisibilityUpdateDto visibleDto)
         {
-            var foodModel = await _foodRepo.GetById(id);
+            FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);
 
             foodModel.Visibility = visibleDto.Visibility;

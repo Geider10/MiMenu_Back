@@ -31,7 +31,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<VoucherModel>?> GetAll(string? sortName, bool? visibility)
         {
-            var voucherList = await _appDB.Vouchers
+            List<VoucherModel>? voucherList = await _appDB.Vouchers
                 .ToListAsync();
             if (sortName == "asc" && !string.IsNullOrEmpty(sortName))
             {

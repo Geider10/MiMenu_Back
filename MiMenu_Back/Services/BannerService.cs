@@ -22,28 +22,28 @@ namespace MiMenu_Back.Services
             bool bannerExists = await _bannerRepo.ExistsByPriority(bannerDto.Priority);
             if (bannerExists) throw new MainException("Priority of banner already exists", 409);
 
-            var bannerModel = _bannerMap.AddToBanner(bannerDto);
+            BannerModel bannerModel = _bannerMap.AddToBanner(bannerDto);
             await _bannerRepo.Add(bannerModel);
         }
         public async Task<BannerGetOneDto> GetById(string id)
         {
-            var bannerModel = await _bannerRepo.GetById(id);
+            BannerModel? bannerModel = await _bannerRepo.GetById(id);
             if (bannerModel == null) throw new MainException("Banner no found", 404);
 
-            var bannerDto = _bannerMap.BannerToGetOne(bannerModel);
+            BannerGetOneDto bannerDto = _bannerMap.BannerToGetOne(bannerModel);
             return bannerDto;
         }
         public async Task<List<BannerGetAllDto>> GetAll(BannerQueryDto queryDto)
         {
-            var bannerList = await _bannerRepo.GetAll(queryDto.SortPriority, queryDto.Visibility);
+            List<BannerModel>? bannerList = await _bannerRepo.GetAll(queryDto.SortPriority, queryDto.Visibility);
             if (bannerList == null || bannerList.Count == 0) throw new MainException("There are no banners", 404);
 
-            var dtoList = _bannerMap.BannerListToGetList(bannerList);
+            List<BannerGetAllDto> dtoList = _bannerMap.BannerListToGetList(bannerList);
             return dtoList;
         }
         public async Task UpdateVisibility(string id,VisibilityUpdateDto visibleDto)
         {
-            var bannerModel = await _bannerRepo.GetById(id);
+            BannerModel? bannerModel = await _bannerRepo.GetById(id);
             if (bannerModel == null) throw new MainException("Banner no found", 404);
 
             bannerModel.Visibility = visibleDto.Visibility;
@@ -51,7 +51,7 @@ namespace MiMenu_Back.Services
         }
         public async Task UpdateImg(string id, ImgUpdateDto imgDto)
         {
-            var bannerModel = await _bannerRepo.GetById(id);
+            BannerModel? bannerModel = await _bannerRepo.GetById(id);
             if (bannerModel == null) throw new MainException("Banner no found", 404);
 
             bannerModel.ImgUrl = imgDto.ImgUrl;
@@ -59,10 +59,10 @@ namespace MiMenu_Back.Services
         }
         public async Task Update(string id, BannerUpdateDto bannerDto)
         {
-            var bannerModelA = await _bannerRepo.GetById(id);
+            BannerModel? bannerModelA = await _bannerRepo.GetById(id);
             if (bannerModelA == null) throw new MainException("Banner no found", 404);
 
-            var bannerModelB = await _bannerRepo.GetByPriority(bannerDto.Priority, id);
+            BannerModel? bannerModelB = await _bannerRepo.GetByPriority(bannerDto.Priority, id);
             if (bannerModelB != null)
             {
                 bannerModelB.Priority = bannerModelA.Priority;
@@ -75,7 +75,7 @@ namespace MiMenu_Back.Services
         }
         public async Task DeleteImg(string id)
         {
-            var bannerModel = await _bannerRepo.GetById(id);
+            BannerModel? bannerModel = await _bannerRepo.GetById(id);
             if (bannerModel == null) throw new MainException("Banner no found", 404);
 
             bannerModel.ImgUrl = null;
@@ -83,7 +83,7 @@ namespace MiMenu_Back.Services
         }
         public async Task Delete(string id)
         {
-            var bannerModel = await _bannerRepo.GetById(id);
+            BannerModel? bannerModel = await _bannerRepo.GetById(id);
             if (bannerModel == null) throw new MainException("Banner no found", 404);
 
             await _bannerRepo.Delete(bannerModel);

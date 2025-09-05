@@ -28,7 +28,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<CategoryModel>> GetAll(TypeCategoryEnum typeCategory, string? sortName, bool? visibility)
         {
-            var categories = await _appDB.Categories
+            List<CategoryModel> categories = await _appDB.Categories
                 .Where(c => c.Type == typeCategory)
                 .ToListAsync();
 

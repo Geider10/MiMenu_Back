@@ -47,7 +47,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
-                var voucherDto = await _voucherService.GetById(id);
+                VoucherGetByIdDto voucherDto = await _voucherService.GetById(id);
                 return StatusCode(200, voucherDto);
             }
             catch (MainException ex)
@@ -64,7 +64,7 @@ namespace MiMenu_Back.Controllers
         {
             try
             {
-                var voucherDtoList = await _voucherService.GetAll(voucherQuery);
+                List<VoucherGetAllDto> voucherDtoList = await _voucherService.GetAll(voucherQuery);
                 return StatusCode(200, voucherDtoList);
             }
             catch (MainException ex)

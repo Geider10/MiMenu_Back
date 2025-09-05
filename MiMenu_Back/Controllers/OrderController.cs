@@ -25,7 +25,7 @@ namespace MiMenu_Back.Controllers
             {
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("Id must has format Guid");
 
-                var generalList = await _orderService.GetAllByUserId(idUser, queryDto);
+                List<OrderGetAllDto> generalList = await _orderService.GetAllByUserId(idUser, queryDto);
                 return StatusCode(201, generalList);
             }
             catch (MainException ex)
@@ -39,14 +39,14 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles ="client")]
         [HttpGet][Route("{idOrder}/user/{idUser}")]
-        public async Task<ActionResult<OrderGeneralDto>> GetById([FromRoute]string idOrder, [FromRoute]string idUser)
+        public async Task<ActionResult<OrderGetDto>> GetById([FromRoute]string idOrder, [FromRoute]string idUser)
         {
             try
             {
                 if(!Guid.TryParse(idOrder, out _)) return BadRequest("IdOrder must has format Guid");
                 if (!Guid.TryParse(idUser, out _)) return BadRequest("IdUser must has format Guid");
 
-                var orderDto = await _orderService.GetById(idOrder, idUser);
+                OrderGetDto orderDto = await _orderService.GetById(idOrder, idUser);
                 return StatusCode(200, orderDto);
             }
             catch (MainException ex)
@@ -67,7 +67,7 @@ namespace MiMenu_Back.Controllers
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
 
                 await _orderService.UpdateStatus(id);
-                return StatusCode(200, new MainResponse(true, "Status from order updated with success"));
+                return StatusCode(200, new MainResponse(true, "Status order updated with success"));
             }
             catch (MainException ex)
             {

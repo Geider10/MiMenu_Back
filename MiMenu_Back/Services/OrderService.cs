@@ -24,13 +24,13 @@ namespace MiMenu_Back.Services
             string idPublic = Guid.NewGuid().ToString();
             DateOnly createDate = _util.CreateDateCurrent();
 
-            var orderModel = _orderMap.AddToOrder(idUser, idPayment, idPublic, typeOrder, StatusOrderEnum.Pending, retirementTime, orderDto.RetirementInstruction, createDate);
+            OrderModel orderModel = _orderMap.AddToOrder(idUser, idPayment, idPublic, typeOrder, StatusOrderEnum.Pending, retirementTime, orderDto.RetirementInstruction, createDate);
             await _orderRepo.Add(orderModel);
             await AddOrderItem(idPublic, itemsDto);
         }
         public async Task UpdateStatus (string id)
         {
-            var orderModel = await _orderRepo.GetById(id);
+            OrderModel? orderModel = await _orderRepo.GetById(id);
             if (orderModel == null) throw new MainException("Order no found", 404);
 
             StatusOrderEnum statusNext = _util.NextStatusOrder(orderModel.Status);
@@ -40,11 +40,11 @@ namespace MiMenu_Back.Services
         }
         public async Task<List<OrderGetAllDto>> GetAllByUserId(string idUser, OrderQueryDto queryDto)
         {
-            var ordersList = await _orderRepo.GetAllByUserId(idUser,queryDto.TypeOrder);
+            List<OrderModel>? ordersList = await _orderRepo.GetAllByUserId(idUser,queryDto.TypeOrder);
             if (ordersList == null || ordersList.Count == 0) throw new MainException("There are no orders for this user", 404);
-            foreach(var order in ordersList)
+            foreach(OrderModel order in ordersList)
             {
-                var itemsList = await GetAllByOrderId(order.Id.ToString());
+                List<OrderItemModel> itemsList = await GetAllByOrderId(order.Id.ToString());
                 order.OrderItems = itemsList;
             }
 
@@ -58,35 +58,35 @@ namespace MiMenu_Back.Services
                     return false;
                 });
             }
-            var generalList = _orderMap.ItemToListGeneral(ordersList, _util);
+            List<OrderGetAllDto> generalList = _orderMap.ItemToListGeneral(ordersList, _util);
             return generalList;
         }
         public async Task<OrderGetDto> GetById(string idOrder,string idUser)
         {
-            var orderModel = await _orderRepo.GetById(idOrder);
+            OrderModel? orderModel = await _orderRepo.GetById(idOrder);
             if (orderModel == null) throw new MainException("Order no found", 404);
             if (orderModel.IdUser.ToString() != idUser) throw new MainException("Order must be the user", 403);
 
-            var itemsList = await GetAllByOrderId(idOrder);
+            List<OrderItemModel> itemsList = await GetAllByOrderId(idOrder);
             orderModel.OrderItems = itemsList;
-            var orderDto = _orderMap.OrderToOrderDto(orderModel, _util);
+            OrderGetDto orderDto = _orderMap.OrderToOrderDto(orderModel, _util);
             return orderDto;
         }
         private async Task AddOrderItem (string idPublic, List<CartItemGetDto> itemsDto)
         {
-            var orderModel = await _orderRepo.GetByIdPublic(idPublic);
+            OrderModel? orderModel = await _orderRepo.GetByIdPublic(idPublic);
             if (orderModel == null) throw new MainException("Order no found", 404);
 
-            foreach(var item in itemsDto)
+            foreach(CartItemGetDto item in itemsDto)
             {
                 decimal priceTotal = item.PriceUnit * item.Quantity;
-                var itemModel = _orderMap.AddToOrderItem(orderModel.Id.ToString(), item.Food.IdFood, item.Quantity, item.PriceUnit, priceTotal);
+                OrderItemModel itemModel = _orderMap.AddToOrderItem(orderModel.Id.ToString(), item.Food.IdFood, item.Quantity, item.PriceUnit, priceTotal);
                 await _orderRepo.AddOrderItem(itemModel);
             }
         }
         private async Task<List<OrderItemModel>> GetAllByOrderId(string idOrder)
         {
-            var orderItemList = await _orderRepo.GetAllByOrderId(idOrder);
+            List<OrderItemModel>? orderItemList = await _orderRepo.GetAllByOrderId(idOrder);
             if (orderItemList == null || orderItemList.Count == 0) throw new MainException("There are no items in this order", 404);
 
             return orderItemList;

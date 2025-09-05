@@ -1,5 +1,6 @@
 ﻿using MiMenu_Back.Data.DTOs.CartItem;
 using MiMenu_Back.Data.DTOs.Order;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -22,47 +23,47 @@ namespace MiMenu_Back.Services
             if (cartItemExists) throw new MainException("CartItem already exists with this FoodId and UserId", 409);
 
             decimal priceTotal = cartItemDto.PriceUnit * cartItemDto.Quantity;
-            var cartItemModel = _cartItemMap.AddToCartItemModel(cartItemDto, priceTotal);
+            CartItemModel cartItemModel = _cartItemMap.AddToCartItemModel(cartItemDto, priceTotal);
             await _cartItemRepo.Add(cartItemModel);
         }
         public async Task<CartItemGetDto> GetById(string idCartItem, string idUser)
         {
-            var cartItemModel = await _cartItemRepo.GetById(idCartItem);
+            CartItemModel? cartItemModel = await _cartItemRepo.GetById(idCartItem);
             if (cartItemModel == null) throw new MainException("CartItem no found", 404);
             if (cartItemModel.IdUser != Guid.Parse(idUser)) throw new MainException("CartItem must be from user", 403);
 
-            var cartItemDto = _cartItemMap.CartItemModelToGet(cartItemModel);
+            CartItemGetDto cartItemDto = _cartItemMap.CartItemModelToGet(cartItemModel);
             return cartItemDto;
         }
         public async Task<List<CartItemGetAllDto>> GetAllByUserId(string idUser)
         {
-            var cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
+            List<CartItemModel>? cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
             if (cartItemList == null || cartItemList.Count == 0) throw new MainException("There are no cartItem for this user", 404);
 
-            var dtoList = _cartItemMap.ItemsToListDto(cartItemList);
+            List<CartItemGetAllDto> dtoList = _cartItemMap.ItemsToListDto(cartItemList);
             return dtoList;
         }
         public async Task<List<CartItemGetDto>> GetDetailByUserId(string idUser)
         {
-            var cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
+            List<CartItemModel>? cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
             if (cartItemList == null || cartItemList.Count == 0) throw new MainException("There are no cartItem for this user", 404);
 
-            var detailList = _cartItemMap.ItemToListDetails(cartItemList);
+            List<CartItemGetDto> detailList = _cartItemMap.ItemToListDetails(cartItemList);
             return detailList;
         }
         public async Task Update(string idCartItem, string idUser, CartItemUpdateDto cartItemDto)
         {
-            var cartItemModel = await _cartItemRepo.GetById(idCartItem);
+            CartItemModel? cartItemModel = await _cartItemRepo.GetById(idCartItem);
             if (cartItemModel == null) throw new MainException("CartItem no found", 404);
             if (cartItemModel.IdUser != Guid.Parse(idUser)) throw new MainException("CartItem must be from user", 403);
 
             decimal priceTotal = cartItemDto.PriceUnit * cartItemDto.Quantity;
-            var cartItemUpdate = _cartItemMap.UpdateToCartItemModel(cartItemModel, cartItemDto, priceTotal);
+            CartItemModel cartItemUpdate = _cartItemMap.UpdateToCartItemModel(cartItemModel, cartItemDto, priceTotal);
             await _cartItemRepo.Update(cartItemUpdate);
         }
         public async Task Delete(string idCartItem, string idUser)
         {
-            var cartItemModel = await _cartItemRepo.GetById(idCartItem);
+            CartItemModel? cartItemModel = await _cartItemRepo.GetById(idCartItem);
             if (cartItemModel == null) throw new MainException("CartItem no found", 404);
             if (cartItemModel.IdUser != Guid.Parse(idUser)) throw new MainException("CartItem must be from user", 403);
 
@@ -70,10 +71,10 @@ namespace MiMenu_Back.Services
         }
         public async Task DeleteAllByUserId(string idUser)
         {
-            var cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
+            List<CartItemModel>? cartItemList = await _cartItemRepo.GetAllByUserId(idUser);
             if (cartItemList == null || cartItemList.Count == 0) throw new MainException("There are no cartItem for this user", 404);
 
-            foreach(var item in cartItemList)
+            foreach(CartItemModel item in cartItemList)
             {
                 await _cartItemRepo.Delete(item);
             }

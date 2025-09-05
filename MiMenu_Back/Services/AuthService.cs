@@ -1,4 +1,5 @@
 ﻿using MiMenu_Back.Data.DTOs.Auth;
+using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
@@ -25,7 +26,7 @@ namespace MiMenu_Back.Services
             string passwordHash = _util.HashText(signupDto.Password);
             DateOnly? birthDate = _util.VerifyFormatDateOnly(signupDto.BirthDate);
 
-            var userModel = _authMap.SignupToUserModel(signupDto, passwordHash, birthDate);
+            UserModel userModel = _authMap.SignupToUserModel(signupDto, passwordHash, birthDate);
             await _userRepo.Add(userModel);
         }
         public async Task<string> Login(LoginDto loginDto)
@@ -33,7 +34,7 @@ namespace MiMenu_Back.Services
             bool userExists = await _userRepo.ExistsByEmail(loginDto.Email);
             if (!userExists) throw new MainException("Email of user no registered", 409);
 
-            var userModel = await _userRepo.GetByEmail(loginDto.Email);
+            UserModel? userModel = await _userRepo.GetByEmail(loginDto.Email);
             bool passwordMatch = _util.VerifyHashText(loginDto.Password, userModel.Password);
             if (!passwordMatch) throw new MainException("Password of user incorrect", 409);
 

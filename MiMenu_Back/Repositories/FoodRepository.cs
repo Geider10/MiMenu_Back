@@ -39,7 +39,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<FoodModel>?> GetAll(string? category, string? sortName, bool? visibility)
         {
-            var foods = await _appDB.Foods
+            List<FoodModel>? foods = await _appDB.Foods
                 .Include(f => f.Category)
                 .ToListAsync();
 
@@ -73,7 +73,7 @@ namespace MiMenu_Back.Repositories
         }
         public async Task<List<FoodModel>?> GetAllByCategory(string idCategory)
         {
-            var foodList = await _appDB.Foods
+            List<FoodModel>? foodList = await _appDB.Foods
                 .Where(f => f.IdCategory == Guid.Parse(idCategory))
                 .ToListAsync();
             return foodList;
