@@ -1,8 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MiMenu_Back.Data.DTOs.CartItem;
-using MiMenu_Back.Data.DTOs.Order;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 using MiMenu_Back.Validators;

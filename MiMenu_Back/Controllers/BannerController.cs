@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs;
-using MiMenu_Back.Data.DTOs.Banner;
+using MiMenu_Back.Data.DTOs.Shared;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 using MiMenu_Back.Validators;

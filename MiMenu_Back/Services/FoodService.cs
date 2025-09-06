@@ -1,10 +1,9 @@
 ﻿using MiMenu_Back.Data.DTOs;
-using MiMenu_Back.Data.DTOs.Food;
+using MiMenu_Back.Data.DTOs.Shared;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
-using System.Runtime.InteropServices;
 
 namespace MiMenu_Back.Services
 {
@@ -44,7 +43,7 @@ namespace MiMenu_Back.Services
             List<FoodGetDto> foodsDtoList = _foodMap.FoodListToGetList(foodsList);
             return foodsDtoList;
         }
-        public async Task Update(string id,FoodAddDto food)
+        public async Task Update(string id,FoodUpdateDto food)
         {
             FoodModel? foodModel = await _foodRepo.GetById(id);
             if (foodModel == null) throw new MainException("Food no found", 404);

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MiMenu_Back.Data.DTOs.User;
+﻿using Microsoft.AspNetCore.Mvc;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Services;
 using FluentValidation.Results;
 using MiMenu_Back.Validators;

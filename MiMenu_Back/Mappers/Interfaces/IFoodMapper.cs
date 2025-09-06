@@ -1,4 +1,4 @@
-﻿using MiMenu_Back.Data.DTOs.Food;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Models;
 
 namespace MiMenu_Back.Mappers.Interfaces
@@ -8,6 +8,6 @@ namespace MiMenu_Back.Mappers.Interfaces
         FoodModel AddToFoodModel(FoodAddDto food);
         FoodGetDto FoodModelToGet(FoodModel food);
         List<FoodGetDto> FoodListToGetList(List<FoodModel> foods);
-        FoodModel UpdateToFoodModel(FoodAddDto foodDto, FoodModel foodModel);
+        FoodModel UpdateToFoodModel(FoodUpdateDto foodDto, FoodModel foodModel);
     }
 }

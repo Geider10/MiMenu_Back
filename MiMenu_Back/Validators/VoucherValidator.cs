@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
-using MiMenu_Back.Data.DTOs.ItemVoucher;
-using MiMenu_Back.Data.DTOs.Voucher;
+using MiMenu_Back.Data.DTOs;
 using System.Text.RegularExpressions;
 
 namespace MiMenu_Back.Validators

@@ -1,6 +1,4 @@
-﻿using MiMenu_Back.Data.DTOs.CartItem;
-using MiMenu_Back.Data.DTOs.Order;
-using MiMenu_Back.Data.DTOs.Payment;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;

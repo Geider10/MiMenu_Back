@@ -1,9 +1,8 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Data.DTOs;
-using MiMenu_Back.Data.DTOs.Food;
+using MiMenu_Back.Data.DTOs.Shared;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 using MiMenu_Back.Validators;
@@ -76,12 +75,12 @@ namespace MiMenu_Back.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpPut][Route("{id}")]
-        public async Task<ActionResult<MainResponse>> Update([FromRoute] string id, [FromBody] FoodAddDto food)
+        public async Task<ActionResult<MainResponse>> Update([FromRoute] string id, [FromBody]FoodUpdateDto food)
         {
             try
             {
                 if (!Guid.TryParse(id, out _)) return BadRequest("Id must has format Guid");
-                ValidationResult bodyReq = new FoodAddValidator().Validate(food);
+                ValidationResult bodyReq = new FoodUpdateValidator().Validate(food);
                 if (!bodyReq.IsValid) return BadRequest(bodyReq.Errors);
 
                 await _foodService.Update(id, food);

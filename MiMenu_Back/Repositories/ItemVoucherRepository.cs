@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiMenu_Back.Data;
-using MiMenu_Back.Data.DTOs.Voucher;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 

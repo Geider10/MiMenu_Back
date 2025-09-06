@@ -1,5 +1,5 @@
 ﻿using MiMenu_Back.Data.DTOs;
-using MiMenu_Back.Data.DTOs.Category;
+using MiMenu_Back.Data.DTOs.Shared;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;

@@ -1,4 +1,4 @@
-﻿using MiMenu_Back.Data.DTOs.Food;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 
@@ -44,7 +44,7 @@ namespace MiMenu_Back.Mappers
             }
             return foodDtoList;
         }
-        public FoodModel UpdateToFoodModel(FoodAddDto foodDto, FoodModel foodModel)
+        public FoodModel UpdateToFoodModel(FoodUpdateDto foodDto, FoodModel foodModel)
         {
             foodModel.IdCategory = Guid.Parse(foodDto.IdCategory);
             foodModel.Name = foodDto.Name;

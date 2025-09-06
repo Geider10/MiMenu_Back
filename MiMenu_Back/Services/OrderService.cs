@@ -1,4 +1,4 @@
-﻿using MiMenu_Back.Data.DTOs.Order;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Data.Enums;

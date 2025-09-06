@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MiMenu_Back.Data.DTOs.Category;
+using MiMenu_Back.Data.DTOs;
 
 namespace MiMenu_Back.Validators
 {

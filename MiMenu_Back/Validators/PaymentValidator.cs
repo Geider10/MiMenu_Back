@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using MiMenu_Back.Data.DTOs.CartItem;
-using MiMenu_Back.Data.DTOs.Order;
-using MiMenu_Back.Data.DTOs.Payment;
+using MiMenu_Back.Data.DTOs;
 
 namespace MiMenu_Back.Validators
 {
@@ -56,26 +54,7 @@ namespace MiMenu_Back.Validators
             RuleFor(prop => prop.Food).SetValidator(new FoodDetailValidator());
         }
     }
-    public class FoodDetailValidator : AbstractValidator<FoodDetailDto>
-    {
-        public FoodDetailValidator()
-        {
-            RuleFor(prop => prop.IdFood)
-                .NotEmpty().WithMessage("IdFood is required")
-                .Must(value => Guid.TryParse(value, out _)).WithMessage("IdFood must has format Guid");
-            RuleFor(prop => prop.Name)
-                .NotEmpty().WithMessage("Name is required")
-                .MaximumLength(200).WithMessage("Name must has length maximum 200 characters");
-            RuleFor(prop => prop.Description)
-                .NotEmpty().WithMessage("Description is required")
-                .MaximumLength(400).WithMessage("Description must has length maximum 400 characters");
-            When(prop => prop.Discount.HasValue, () =>
-            {
-                RuleFor(prop => prop)
-                    .Must(prop => prop.Discount >= 0 && prop.Discount <= 100).WithMessage("Discount must be between 0 and 100");
-            });
-        }
-    }
+ 
     public class WebhookValidator : AbstractValidator<WebHookDto>
     {
         public WebhookValidator()

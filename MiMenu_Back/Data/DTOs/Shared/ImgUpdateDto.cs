@@ -1,4 +1,4 @@
-﻿namespace MiMenu_Back.Data.DTOs
+﻿namespace MiMenu_Back.Data.DTOs.Shared
 {
     public class ImgUpdateDto
     {

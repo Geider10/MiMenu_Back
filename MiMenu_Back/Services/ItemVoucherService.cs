@@ -1,5 +1,4 @@
-﻿using MiMenu_Back.Data.DTOs.ItemVoucher;
-using MiMenu_Back.Data.DTOs.Voucher;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;

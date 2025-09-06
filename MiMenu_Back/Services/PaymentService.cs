@@ -1,19 +1,14 @@
-﻿using MercadoPago.Client.Common;
-using MercadoPago.Client.Payment;
+﻿using MercadoPago.Client.Payment;
 using MercadoPago.Client.Preference;
 using MercadoPago.Resource.Payment;
 using MercadoPago.Resource.Preference;
-using Microsoft.AspNetCore.Routing.Constraints;
-using MiMenu_Back.Data.DTOs.Order;
-using MiMenu_Back.Data.DTOs.Payment;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Enums;
 using MiMenu_Back.Data.Models;
 using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-
 namespace MiMenu_Back.Services
 {
     public class PaymentService

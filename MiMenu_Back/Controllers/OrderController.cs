@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MiMenu_Back.Data.DTOs.Order;
-using MiMenu_Back.Data.DTOs.Payment;
+using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
 

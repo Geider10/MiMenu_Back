@@ -1,13 +1,11 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
-using MiMenu_Back.Data.DTOs.Category;
 using MiMenu_Back.Validators;
-using Microsoft.IdentityModel.Tokens;
 using MiMenu_Back.Data.DTOs;
+using MiMenu_Back.Data.DTOs.Shared;
 namespace MiMenu_Back.Controllers
 {
     [Route("api/category")]

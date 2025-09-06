@@ -1,4 +1,4 @@
-﻿using MiMenu_Back.Data.DTOs.Auth;
+﻿using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Data.Models;
 
 namespace MiMenu_Back.Mappers.Interfaces
