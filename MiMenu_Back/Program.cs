@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.Load();
 var connectionString = System.Environment.GetEnvironmentVariable("MySQLConnection");
 var secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
-var accessToken = System.Environment.GetEnvironmentVariable("AccessToken");
+var accessToken = System.Environment.GetEnvironmentVariable("AccessTokenMP");
 builder.Services.AddDbContext<AppDB>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
 MercadoPagoConfig.AccessToken = accessToken;
 
@@ -54,7 +54,6 @@ builder.Services.AddScoped<OrderService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddAuthentication(config =>
 {

@@ -9,6 +9,7 @@ using MiMenu_Back.Mappers.Interfaces;
 using MiMenu_Back.Repositories.Interfaces;
 using MiMenu_Back.Utils;
 using Newtonsoft.Json;
+using System.Security.Cryptography.Xml;
 namespace MiMenu_Back.Services
 {
     public class PaymentService
@@ -70,9 +71,9 @@ namespace MiMenu_Back.Services
                 InitPoint = preference.InitPoint
             };
         }
-        public async Task ReceiveWebhook (WebHookDto webhookDto)
+        public async Task ReceiveWebhook (WebHookDto webhookDto, WebhookParamsDto webhookParams, string xRequest, string xSignature)
         {
-            //validar secret key
+            ValidateSecretKey(xRequest, xSignature, webhookParams.data_id);
             if (webhookDto.type == "payment")
             {
                 string id = webhookDto.data.id;
@@ -127,6 +128,17 @@ namespace MiMenu_Back.Services
             string createDate = _util.FormatDateTime(paymentModel.CreateDate);
             PaymentGetDto paymentDto = _paymentMap.PaymentToGetDto(paymentModel, status, createDate);
             return paymentDto;
+        }
+        private void ValidateSecretKey(string xRequest, string xSignature, string dataId)
+        {
+            string[] signatureSplit = xSignature.Split(",");
+            string ts = signatureSplit[0].Substring(3);
+            string keyMP = signatureSplit[1].Substring(3);
+            string template = "id:"+dataId+";request-id:"+xRequest+";ts:"+ts+";";
+
+            string encryptedSignature = _util.GenerateCounterKey(template);
+
+            if (encryptedSignature != keyMP) throw new MainException("HMAC verification failed", 422);
         }
     }
 }

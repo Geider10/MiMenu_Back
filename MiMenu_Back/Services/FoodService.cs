@@ -22,7 +22,7 @@ namespace MiMenu_Back.Services
         {
             bool foodExists = await _foodRepo.ExistsByName(food.Name);
             if (foodExists) throw new MainException("Name of food already exists", 409);
-            if (food.Discount != null && food.Discount > 100) throw new MainException("Discount must be between 1 and 100",422);
+            if (food.Discount > 100 || food.Discount >= 0 && food.Discount <=4) throw new MainException("Discount must be between 5 and 100",422);
 
             FoodModel foodModel = _foodMap.AddToFoodModel(food);
             await _foodRepo.Add(foodModel);

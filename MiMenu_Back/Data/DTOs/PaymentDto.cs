@@ -40,4 +40,9 @@
     {
         public string id { get; set; }
     }
+    public class WebhookParamsDto
+    {
+        public string data_id { get; set; }
+        public string type { get; set; }
+    }
 }

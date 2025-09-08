@@ -5,6 +5,7 @@ using MiMenu_Back.Data.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -22,25 +23,37 @@ namespace MiMenu_Back.Utils
         }
         public string GenerateJWT(string id, string role)
         {
-            var claims = new List<Claim>
+            List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, id),
                 new Claim(ClaimTypes.Role, role)
             };
 
-            DotNetEnv.Env.Load();
-            var secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
+            string secretKey = System.Environment.GetEnvironmentVariable("SecretKey");
             var encodingSecreKet = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(encodingSecreKet, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
+            JwtSecurityToken token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: credentials
-                );
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
 
+        }
+        public string GenerateCounterKey(string template)
+        {
+            string secretKey = System.Environment.GetEnvironmentVariable("SecretKeyMPWebhook");
+
+            var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+            var templateBytes = Encoding.UTF8.GetBytes(template);
+
+            using (HMACSHA256 hmac = new HMACSHA256(keyBytes))
+            {
+                var hashBytes = hmac.ComputeHash(templateBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+            }
         }
         #region Date Formatting
         public DateOnly? VerifyFormatDateOnly(string? date)

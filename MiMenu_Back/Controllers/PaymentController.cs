@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MiMenu_Back.Data.DTOs;
 using MiMenu_Back.Services;
 using MiMenu_Back.Utils;
@@ -40,14 +41,16 @@ namespace MiMenu_Back.Controllers
         }
         //api very private
         [HttpPost][Route("webhook")]
-        public async Task<ActionResult> ReceiveWebhook([FromBody] WebHookDto webhookDto)
+        public async Task<ActionResult> ReceiveWebhook([FromBody] WebHookDto webhookDto, [FromQuery]WebhookParamsDto webhookParams)
         {
             try
             {
                 ValidationResult result = new WebhookValidator().Validate(webhookDto);
                 if (!result.IsValid) return BadRequest(result.Errors);
+                string xSignature = Request.Headers["x-signature"].ToString();
+                string xRequestId = Request.Headers["x-request-id"].ToString();
 
-                await _paymentService.ReceiveWebhook(webhookDto);
+                await _paymentService.ReceiveWebhook(webhookDto, webhookParams, xRequestId, xSignature);
                 return StatusCode(200);
             }
             catch (MainException ex)
