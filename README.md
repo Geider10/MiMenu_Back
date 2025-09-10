@@ -1,16 +1,16 @@
 # Backend - MiMenu (MVP)
 
 ## Descripción 
-La API REST permite a la aplicación móvil gestionar pedidos de comida. El cliente puede pedir comida para **comer en el local** o **para llevar** (**delivery** no está implementado en este MVP).  
+EL Backend permite realizar pedidos de comida desde la aplicación. El cliente puede pedir para **comer en el local** o **para llevar** (**delivery** no está implementado en este MVP).  
 Las funcionalidades y los casos de uso están inspirados en **Mostaza** y en **Mercado Pago Delivery**.
 
 
-## Características principales
+## Características de la API REST
 - Autenticación y autorización.
 - Validación de datos.
 - Encriptación de contraseñas.
-- Control de errores y de datos nulos.
-- Aplique reglas de negocio segun el modelo.
+- Manejo de errores y validación de datos nulos.
+- Implmentación de reglas de negocio por modelo.
 
 ## Funcionalidades por rol
 **Usuario**
@@ -18,7 +18,7 @@ Las funcionalidades y los casos de uso están inspirados en **Mostaza** y en **M
 - Agregar comidas al carrito
 - Canjear y aplicar cupones
 - Confirmar pedidos
-- Pagar con Mercado Pago
+- Realizar pagos con Mercado Pago
 
 **Admin**
 - Gestionar comidas
@@ -27,9 +27,9 @@ Las funcionalidades y los casos de uso están inspirados en **Mostaza** y en **M
 - Gestionar categorías
 
 **Local** (no implementado en este MVP)
-  - Ver pedidos recibidos
-  - Cambiar estado de pedidos
-  - Recibir pagos
+- Consultar pedidos recibidos
+- Actualizar el estado de los pedidos
+- Registrar pagos
 
 ## Tecnologias
 - Lenguaje: C# + .NET 8.0
@@ -38,14 +38,14 @@ Las funcionalidades y los casos de uso están inspirados en **Mostaza** y en **M
 - Otros: Linq, JWT, .ENV
 
 ## Buenas prácticas aplicadas
-- Convetional Commits
+- Conventional Commits
 - Arquitectura en capas
 - POO, Interfaces, Enums
 
 ## Futuras mejoras
 - Implementar combos personalizados e ingredientes.
-- Panel del local y pedidos asociados.
-- Gestión de direcciones del usuario y pedidos a domicilio.
+- Administración del local y pedidos asociados.
+- Implementar pedidos con envío a domicilio y gestionar las direcciones.
 - Pruebas unitarias y de integración.
 
 
